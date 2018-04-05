@@ -32,7 +32,7 @@
   </ItemGroup>
   <ItemGroup>
     <Dependency Include="nanoFramework.CoreLibrary">
-      <Version>[1.0.0-preview043]</Version>
+      <Version>[1.0.0-preview048]</Version>
     </Dependency>
     <Dependency Include="nanoFramework.Runtime.Native">
       <Version>[1.0.0-preview172]</Version>
@@ -55,7 +55,7 @@
     <Description>This package includes the System.Net assembly for nanoFramework C# projects</Description>
     <ReleaseNotes>
     </ReleaseNotes>
-    <ProjectUrl>https://github.com/nanoframework/nf-class-libraries</ProjectUrl>
+    <ProjectUrl>https://github.com/nanoframework/lib-System.Net</ProjectUrl>
     <LicenseUrl>
     </LicenseUrl>
     <Copyright>Copyright (c) 2018 The nanoFramework project contributors</Copyright>
