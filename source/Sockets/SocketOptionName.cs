@@ -253,7 +253,6 @@ namespace System.Net.Sockets
         //
         //good for ipv6
         //
-
         HopLimit = 21,            //IPV6_HOPLIMIT
         //
         // good for SocketOptionLevel.Tcp

@@ -12,9 +12,8 @@ namespace TestConnect
     {
         public static void Main()
         {
-            //while (!Debugger.IsAttached) { Thread.Sleep(100); }    // Wait for debugger (only needed for debugging session)
-            Thread.Sleep(200);
-            Console.WriteLine("Program started");                  // You can remove this line once it outputs correctly on the console
+            Console.WriteLine("Program started");      
+            
             GpioPin pin = GpioController.GetDefault().OpenPin(27);
             pin.SetDriveMode(GpioPinDriveMode.Output);
             pin.Write(GpioPinValue.High);
