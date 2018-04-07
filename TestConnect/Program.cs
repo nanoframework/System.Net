@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Threading;
-using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading;
 using Windows.Devices.Gpio;
-using System.Reflection;
 
 namespace TestConnect
 {
@@ -14,29 +12,16 @@ namespace TestConnect
         {
             Console.WriteLine("Program started");      
             
-            GpioPin pin = GpioController.GetDefault().OpenPin(27);
+            //  GpioPin pin = GpioController.GetDefault().OpenPin(27);  
+            GpioPin pin = GpioController.GetDefault().OpenPin(PinNumber('J', 5));
             pin.SetDriveMode(GpioPinDriveMode.Output);
             pin.Write(GpioPinValue.High);
 
-            try
+            for(; ; )
             {
                 ListenTest(pin);
 
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error" + ex.Message);
-                // Do whatever please you with the exception caught
-            }
-            finally    // Enter the infinite loop in all cases
-            {
-                while (true)
-                {
-                    pin.Write(GpioPinValue.Low);
-                    Thread.Sleep(200);
-                    pin.Write(GpioPinValue.High);
-                    Thread.Sleep(200);
-                }
+                Thread.Sleep(2000);
             }
         }
 
@@ -135,6 +120,12 @@ namespace TestConnect
         //        }
         //        }
 
+        static int PinNumber(char port, byte pin)
+        {
+            if (port < 'A' || port > 'J')
+                throw new ArgumentException();
 
+            return ((port - 'A') * 16) + pin;
+        }
     }
 }
