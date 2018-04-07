@@ -10,11 +10,12 @@ namespace TestConnect
     {
         public static void Main()
         {
-            Console.WriteLine("Program started");                  // You can remove this line once it outputs correctly on the console
+            Console.WriteLine("Program started");      
+            
+            //  GpioPin pin = GpioController.GetDefault().OpenPin(27);  
             GpioPin pin = GpioController.GetDefault().OpenPin(PinNumber('J', 5));
             pin.SetDriveMode(GpioPinDriveMode.Output);
             pin.Write(GpioPinValue.High);
-
 
             for(; ; )
             {
