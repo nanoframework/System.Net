@@ -62,9 +62,12 @@
     <Compile Include="IPAddress.cs" />
     <Compile Include="IPEndPoint.cs" />
     <Compile Include="IPHostEntry.cs" />
+    <Compile Include="NetworkInformation\NetworkInformationOptions.cs" />
+    <Compile Include="NetworkInformation\AddressMode.cs" />
     <Compile Include="NetworkInformation\NetworkChange.cs" />
     <Compile Include="NetworkInformation\NetworkInterface.cs" />
-    <Compile Include="NetworkInformation\Wireless.cs" />
+    <Compile Include="NetworkInformation\NetworkInterfaceType.cs" />
+    <Compile Include="NetworkInformation\Wireless80211Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SocketAddress.cs" />
     <Compile Include="SocketException.cs" />
