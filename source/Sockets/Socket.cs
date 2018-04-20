@@ -407,7 +407,7 @@ namespace System.Net.Sockets
             return NativeSocket.poll(this, (int)mode, microSeconds);
         }
 
-        [MethodImplAttribute(MethodImplOptions.Synchronized)]
+        [MethodImpl(MethodImplOptions.Synchronized)]
         protected virtual void Dispose(bool disposing)
         {
             if (m_Handle != -1)
