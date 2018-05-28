@@ -1,37 +1,21 @@
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (c) Microsoft Corporation.  All rights reserved.
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Copyright (c) 2018 The nanoFramework project contributors
+// Portions Copyright (c) Microsoft Corporation.  All rights reserved.
+// See LICENSE file in the project root for full license information.
+//
 
-using System;
 using System.Collections;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading;
 
 namespace System.Net.NetworkInformation
 {
     /// <summary>
-    /// Specifies the type of network interface used by the device.
+    /// Provides information about network interfaces and enables applications to control them.
     /// </summary>
-    public enum NetworkInterfaceType
-    {
-        /// <summary>
-        /// The network interface type is unknown or not specified.
-        /// </summary>
-        Unknown = 1,
-        /// <summary>
-        /// The device uses an Ethernet network interface.
-        /// </summary>
-        Ethernet = 6,
-        /// <summary>
-        /// The device uses a wireless network based on the 802.11 standard.
-        /// </summary>
-        Wireless80211 = 71,
-    }
-
-    /// <summary>
-    /// Provides information about interfaces and enables applications to control them.
-    /// </summary>
+    /// <remarks>
+    /// This class is exclusive of nanoFramework and it does not exist on the UWP API.
+    /// </remarks>
     public class NetworkInterface
     {
         //set update flags...
@@ -41,29 +25,46 @@ namespace System.Net.NetworkInformation
         private const int UPDATE_FLAGS_DHCP_RELEASE = 0x8;
         private const int UPDATE_FLAGS_MAC = 0x10;
 
-        private const uint FLAGS_DHCP = 0x1;
-        private const uint FLAGS_DYNAMIC_DNS = 0x2;
-
- //FIXME       [FieldNoReflection]
         private readonly int _interfaceIndex;
 
-        private uint _flags;
-        private uint _ipAddress;
-        private uint _gatewayAddress;
-        private uint _subnetMask;
-        private uint _dnsAddress1;
-        private uint _dnsAddress2;
-        private NetworkInterfaceType _networkInterfaceType;
         private byte[] _macAddress;
+        private AddressMode _startupAddressMode;
+        private uint _specificConfigId;
+        private bool _automaticDns;
+
+        // IPv4 fields
+        private uint _ipv4Address;
+        private uint _ipv4NetMask;
+        private uint _ipv4GatewayAddress;
+        private uint _ipv4dnsAddress1;
+        private uint _ipv4dnsAddress2;
+
+        // IPv6 fields
+        private uint[] _ipv6Address;
+        private uint[] _ipv6NetMask;
+        private uint[] _ipv6GatewayAddress;
+        private uint[] _ipv6dnsAddress1;
+        private uint[] _ipv6dnsAddress2;
+
+        private NetworkInterfaceType _networkInterfaceType;
 
         /// <summary>
-        ///  	Initializes a new instance of the NetworkInterface class.
+        /// Initializes a new instance of the <see cref="NetworkInterface"/> class.
         /// </summary>
         /// <param name="interfaceIndex"></param>
         protected NetworkInterface(int interfaceIndex)
         {
-            this._interfaceIndex = interfaceIndex;
+            _interfaceIndex = interfaceIndex;
             _networkInterfaceType = NetworkInterfaceType.Unknown;
+            _startupAddressMode = AddressMode.Invalid;
+            _specificConfigId = uint.MaxValue;
+            _automaticDns = true;
+
+            _ipv6Address = new uint[4];
+            _ipv6NetMask = new uint[4];
+            _ipv6GatewayAddress = new uint[4];
+            _ipv6dnsAddress1 = new uint[4];
+            _ipv6dnsAddress2 = new uint[4];
         }
 
         /// <summary>
@@ -83,63 +84,111 @@ namespace System.Net.NetworkInformation
             return ifaces;
         }
 
-        [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        private extern static int GetNetworkInterfaceCount();
-
-        [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        private extern static NetworkInterface GetNetworkInterface(uint interfaceIndex);
-
-        [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        private extern void InitializeNetworkInterfaceSettings();
-
-        [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        private extern void UpdateConfiguration(int updateType);
-
-        [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        private static extern uint IPAddressFromString(string ipAddress);
-
-        private string IPAddressToString(uint ipAddress)
+        private string IPv4AddressToString(uint ipv4Address)
         {
- // FIXME          if(SystemInfo.IsBigEndian)
-            //{
-            //    return string.Concat(
-            //                    ((ipAddress >> 24) & 0xFF).ToString(),
-            //                     ".",
-            //                    ((ipAddress >> 16) & 0xFF).ToString(),
-            //                     ".",
-            //                    ((ipAddress >> 8) & 0xFF).ToString(),
-            //                     ".",
-            //                    ((ipAddress >> 0) & 0xFF).ToString()
-            //                    );
-            //}
-            //    else
+            return string.Concat(
+                            ((ipv4Address >> 0) & 0xFF).ToString(),
+                                ".",
+                            ((ipv4Address >> 8) & 0xFF).ToString(),
+                                ".",
+                            ((ipv4Address >> 16) & 0xFF).ToString(),
+                                ".",
+                            ((ipv4Address >> 24) & 0xFF).ToString()
+                            );
+        }
+
+        private string IPv6AddressToString(uint[] ipv6Address)
+        {
+            throw new NotImplementedException();
+
+            return string.Concat(
+                            ipv6Address[0].ToString("X4"),
+                                ":",
+                            ipv6Address[1].ToString("X4"),
+                                ".",
+                            ipv6Address[2].ToString("X4"),
+                                ".",
+                            ipv6Address[3].ToString("X4")
+                            );
+        }
+
+        /// <summary>
+        /// Enables an application to set and use a static IPv4 address.
+        /// </summary>
+        /// <param name="ipv4Address">Holds the IPv4 address to use. </param>
+        /// <param name="ipv4SubnetMask">Contains the IPv4 address's subnet mask.</param>
+        /// <param name="ipv4GatewayAddress">Specifies the IPv4 address of the gateway. </param>
+        public void EnableStaticIPv4(string ipv4Address, string ipv4SubnetMask, string ipv4GatewayAddress)
+        {
+            try
             {
-                return string.Concat(
-                                ((ipAddress >> 0) & 0xFF).ToString(),
-                                 ".",
-                                ((ipAddress >> 8) & 0xFF).ToString(),
-                                 ".",
-                                ((ipAddress >> 16) & 0xFF).ToString(),
-                                 ".",
-                                ((ipAddress >> 24) & 0xFF).ToString()
-                                );
+                _ipv4Address = IPAddressFromString(ipv4Address);
+                _ipv4NetMask = IPAddressFromString(ipv4SubnetMask);
+                _ipv4GatewayAddress = IPAddressFromString(ipv4GatewayAddress);
+                _startupAddressMode = AddressMode.Static;
+
+                UpdateConfiguration(UPDATE_FLAGS_DHCP);
+            }
+            finally
+            {
+                ReloadSettings();
             }
         }
 
         /// <summary>
-        /// Enables an application to set and use a static IP address.
+        /// Enables an application to set and use a static IPv6 address.
         /// </summary>
-        /// <param name="ipAddress">Holds the IP address to use. </param>
-        /// <param name="subnetMask">Contains the address's subnet mask.</param>
-        /// <param name="gatewayAddress">Specifies the address of the gateway. </param>
-        public void EnableStaticIP(string ipAddress, string subnetMask, string gatewayAddress)
+        /// <param name="ipv6Address">Holds the IPv6 address to use. </param>
+        /// <param name="ipv6SubnetMask">Contains the IPv6 address's subnet mask.</param>
+        /// <param name="ipv6GatewayAddress">Specifies the IPv6 address of the gateway. </param>
+        public void EnableStaticIPv6(string ipv6Address, string ipv6SubnetMask, string ipv6GatewayAddress)
         {
             try
             {
-                _ipAddress = IPAddressFromString(ipAddress);
-                _subnetMask = IPAddressFromString(subnetMask);
-                _gatewayAddress = IPAddressFromString(gatewayAddress);
-                _flags &= ~FLAGS_DHCP;
+                throw new NotImplementedException();
+
+                // FIXME
+                // need to test this
+                //_ipv6Address = IPAddressFromString(ipv6Address);
+                //_ipv6NetMask = IPAddressFromString(ipv6subnetMask);
+                //_ipv6GatewayAddress = IPAddressFromString(ipv6gatewayAddress);
+
+                _startupAddressMode = AddressMode.Static;
+
+                UpdateConfiguration(UPDATE_FLAGS_DHCP);
+            }
+            finally
+            {
+                ReloadSettings();
+            }
+        }
+
+        /// <summary>
+        /// Enables an application to set and use a static IPv4 and IPv6 address.
+        /// </summary>
+        /// <param name="ipv4Address">Holds the IPv4 address to use. </param>
+        /// <param name="ipv4subnetMask">Contains the IPv4 address's subnet mask.</param>
+        /// <param name="ipv4gatewayAddress">Specifies the IPv4 address of the gateway. </param>
+        /// <param name="ipv6Address">Holds the IPv6 address to use. </param>
+        /// <param name="ipv6SubnetMask">Contains the IPv6 address's subnet mask.</param>
+        /// <param name="ipv6GatewayAddress">Specifies the IPv6 address of the gateway. </param>
+        public void EnableStaticIP(string ipv4Address, string ipv4subnetMask, string ipv4gatewayAddress, string ipv6Address, string ipv6SubnetMask, string ipv6GatewayAddress)
+        {
+            try
+            {
+                throw new NotImplementedException();
+
+                _ipv4Address = IPAddressFromString(ipv4Address);
+                _ipv4NetMask = IPAddressFromString(ipv4subnetMask);
+                _ipv4GatewayAddress = IPAddressFromString(ipv4gatewayAddress);
+
+                // FIXME
+                // need to test this
+                //_ipv6Address = IPAddressFromString(ipv6Address);
+                //_ipv6NetMask = IPAddressFromString(ipv6subnetMask);
+                //_ipv6GatewayAddress = IPAddressFromString(ipv6gatewayAddress);
+
+                _startupAddressMode = AddressMode.Static;
 
                 UpdateConfiguration(UPDATE_FLAGS_DHCP);
             }
@@ -156,7 +205,7 @@ namespace System.Net.NetworkInformation
         {
             try
             {
-                _flags |= FLAGS_DHCP;
+                _startupAddressMode = AddressMode.DHCP;
                 UpdateConfiguration(UPDATE_FLAGS_DHCP);
             }
             finally
@@ -166,10 +215,10 @@ namespace System.Net.NetworkInformation
         }
 
         /// <summary>
-        /// Enables a network interface to use a specific DNS server address.
+        /// Enables a network interface to use a specific DNS server IPv4 address.
         /// </summary>
         /// <param name="dnsAddresses">Holds the DNS server address. </param>
-        public void EnableStaticDns(string[] dnsAddresses)
+        public void EnableStaticIPv4Dns(string[] dnsAddresses)
         {
             if (dnsAddresses == null || dnsAddresses.Length == 0 || dnsAddresses.Length > 2)
             {
@@ -193,10 +242,11 @@ namespace System.Net.NetworkInformation
 
             try
             {
-                _dnsAddress1 = addresses[0];
-                _dnsAddress2 = addresses[1];
+                _ipv4dnsAddress1 = addresses[0];
+                _ipv4dnsAddress2 = addresses[1];
 
-                _flags &= ~FLAGS_DYNAMIC_DNS;
+                // clear flag
+                _automaticDns = false;
 
                 UpdateConfiguration(UPDATE_FLAGS_DNS);
             }
@@ -204,16 +254,65 @@ namespace System.Net.NetworkInformation
             {
                 ReloadSettings();
             }
+        }
+
+        /// <summary>
+        /// Enables a network interface to use a specific DNS server IPv6 address.
+        /// </summary>
+        /// <param name="dnsAddresses">Holds the DNS server address. </param>
+        public void EnableStaticIPv6Dns(string[] dnsAddresses)
+        {
+            throw new NotImplementedException();
+
+            // reset flag
+            //_flags &= ~Options.DynamicDNS;
+
+            //if (dnsAddresses == null || dnsAddresses.Length == 0 || dnsAddresses.Length > 2)
+            //{
+            //    throw new ArgumentException();
+            //}
+
+            //uint[] addresses = new uint[2];
+
+            //int iAddress = 0;
+            //for (int i = 0; i < dnsAddresses.Length; i++)
+            //{
+            //    uint address = IPAddressFromString(dnsAddresses[i]);
+
+            //    addresses[iAddress] = address;
+
+            //    if (address != 0)
+            //    {
+            //        iAddress++;
+            //    }
+            //}
+
+            //try
+            //{
+            //    _ipv6dnsAddress1 = addresses[0];
+            //    _ipv6dnsAddress2 = addresses[1];
+
+            //    UpdateConfiguration(UPDATE_FLAGS_DNS);
+            //}
+            //finally
+            //{
+            //    ReloadSettings();
+            //}
         }
 
         /// <summary>
         /// Enables a network interface to obtain a DNS server address automatically.
         /// </summary>
-        public void EnableDynamicDns()
+        public void EnableAutomaticDns()
         {
             try
             {
-                _flags |= FLAGS_DYNAMIC_DNS;
+                // reset IPv4 DNS addresses
+                _ipv4dnsAddress1 = 0;
+                _ipv4dnsAddress2 = 0;
+
+                // set flag
+                _automaticDns = true;
 
                 UpdateConfiguration(UPDATE_FLAGS_DNS);
             }
@@ -224,27 +323,39 @@ namespace System.Net.NetworkInformation
         }
 
         /// <summary>
-        /// Holds the IP address of the network interface.
+        /// Retrieves a value indicating whether a network interface can obtain a DNS server address automatically.
+        /// true if dynamic DNS is enabled, or false if not. 
         /// </summary>
-        public string IPAddress
+        public bool IsAutomaticDnsEnabled
         {
-            get { return IPAddressToString(_ipAddress); }
+            get
+            {
+                return _automaticDns;
+            }
         }
 
         /// <summary>
-        /// Contains the gateway address.
+        /// Holds the IP v4 address of the network interface.
         /// </summary>
-        public string GatewayAddress
+        public string IPv4Address
         {
-            get { return IPAddressToString(_gatewayAddress); }
+            get { return IPv4AddressToString(_ipv4Address); }
         }
 
         /// <summary>
-        /// Retrieves the network interface's subnet mask.
+        /// Contains the gateway IPv4 address.
         /// </summary>
-        public string SubnetMask
+        public string IPv4GatewayAddress
         {
-            get { return IPAddressToString(_subnetMask); }
+            get { return IPv4AddressToString(_ipv4GatewayAddress); }
+        }
+
+        /// <summary>
+        /// Retrieves the network interface's IPv4 subnet mask.
+        /// </summary>
+        public string IPv4SubnetMask
+        {
+            get { return IPv4AddressToString(_ipv4NetMask); }
         }
 
         /// <summary>
@@ -253,38 +364,26 @@ namespace System.Net.NetworkInformation
         /// </summary>
         public bool IsDhcpEnabled
         {
-            get { return (_flags & FLAGS_DHCP) != 0; }
+            get { return (_startupAddressMode == AddressMode.DHCP);  }
         }
 
         /// <summary>
-        /// Retrieves a value indicating whether a network interface can obtain a DNS server address automatically.
-        /// true if dynamic DNS is enabled, or false if not. 
+        /// Holds the IPv4 DNS server address.
         /// </summary>
-        public bool IsDynamicDnsEnabled
-        {
-            get
-            {
-                return (_flags & FLAGS_DYNAMIC_DNS) != 0;
-            }
-        }
-
-        /// <summary>
-        /// Holds the DNS server address.
-        /// </summary>
-        public string[] DnsAddresses
+        public string[] IPv4DnsAddresses
         {
             get
             {
                 ArrayList list = new ArrayList();
 
-                if (_dnsAddress1 != 0)
+                if (_ipv4dnsAddress1 != 0)
                 {
-                    list.Add(IPAddressToString(_dnsAddress1));
+                    list.Add(IPv4AddressToString(_ipv4dnsAddress1));
                 }
 
-                if (_dnsAddress2 != 0)
+                if (_ipv4dnsAddress2 != 0)
                 {
-                    list.Add(IPAddressToString(_dnsAddress2));
+                    list.Add(IPv4AddressToString(_ipv4dnsAddress2));
                 }
 
                 return (string[])list.ToArray(typeof(string));
@@ -354,6 +453,33 @@ namespace System.Net.NetworkInformation
         {
             get { return _networkInterfaceType; }
         }
+
+        /// <summary>
+        /// The ID of the associated configuration, if any. To be used as the foreign key of that configuration.
+        /// </summary>
+        /// <remarks>
+        /// If there is no configuration associated it reads as <see cref="uint.MaxValue"/>.
+        /// </remarks>
+        public uint SpecificConfigId { get => _specificConfigId; set => _specificConfigId = value; }
+
+        #region native methods
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        private extern static int GetNetworkInterfaceCount();
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        private extern static NetworkInterface GetNetworkInterface(uint interfaceIndex);
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        private extern void InitializeNetworkInterfaceSettings();
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        private extern void UpdateConfiguration(int updateType);
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        private static extern uint IPAddressFromString(string ipAddress);
+
+        #endregion
     }
 }
 
