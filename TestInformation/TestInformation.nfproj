@@ -26,7 +26,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
-      <HintPath>..\source\packages\nanoFramework.CoreLibrary.1.0.0-preview049\lib\mscorlib.dll</HintPath>
+      <HintPath>..\source\packages\nanoFramework.CoreLibrary.1.0.0-preview050\lib\mscorlib.dll</HintPath>
       <Private>True</Private>
       <SpecificVersion>True</SpecificVersion>
     </Reference>
