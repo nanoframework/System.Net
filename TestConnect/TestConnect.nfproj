@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Label="Globals">
     <NanoFrameworkProjectSystemPath>$(MSBuildToolsPath)..\..\..\nanoFramework\v1.0\</NanoFrameworkProjectSystemPath>
@@ -26,12 +26,12 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
-      <HintPath>..\source\packages\nanoFramework.CoreLibrary.1.0.0-preview050\lib\mscorlib.dll</HintPath>
+      <HintPath>..\source\packages\nanoFramework.CoreLibrary.1.0.0-preview054\lib\mscorlib.dll</HintPath>
       <Private>True</Private>
       <SpecificVersion>True</SpecificVersion>
     </Reference>
     <Reference Include="nanoFramework.Runtime.Native, Version=1.0.0.0, Culture=neutral, PublicKeyToken=72027bbd7f714be2">
-      <HintPath>..\source\packages\nanoFramework.Runtime.Native.1.0.0-preview178\lib\nanoFramework.Runtime.Native.dll</HintPath>
+      <HintPath>..\source\packages\nanoFramework.Runtime.Native.1.0.0-preview179\lib\nanoFramework.Runtime.Native.dll</HintPath>
       <Private>True</Private>
       <SpecificVersion>True</SpecificVersion>
     </Reference>
