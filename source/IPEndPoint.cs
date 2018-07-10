@@ -7,28 +7,50 @@ namespace System.Net
     using System.Net.Sockets;
     using System.Globalization;
 
-    
+    /// <summary>
+    /// Represents a network endpoint as an IP address and a port number.
+    /// </summary>
     [Serializable]
     public class IPEndPoint : EndPoint
     {
+        /// <summary>
+        /// Specifies the minimum value that can be assigned to the Port property. This field is read-only.
+        /// </summary>
         public const int MinPort = 0x00000000;
+        /// <summary>
+        /// Specifies the maximum value that can be assigned to the Port property. The MaxPort value is set to 0x0000FFFF. This field is read-only.
+        /// </summary>
         public const int MaxPort = 0x0000FFFF;
 
         private IPAddress m_Address;
         private int m_Port;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IPEndPoint"/> class with the specified address and port number.
+        /// </summary>
+        /// <param name="address">The IP address of the Internet host.</param>
+        /// <param name="port">The port number associated with the address, or 0 to specify any available port. port is in host order.</param>
         public IPEndPoint(long address, int port)
         {
             m_Port = port;
             m_Address = new IPAddress(address);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IPEndPoint"/> class with the specified address and port number.
+        /// </summary>
+        /// <param name="address"></param>
+        /// <param name="port"></param>
         public IPEndPoint(IPAddress address, int port)
         {
             m_Port = port;
             m_Address = address;
         }
 
+        /// <summary>
+        /// Gets or sets the IP address of the endpoint.
+        /// </summary>
+        /// <value>An IPAddress instance containing the IP address of the endpoint.</value>
         public IPAddress Address
         {
             get
@@ -37,6 +59,10 @@ namespace System.Net
             }
         }
 
+        /// <summary>
+        /// Gets or sets the port number of the endpoint.
+        /// </summary>
+        /// <value>An integer value in the range <see cref="MinPort"/> to <see cref="MaxPort"/> indicating the port number of the endpoint.</value>
         public int Port
         {
             get
@@ -45,6 +71,10 @@ namespace System.Net
             }
         }
 
+        /// <summary>
+        /// Serializes endpoint information into a <see cref="SocketAddress"/> instance.
+        /// </summary>
+        /// <returns>A <see cref="SocketAddress"/> instance containing the socket address for the endpoint.</returns>
         public override SocketAddress Serialize()
         {
             // create a new SocketAddress
@@ -65,6 +95,11 @@ namespace System.Net
             return socketAddress;
         }
 
+        /// <summary>
+        /// Creates an endpoint from a socket address.
+        /// </summary>
+        /// <param name="socketAddress">The <see cref="SocketAddress"/> to use for the endpoint.</param>
+        /// <returns>An <see cref="EndPoint"/> instance using the specified socket address.</returns>
         public override EndPoint Create(SocketAddress socketAddress)
         {
             // strip out of SocketAddress information on the EndPoint
@@ -91,11 +126,20 @@ namespace System.Net
             return created;
         }
 
+        /// <summary>
+        /// Returns the IP address and port number of the specified endpoint.
+        /// </summary>
+        /// <returns>A string containing the IP address and the port number of the specified endpoint (for example, 192.168.1.2:80).</returns>
         public override string ToString()
         {
             return m_Address.ToString() + ":" + m_Port.ToString();
         }
 
+        /// <summary>
+        /// Determines whether the specified Object is equal to the current IPEndPoint instance.
+        /// </summary>
+        /// <param name="obj">The specified Object to compare with the current <see cref="IPEndPoint"/> instance.</param>
+        /// <returns>true if the objects are equal.</returns>
         public override bool Equals(object obj)
         {
             IPEndPoint ep = obj as IPEndPoint;

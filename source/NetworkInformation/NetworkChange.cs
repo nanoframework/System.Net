@@ -99,8 +99,28 @@ namespace System.Net.NetworkInformation
             }
         }
 
-        /// Events
+        /// <summary>
+        /// Event occurs when the IP address of a network interface changes.
+        /// </summary>
+        /// <remarks>
+        /// The NetworkChange class raises NetworkAddressChanged events when the address of a network interface, 
+        /// also called a network card or adapter, changes.
+        /// 
+        /// To have a NetworkChange object call an event-handling method when a NetworkAddressChanged event occurs, 
+        /// you must associate the method with a NetworkAddressChangedEventHandler delegate, and add this delegate to this event. 
+        /// </remarks>
         public static event NetworkAddressChangedEventHandler NetworkAddressChanged;
+
+        /// <summary>
+        /// Event occurs when the availability of the network changes.
+        /// </summary>
+        /// <remarks>
+        /// The NetworkChange class raises NetworkAvailabilityChanged events when the availability of the network changes. 
+        /// The network is available when at least one network interface is marked "up" and is not a tunnel or loopback interface.
+        /// 
+        /// To have a NetworkChange object call an event-handling method when a NetworkAvailabilityChanged event occurs, 
+        /// you must associate the method with a NetworkAvailabilityChangedEventHandler delegate, and add this delegate to this event. 
+        /// </remarks>
         public static event NetworkAvailabilityChangedEventHandler NetworkAvailabilityChanged;
 
         static NetworkChange()

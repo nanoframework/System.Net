@@ -6,12 +6,15 @@ using System;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
-using Microsoft.SPOT.Net.Security;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 
-namespace Microsoft.SPOT.Net.Security
+namespace System.Net.Security
 {
+    /// <summary>
+    /// Provides a stream used for client-server communication that uses the Secure Socket Layer (SSL) security 
+    /// protocol to authenticate the server and optionally the client.
+    /// </summary>
     public class SslStream : NetworkStream
     {
         // Internal flags
@@ -20,6 +23,14 @@ namespace Microsoft.SPOT.Net.Security
 
         //--//
 
+        /// <summary>
+        /// Initializes a new instance of the SslStream class using the specified Socket.
+        /// </summary>
+        /// <param name="socket">A valid socket that currently has a TCP connection.</param>
+        /// <remarks>
+        /// The SslStream maintains the lifetime of the socket. When the SslStream object is disposed, 
+        /// the underlying TCP socket will be closed.
+        /// </remarks>
         public SslStream(Socket socket)
             : base(socket, false)
         {
@@ -31,32 +42,75 @@ namespace Microsoft.SPOT.Net.Security
             _sslContext = -1;
             _isServer = false;
         }
-        
+
+        /// <summary>
+        /// Called by clients to authenticate the server and optionally the client in a client-server connection. 
+        /// The authentication process uses the specified SSL protocols.
+        /// </summary>
+        /// <param name="targetHost">The name of the server that will share this SslStream.</param>
+        /// <param name="sslProtocols">The protocols that may be supported.</param>
         public void AuthenticateAsClient(string targetHost, params SslProtocols[] sslProtocols)
         {
             AuthenticateAsClient(targetHost, null, null, SslVerification.NoVerification, sslProtocols);
         }
 
+        /// <summary>
+        /// Called by clients to authenticate the server and optionally the client in a client-server connection. 
+        /// The authentication process uses the specified certificate collections and SSL protocols.
+        /// </summary>
+        /// <param name="targetHost">The name of the server that will share this SslStream.</param>
+        /// <param name="cert">The client certificate.</param>
+        /// <param name="verify">The type of verification required for authentication.</param>
+        /// <param name="sslProtocols">The protocols that may be supported.</param>
         public void AuthenticateAsClient(string targetHost, X509Certificate cert, SslVerification verify, params SslProtocols[] sslProtocols)
         {
             AuthenticateAsClient(targetHost, cert, null, verify, sslProtocols);
         }
 
+        /// <summary>
+        /// Called by clients to authenticate the server and optionally the client in a client-server connection. 
+        /// The authentication process uses the specified certificate collections and SSL protocols.
+        /// </summary>
+        /// <param name="targetHost">The name of the server that will share this SslStream.</param>
+        /// <param name="cert">The client certificate.</param>
+        /// <param name="ca">The collection of certificates for client authorities to use for authentication.</param>
+        /// <param name="verify">The type of verification required for authentication.</param>
+        /// <param name="sslProtocols">The protocols that may be supported.</param>
         public void AuthenticateAsClient(string targetHost, X509Certificate cert, X509Certificate[] ca, SslVerification verify, params SslProtocols[] sslProtocols)
         {
             Authenticate(false, targetHost, cert, ca, verify, sslProtocols);
         }
 
+        /// <summary>
+        /// Called by servers to authenticate the server and optionally the client in a client-server connection.
+        /// This member is overloaded.For complete information about this member, including syntax, usage, and examples, click a name in the overload list.
+        /// </summary>
+        /// <param name="cert">The certificate used to authenticate the server.</param>
+        /// <param name="verify">An enumeration value that specifies the degree of verification required, such as whether the client must supply a certificate for authentication.</param>
+        /// <param name="sslProtocols">The protocols that may be used for authentication.</param>
         public void AuthenticateAsServer(X509Certificate cert, SslVerification verify, params SslProtocols[] sslProtocols)
         {
             AuthenticateAsServer(cert, null, verify, sslProtocols);
         }
 
+        /// <summary>
+        /// Called by servers to authenticate the server and optionally the client in a client-server connection using the specified certificate, 
+        /// verification requirements and security protocol.
+        /// </summary>
+        /// <param name="cert">The certificate used to authenticate the server.</param>
+        /// <param name="ca">The certifcates for certificate authorities to use for authentication.</param>
+        /// <param name="verify">An enumeration value that specifies the degree of verification required, such as whether the client must supply a certificate for authentication.</param>
+        /// <param name="sslProtocols">The protocols that may be used for authentication.</param>
         public void AuthenticateAsServer(X509Certificate cert, X509Certificate[] ca, SslVerification verify, params SslProtocols[] sslProtocols)
         {
             Authenticate(true, "", cert, ca, verify, sslProtocols);
         }
 
+        /// <summary>
+        /// Updates the SSL stack to use updated certificates.
+        /// </summary>
+        /// <param name="cert">The personal certificate to update.</param>
+        /// <param name="ca">The certificate authority certificate to update.</param>
         public void UpdateCertificates(X509Certificate cert, X509Certificate[] ca)
         {
             if(_sslContext == -1) throw new InvalidOperationException();
@@ -102,8 +156,14 @@ namespace Microsoft.SPOT.Net.Security
             }
         }
 
+        /// <summary>
+        /// Gets a value that indicates whether the local side of the connection used by this SslStream was authenticated as the server.
+        /// </summary>
         public bool IsServer { get { return _isServer; } }
 
+        /// <summary>
+        /// Gets the length of the stream. (Overrides NetworkStream. . :: . .Length.)
+        /// </summary>
         public override long Length
         {
             get
@@ -115,6 +175,9 @@ namespace Microsoft.SPOT.Net.Security
             }
         }
 
+        /// <summary>
+        /// Gets a value the indicates whether data is available in the stream. (Overrides NetworkStream. . :: . .DataAvailable.)
+        /// </summary>
         public override bool DataAvailable
         {
             get
@@ -126,6 +189,9 @@ namespace Microsoft.SPOT.Net.Security
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         ~SslStream()
         {
             // Do not re-create Dispose clean-up code here.
@@ -134,6 +200,10 @@ namespace Microsoft.SPOT.Net.Security
             Dispose(false);
         }
 
+        /// <summary>
+        /// Releases the unmanaged resources used by the SslStream and optionally releases the managed resources. 
+        /// </summary>
+        /// <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
         [MethodImplAttribute(MethodImplOptions.Synchronized)]
         protected override void Dispose(bool disposing)
         {
@@ -155,6 +225,13 @@ namespace Microsoft.SPOT.Net.Security
             }
         }
 
+        /// <summary>
+        /// Reads data from this stream and stores it in the specified array.
+        /// </summary>
+        /// <param name="buffer">An array that receives the bytes read from this stream.</param>
+        /// <param name="offset">An integer that contains the zero-based location in buffer at which to begin storing the data read from this stream.</param>
+        /// <param name="size">The maximum number of bytes to read from this stream.</param>
+        /// <returns></returns>
         public override int Read(byte[] buffer, int offset, int size)
         {
             if (buffer == null)
@@ -180,6 +257,12 @@ namespace Microsoft.SPOT.Net.Security
             return SslNative.SecureRead(_socket, buffer, offset, size, _socket.ReceiveTimeout);
         }
 
+        /// <summary>
+        /// Write the specified number of bytes to the underlying stream using the specified buffer and offset.
+        /// </summary>
+        /// <param name="buffer">An array that supplies the bytes written to the stream.</param>
+        /// <param name="offset">he zero-based location in buffer at which to begin reading bytes to be written to the stream.</param>
+        /// <param name="size">The number of bytes to read from buffer.</param>
         public override void Write(byte[] buffer, int offset, int size)
         {
             if (buffer == null)

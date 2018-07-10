@@ -10,49 +10,30 @@ namespace System.Net.Sockets
     // Option flags per-socket.
     //
 
-    /// <devdoc>
-    ///    <para>
-    ///       Defines socket option levels for the <see cref='System.Net.Sockets.Socket'/> class.
-    ///    </para>
-    /// </devdoc>
-    //UEUE
+    /// <summary>
+    /// Defines socket option levels for the <see cref='System.Net.Sockets.Socket'/> class.
+    /// </summary>
     public enum SocketOptionLevel
     {
-
-        /// <devdoc>
-        ///    <para>
-        ///       Indicates socket options apply to the socket itself.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Indicates socket options apply to the socket itself.
+        /// </summary>
         Socket = 0xffff,
-
-        /// <devdoc>
-        ///    <para>
-        ///       Indicates socket options apply to IP sockets.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Indicates socket options apply to IP sockets.
+        /// </summary>
         IP = ProtocolType.IP,
-
-        /// <devdoc>
-        /// <para>
-        /// Indicates socket options apply to IPv6 sockets.
-        /// </para>
-        /// </devdoc>
+        /// <summary>
+        ///  Indicates socket options apply to IPv6 sockets.
+        /// </summary>
         IPv6 = ProtocolType.IPv6,
-
-        /// <devdoc>
-        ///    <para>
-        ///       Indicates socket options apply to Tcp sockets.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Indicates socket options apply to Tcp sockets.
+        /// </summary>
         Tcp = ProtocolType.Tcp,
-
-        /// <devdoc>
-        /// <para>
+        /// <summary>
         /// Indicates socket options apply to Udp sockets.
-        /// </para>
-        /// </devdoc>
-        //UEUE
+        /// </summary>
         Udp = ProtocolType.Udp,
 
     }; // enum SocketOptionLevel
