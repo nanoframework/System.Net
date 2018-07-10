@@ -7,266 +7,207 @@ namespace System.Net.Sockets
     using System;
     using System.Net;
 
-    /// <devdoc>
-    ///    <para>
-    ///       Defines socket error constants.
-    ///    </para>
-    /// </devdoc>
-
+    /// <summary>
+    /// Defines socket error constants.
+    /// </summary>
     public enum SocketError : int
     {
-        /// <devdoc>
-        ///    <para>
-        ///       The operation completed succesfully.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// The operation completed succesfully.
+        /// </summary>
         Success = 0,
 
-        /// <devdoc>
-        ///    <para>
-        ///       The socket has an error.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// An unspecified Socket error has occurred.
+        /// </summary>
         SocketError = (-1),
-        /*
-         * Windows Sockets definitions of regular Microsoft C error constants
-         */
-        /// <devdoc>
-        ///    <para>
-        ///       A blocking socket call was canceled.
-        ///    </para>
-        /// </devdoc>
+ 
+        /// <summary>
+        /// A blocking Socket call was canceled.
+        /// </summary>
         Interrupted = (10000 + 4),      //WSAEINTR
-        /// <devdoc>
-        ///    <para>
-        ///       [To be supplied.]
-        ///    </para>
-        /// </devdoc>
-        //WSAEBADF               = (10000+9),   //
-        /// <devdoc>
-        ///    <para>
-        ///       Permission denied.
-        ///    </para>
-        /// </devdoc>
+ 
+        /// <summary>
+        /// An attempt was made to access a Socket in a way that is forbidden by its access permissions.
+        /// </summary>
         AccessDenied = (10000 + 13),      //WSAEACCES
-        /// <devdoc>
-        ///    <para>
-        ///       Bad address.
-        ///    </para>
-        /// </devdoc>
+ 
+        /// <summary>
+        /// An invalid pointer address was detected by the underlying socket provider.
+        /// </summary>
         Fault = (10000 + 14),        //WSAEFAULT
-        /// <devdoc>
-        ///    <para>
-        ///       Invalid argument.
-        ///    </para>
-        /// </devdoc>
+ 
+        /// <summary>
+        /// An invalid argument was supplied to a Socket member.
+        /// </summary>
         InvalidArgument = (10000 + 22),    //WSAEINVAL
-        /// <devdoc>
-        ///    <para>
-        ///       Too many open
-        ///       files.
-        ///    </para>
-        /// </devdoc>
+
+        /// <summary>
+        /// There are too many open sockets in the underlying socket provider.
+        /// </summary>
         TooManyOpenSockets = (10000 + 24),  //WSAEMFILE
 
-        /*
-         * Windows Sockets definitions of regular Berkeley error constants
-         */
-        /// <devdoc>
-        ///    <para>
-        ///       Resource temporarily unavailable.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// An operation on a nonblocking socket cannot be completed immediately.
+        /// </summary>
         WouldBlock = (10000 + 35),   //WSAEWOULDBLOCK
-        /// <devdoc>
-        ///    <para>
-        ///       Operation now in progress.
-        ///    </para>
-        /// </devdoc>
+
+        /// <summary>
+        /// A blocking operation is in progress.
+        /// </summary>
         InProgress = (10000 + 36),  // WSAEINPROGRESS
-        /// <devdoc>
-        ///    <para>
-        ///       Operation already in progress.
-        ///    </para>
-        /// </devdoc>
+ 
+        /// <summary>
+        /// The nonblocking Socket already has an operation in progress.
+        /// </summary>
         AlreadyInProgress = (10000 + 37),  //WSAEALREADY
-        /// <devdoc>
-        ///    <para>
-        ///       Socket operation on nonsocket.
-        ///    </para>
-        /// </devdoc>
+
+        /// <summary>
+        /// A Socket operation was attempted on a non-socket.
+        /// </summary>
         NotSocket = (10000 + 38),   //WSAENOTSOCK
-        /// <devdoc>
-        ///    <para>
-        ///       Destination address required.
-        ///    </para>
-        /// </devdoc>
+ 
+        /// <summary>
+        /// A required address was omitted from an operation on a Socket.
+        /// </summary>
         DestinationAddressRequired = (10000 + 39), //WSAEDESTADDRREQ
-        /// <devdoc>
-        ///    <para>
-        ///       Message too long.
-        ///    </para>
-        /// </devdoc>
+ 
+        /// <summary>
+        /// The datagram is too long.
+        /// </summary>
         MessageSize = (10000 + 40),  //WSAEMSGSIZE
-        /// <devdoc>
-        ///    <para>
-        ///       Protocol wrong type for socket.
-        ///    </para>
-        /// </devdoc>
+ 
+        /// <summary>
+        /// The protocol type is incorrect for this Socket.
+        /// </summary>
         ProtocolType = (10000 + 41), //WSAEPROTOTYPE
-        /// <devdoc>
-        ///    <para>
-        ///       Bad protocol option.
-        ///    </para>
-        /// </devdoc>
+
+        /// <summary>
+        ///  An unknown, invalid, or unsupported option or level was used with a Socket.
+        /// </summary>
         ProtocolOption = (10000 + 42), //WSAENOPROTOOPT
-        /// <devdoc>
-        ///    <para>
-        ///       Protocol not supported.
-        ///    </para>
-        /// </devdoc>
+
+        /// <summary>
+        /// The protocol is not implemented or has not been configured.
+        /// </summary>
         ProtocolNotSupported = (10000 + 43), //WSAEPROTONOSUPPORT
-        /// <devdoc>
-        ///    <para>
-        ///       Socket type not supported.
-        ///    </para>
-        /// </devdoc>
+
+        /// <summary>
+        /// The support for the specified socket type does not exist in this address family.
+        /// </summary>
         SocketNotSupported = (10000 + 44), //WSAESOCKTNOSUPPORT
-        /// <devdoc>
-        ///    <para>
-        ///       Operation not supported.
-        ///    </para>
-        /// </devdoc>
+
+        /// <summary>
+        /// The address family is not supported by the protocol family.
+        /// </summary>
         OperationNotSupported = (10000 + 45), //WSAEOPNOTSUPP
-        /// <devdoc>
-        ///    <para>
-        ///       Protocol family not supported.
-        ///    </para>
-        /// </devdoc>
+
+        /// <summary>
+        /// The protocol family is not implemented or has not been configured.
+        /// </summary>
         ProtocolFamilyNotSupported = (10000 + 46), //WSAEPFNOSUPPORT
-        /// <devdoc>
-        ///    <para>
-        ///       Address family not supported by protocol family.
-        ///    </para>
-        /// </devdoc>
+
+        /// <summary>
+        /// The address family specified is not supported. This error is returned if the IPv6 address family was specified and the IPv6 stack is not installed on the local machine. 
+        /// This error is returned if the IPv4 address family was specified and the IPv4 stack is not installed on the local machine.
+        /// </summary>
         AddressFamilyNotSupported = (10000 + 47), //WSAEAFNOSUPPORT
-        /// <devdoc>
-        ///    Address already in use.
-        /// </devdoc>
+
+        /// <summary>
+        /// Only one use of an address is normally permitted.
+        /// </summary>
         AddressAlreadyInUse = (10000 + 48), // WSAEADDRINUSE
-        /// <devdoc>
-        ///    <para>
-        ///       Cannot assign requested address.
-        ///    </para>
-        /// </devdoc>
+ 
+        /// <summary>
+        /// The selected IP address is not valid in this context.
+        /// </summary>
         AddressNotAvailable = (10000 + 49), //WSAEADDRNOTAVAIL
-        /// <devdoc>
-        ///    <para>
-        ///       Network is down.
-        ///    </para>
-        /// </devdoc>
+
+        /// <summary>
+        /// The network is not available.
+        /// </summary>
         NetworkDown = (10000 + 50), //WSAENETDOWN
-        /// <devdoc>
-        ///    <para>
-        ///       Network is unreachable.
-        ///    </para>
-        /// </devdoc>
+
+        /// <summary>
+        /// No route to the remote host exists.
+        /// </summary>
         NetworkUnreachable = (10000 + 51), //WSAENETUNREACH
-        /// <devdoc>
-        ///    <para>
-        ///       Network dropped connection on reset.
-        ///    </para>
-        /// </devdoc>
+
+        /// <summary>
+        /// The application tried to set KeepAlive on a connection that has already timed out
+        /// </summary>
         NetworkReset = (10000 + 52), //WSAENETRESET
-        /// <devdoc>
-        ///    <para>
-        ///       Software caused connection to abort.
-        ///    </para>
-        /// </devdoc>
+
+        /// <summary>
+        /// The connection was aborted by the .NET Framework or the underlying socket provider.
+        /// </summary>
         ConnectionAborted = (10000 + 53), //WSAECONNABORTED
-        /// <devdoc>
-        ///    <para>
-        ///       Connection reset by peer.
-        ///    </para>
-        /// </devdoc>
+ 
+        /// <summary>
+        /// The connection was reset by the remote peer.
+        /// </summary>
         ConnectionReset = (10000 + 54), //WSAECONNRESET
-        /// <devdoc>
-        ///    No buffer space available.
-        /// </devdoc>
+
+        /// <summary>
+        /// No free buffer space is available for a Socket operation.
+        /// </summary>
         NoBufferSpaceAvailable = (10000 + 55), //WSAENOBUFS
-        /// <devdoc>
-        ///    <para>
-        ///       Socket is already connected.
-        ///    </para>
-        /// </devdoc>
+
+        /// <summary>
+        /// The Socket is already connected.
+        /// </summary>
         IsConnected = (10000 + 56), //WSAEISCONN
-        /// <devdoc>
-        ///    <para>
-        ///       Socket is not connected.
-        ///    </para>
-        /// </devdoc>
+
+        /// <summary>
+        /// The application tried to send or receive data, and the Socket is not connected.
+        /// </summary>
         NotConnected = (10000 + 57), //WSAENOTCONN
-        /// <devdoc>
-        ///    <para>
-        ///       Cannot send after socket shutdown.
-        ///    </para>
-        /// </devdoc>
+
+        /// <summary>
+        /// A request to send or receive data was disallowed because the Socket has already been closed.
+        /// </summary>
         Shutdown = (10000 + 58), //WSAESHUTDOWN
-        /// <devdoc>
-        ///    <para>
-        ///       Connection timed out.
-        ///    </para>
-        /// </devdoc>
+
+        /// <summary>
+        /// The connection attempt timed out, or the connected host has failed to respond.
+        /// </summary>
         TimedOut = (10000 + 60), //WSAETIMEDOUT
-        /// <devdoc>
-        ///    <para>
-        ///       Connection refused.
-        ///    </para>
-        /// </devdoc>
+
+        /// <summary>
+        /// The remote host is actively refusing a connection.
+        /// </summary>
         ConnectionRefused = (10000 + 61), //WSAECONNREFUSED
-        /// <devdoc>
-        ///    <para>
-        ///       Host is down.
-        ///    </para>
-        /// </devdoc>
+
+        /// <summary>
+        /// The operation failed because the remote host is down.
+        /// </summary>
         HostDown = (10000 + 64), //WSAEHOSTDOWN
-        /// <devdoc>
-        ///    <para>
-        ///       No route to host.
-        ///    </para>
-        /// </devdoc>
+
+        /// <summary>
+        /// There is no network route to the specified host.
+        /// </summary>
         HostUnreachable = (10000 + 65), //WSAEHOSTUNREACH
-        /// <devdoc>
-        ///    <para>
-        ///       Too many processes.
-        ///    </para>
-        /// </devdoc>
+
+        /// <summary>
+        /// Too many processes are using the underlying socket provider.
+        /// </summary>
         ProcessLimit = (10000 + 67), //WSAEPROCLIM
-        /// <devdoc>
-        ///    <para>
-        ///       [To be supplied.]
-        ///    </para>
-        /// </devdoc>
-        /*
-         * Extended Windows Sockets error constant definitions
-         */
-        /// <devdoc>
-        ///    <para>
-        ///       Network subsystem is unavailable.
-        ///    </para>
-        /// </devdoc>
+
+        /// <summary>
+        /// The network subsystem is unavailable.
+        /// </summary>
         SystemNotReady = (10000 + 91), //WSASYSNOTREADY
-        /// <devdoc>
-        ///    <para>
-        ///       Winsock.dll out of range.
-        ///    </para>
-        /// </devdoc>
+ 
+        /// <summary>
+        /// The version of the underlying socket provider is out of range.
+        /// </summary>
         VersionNotSupported = (10000 + 92), //WSAVERNOTSUPPORTED
-        /// <devdoc>
         ///    <para>
         ///       Successful startup not yet performed.
         ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// The underlying socket provider has not been initialized.
+        /// </summary>
         NotInitialized = (10000 + 93), //WSANOTINITIALISED
 
         // WSAEREMOTE             = (10000+71),
@@ -275,44 +216,34 @@ namespace System.Net.Sockets
         ///       Graceful shutdown in progress.
         ///    </para>
         /// </devdoc>
+        /// <summary>
+        /// A graceful shutdown is in progress.
+        /// </summary>
         Disconnecting = (10000 + 101), //WSAEDISCON
 
+        /// <summary>
+        /// The specified class was not found.
+        /// </summary>
         TypeNotFound = (10000 + 109), //WSATYPE_NOT_FOUND
 
-        /*
-         * Error return codes from gethostbyname() and gethostbyaddr()
-         *              = (when using the resolver). Note that these errors are
-         * retrieved via WSAGetLastError() and must therefore follow
-         * the rules for avoiding clashes with error numbers from
-         * specific implementations or language run-time systems.
-         * For this reason the codes are based at 10000+1001.
-         * Note also that [WSA]NO_ADDRESS is defined only for
-         * compatibility purposes.
-         */
-
-        /// <devdoc>
-        ///    <para>
-        ///       Host not found (Authoritative Answer: Host not found).
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// No such host is known. The name is not an official host name or alias.
+        /// </summary>
         HostNotFound = (10000 + 1001), //WSAHOST_NOT_FOUND
-        /// <devdoc>
-        ///    <para>
-        ///       Nonauthoritative host not found (Non-Authoritative: Host not found, or SERVERFAIL).
-        ///    </para>
-        /// </devdoc>
+
+        /// <summary>
+        /// The name of the host could not be resolved. Try again later.
+        /// </summary>
         TryAgain = (10000 + 1002), //WSATRY_AGAIN
-        /// <devdoc>
-        ///    <para>
-        ///       This is a nonrecoverable error (Non recoverable errors, FORMERR, REFUSED, NOTIMP).
-        ///    </para>
-        /// </devdoc>
+
+        /// <summary>
+        /// The error is unrecoverable or the requested database cannot be located.
+        /// </summary>
         NoRecovery = (10000 + 1003), //WSANO_RECOVERY
-        /// <devdoc>
-        ///    <para>
-        ///       Valid name, no data record of requested type.
-        ///    </para>
-        /// </devdoc>
+
+        /// <summary>
+        /// The requested name or IP address was not found on the name server.
+        /// </summary>
         NoData = (10000 + 1004), //WSANO_DATA
     }
 }

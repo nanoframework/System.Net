@@ -10,9 +10,23 @@ namespace System.Net
     using System.Runtime.InteropServices;
     using System.Threading;
     using System.Globalization;
-    
+
+    /// <summary>
+    /// Provides simple domain name resolution functionality.
+    /// </summary>
     public static class Dns
     {
+        /// <summary>
+        /// Resolves a host name or IP address to an <see cref="IPHostEntry"/> instance.
+        /// </summary>
+        /// <param name="hostNameOrAddress">The host name or IP address to resolve.</param>
+        /// <returns>An <see cref="IPHostEntry"/> instance that contains address information about the host specified in 
+        /// hostNameOrAddress.
+        /// </returns>
+        /// <remarks>
+        /// <para>The GetHostEntry method queries a DNS server for the IP address that is associated with a host name or IP address.</para>
+        /// <para>When an empty string is passed as the host name, this method returns the IPv4 addresses of the local host.</para>
+        /// </remarks>
         public static IPHostEntry GetHostEntry(string hostNameOrAddress)
         {
 

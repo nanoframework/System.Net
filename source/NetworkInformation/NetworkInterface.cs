@@ -101,15 +101,15 @@ namespace System.Net.NetworkInformation
         {
             throw new NotImplementedException();
 
-            return string.Concat(
-                            ipv6Address[0].ToString("X4"),
-                                ":",
-                            ipv6Address[1].ToString("X4"),
-                                ".",
-                            ipv6Address[2].ToString("X4"),
-                                ".",
-                            ipv6Address[3].ToString("X4")
-                            );
+        //    return string.Concat(
+        //                    ipv6Address[0].ToString("X4"),
+        //                        ":",
+        //                    ipv6Address[1].ToString("X4"),
+        //                        ".",
+        //                    ipv6Address[2].ToString("X4"),
+        //                        ".",
+        //                    ipv6Address[3].ToString("X4")
+        //                    );
         }
 
         /// <summary>
@@ -153,9 +153,9 @@ namespace System.Net.NetworkInformation
                 //_ipv6NetMask = IPAddressFromString(ipv6subnetMask);
                 //_ipv6GatewayAddress = IPAddressFromString(ipv6gatewayAddress);
 
-                _startupAddressMode = AddressMode.Static;
+                //_startupAddressMode = AddressMode.Static;
 
-                UpdateConfiguration(UPDATE_FLAGS_DHCP);
+                //UpdateConfiguration(UPDATE_FLAGS_DHCP);
             }
             finally
             {

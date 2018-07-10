@@ -4,138 +4,134 @@
 
 namespace System.Net.Sockets
 {
-
-    /// <devdoc>
-    ///    <para>
-    ///       Specifies the type of protocol that an instance of the <see cref='System.Net.Sockets.Socket'/>
-    ///       class can use.
-    ///    </para>
-    /// </devdoc>
+    /// <summary>
+    /// Specifies the type of protocol that an instance of the <see cref='System.Net.Sockets.Socket'/>
+    /// </summary>
     public enum ProtocolFamily
     {
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
+        /// <summary>
+        /// Unknown protocol.
+        /// </summary>
         Unknown = AddressFamily.Unknown,
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
+        /// <summary>
+        /// Unspecified protocol.
+        /// </summary>
         Unspecified = AddressFamily.Unspecified,
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
+        /// <summary>
+        /// Unix local to host protocol.
+        /// </summary>
         Unix = AddressFamily.Unix,
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
+        /// <summary>
+        /// IP version 4 protocol.
+        /// </summary>
         InterNetwork = AddressFamily.InterNetwork,
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
+        /// <summary>
+        /// ARPANET IMP protocol.
+        /// </summary>
         ImpLink = AddressFamily.ImpLink,
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
+        /// <summary>
+        /// PUP protocol.
+        /// </summary>
         Pup = AddressFamily.Pup,
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
+        /// <summary>
+        /// MIT CHAOS protocol.
+        /// </summary>
         Chaos = AddressFamily.Chaos,
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
+        /// <summary>
+        /// Xerox NS protocol.
+        /// </summary>
         NS = AddressFamily.NS,
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
+        /// <summary>
+        /// IPX or SPX protocol.
+        /// </summary>
         Ipx = AddressFamily.Ipx,
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
+        /// <summary>
+        /// ISO protocol.
+        /// </summary>
         Iso = AddressFamily.Iso,
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
+        /// <summary>
+        /// OSI protocol.
+        /// </summary>
         Osi = AddressFamily.Osi,
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
+        /// <summary>
+        /// European Computer Manufacturers Association (ECMA) protocol.
+        /// </summary>
         Ecma = AddressFamily.Ecma,
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
+        /// <summary>
+        /// DataKit protocol.
+        /// </summary>
         DataKit = AddressFamily.DataKit,
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
+        /// <summary>
+        /// CCITT protocol, such as X.25.
+        /// </summary>
         Ccitt = AddressFamily.Ccitt,
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
+        /// <summary>
+        /// IBM SNA protocol.
+        /// </summary>
         Sna = AddressFamily.Sna,
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
+        /// <summary>
+        /// DECNet protocol.
+        /// </summary>
         DecNet = AddressFamily.DecNet,
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
+        /// <summary>
+        /// Direct data link protocol.
+        /// </summary>
         DataLink = AddressFamily.DataLink,
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
+        /// <summary>
+        /// LAT protocol.
+        /// </summary>
         Lat = AddressFamily.Lat,
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
+        /// <summary>
+        /// NSC HyperChannel protocol.
+        /// </summary>
         HyperChannel = AddressFamily.HyperChannel,
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
+        /// <summary>
+        /// AppleTalk protocol.
+        /// </summary>
         AppleTalk = AddressFamily.AppleTalk,
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
+        /// <summary>
+        /// NetBIOS protocol.
+        /// </summary>
         NetBios = AddressFamily.NetBios,
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
+        /// <summary>
+        /// VoiceView protocol.
+        /// </summary>
         VoiceView = AddressFamily.VoiceView,
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
+        /// <summary>
+        /// FireFox protocol.
+        /// </summary>
         FireFox = AddressFamily.FireFox,
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
+        /// <summary>
+        /// Banyan protocol.
+        /// </summary>
         Banyan = AddressFamily.Banyan,
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
+        /// <summary>
+        /// Native ATM services protocol.
+        /// </summary>
         Atm = AddressFamily.Atm,
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
+        /// <summary>
+        /// IP version 6 protocol.
+        /// </summary>
         InterNetworkV6 = AddressFamily.InterNetworkV6,
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
+        /// <summary>
+        /// Microsoft Cluster products protocol.
+        /// </summary>
         Cluster = AddressFamily.Cluster,
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
+        /// <summary>
+        /// IEEE 1284.4 workgroup protocol.
+        /// </summary>
         Ieee12844 = AddressFamily.Ieee12844,
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
+        /// <summary>
+        /// IrDA protocol.
+        /// </summary>
         Irda = AddressFamily.Irda,
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
+        /// <summary>
+        /// Network Designers OSI gateway enabled protocol.
+        /// </summary>
         NetworkDesigners = AddressFamily.NetworkDesigners,
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
+        /// <summary>
+        /// MAX protocol.
+        /// </summary>
         Max = AddressFamily.Max,
 
     }; // enum ProtocolFamily
