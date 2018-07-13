@@ -37,8 +37,8 @@
     <Dependency Include="nanoFramework.CoreLibrary">
       <Version>[1.0.0-preview054]</Version>
     </Dependency>
-    <Dependency Include="nanoFramework.Runtime.Native">
-      <Version>[1.0.0-preview183]</Version>
+    <Dependency Include="nanoFramework.Runtime.Events">
+      <Version>[1.0.0-preview178]</Version>
     </Dependency>
   </ItemGroup>
   <PropertyGroup Label="Globals">
