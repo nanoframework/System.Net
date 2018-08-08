@@ -1,17 +1,12 @@
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (c) Microsoft Corporation.  All rights reserved.
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("System.Net.Security")]
+//
+// Copyright (c) 2018 The nanoFramework project contributors
+// Portions Copyright (c) Microsoft Corporation.  All rights reserved.
+// See LICENSE file in the project root for full license information.
+//
 
 namespace System.Net.Sockets
 {
-    using System.Collections;
-    using System.Diagnostics;
-    using System.Globalization;
-    using System.IO;
     using System.Net;
-    using System.Runtime.InteropServices;
     using System.Runtime.CompilerServices;
     using System.Threading;
 

@@ -1,19 +1,18 @@
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (c) Microsoft Corporation.  All rights reserved.
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Copyright (c) 2018 The nanoFramework project contributors
+// Portions Copyright (c) Microsoft Corporation.  All rights reserved.
+// See LICENSE file in the project root for full license information.
+//
 
 namespace System.Net.Sockets
 {
-    using System;
-    using System.Net;
-
     /// <summary>
     /// Defines socket error constants.
     /// </summary>
     public enum SocketError : int
     {
         /// <summary>
-        /// The operation completed succesfully.
+        /// The operation completed successfully.
         /// </summary>
         Success = 0,
 
@@ -23,7 +22,7 @@ namespace System.Net.Sockets
         SocketError = (-1),
  
         /// <summary>
-        /// A blocking Socket call was canceled.
+        /// A blocking Socket call was cancelled.
         /// </summary>
         Interrupted = (10000 + 4),      //WSAEINTR
  
