@@ -47,7 +47,7 @@ namespace System.Net.Sockets
         TooManyOpenSockets = (10000 + 24),  //WSAEMFILE
 
         /// <summary>
-        /// An operation on a nonblocking socket cannot be completed immediately.
+        /// An operation on a non-blocking socket cannot be completed immediately.
         /// </summary>
         WouldBlock = (10000 + 35),   //WSAEWOULDBLOCK
 
@@ -57,7 +57,7 @@ namespace System.Net.Sockets
         InProgress = (10000 + 36),  // WSAEINPROGRESS
  
         /// <summary>
-        /// The nonblocking Socket already has an operation in progress.
+        /// The non-blocking Socket already has an operation in progress.
         /// </summary>
         AlreadyInProgress = (10000 + 37),  //WSAEALREADY
 
@@ -202,7 +202,7 @@ namespace System.Net.Sockets
         /// </summary>
         VersionNotSupported = (10000 + 92), //WSAVERNOTSUPPORTED
         ///    <para>
-        ///       Successful startup not yet performed.
+        ///       Successful start-up not yet performed.
         ///    </para>
         /// <summary>
         /// The underlying socket provider has not been initialized.
@@ -246,5 +246,3 @@ namespace System.Net.Sockets
         NoData = (10000 + 1004), //WSANO_DATA
     }
 }
-
-

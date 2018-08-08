@@ -100,5 +100,3 @@ namespace System.Net.Security
         internal static extern int DataAvailable(object socket);
     }
 }
-
-

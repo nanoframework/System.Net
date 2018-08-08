@@ -58,8 +58,5 @@ namespace System.Net.Sockets
         /// </summary>
         Unknown = -1,   // Unknown socket type
 
-    } // enum SocketType
-
-} // namespace System.Net.Sockets
-
-
+    }
+}

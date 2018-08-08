@@ -28,16 +28,13 @@ namespace System.Net.Sockets
         /// </summary>
         IPv6 = ProtocolType.IPv6,
         /// <summary>
-        /// Indicates socket options apply to Tcp sockets.
+        /// Indicates socket options apply to TCP sockets.
         /// </summary>
         Tcp = ProtocolType.Tcp,
         /// <summary>
-        /// Indicates socket options apply to Udp sockets.
+        /// Indicates socket options apply to UDP sockets.
         /// </summary>
         Udp = ProtocolType.Udp,
 
-    }; // enum SocketOptionLevel
-
-} // namespace System.Net.Sockets
-
-
+    }
+}

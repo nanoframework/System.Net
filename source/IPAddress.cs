@@ -241,10 +241,6 @@ namespace System.Net
             }
 
             return IPAddress.Any;
-        }
-        
-        
-    } // class IPAddress
-} // namespace System.Net
-
-
+        }   
+    }
+}

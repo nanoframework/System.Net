@@ -23,7 +23,5 @@ namespace System.Net.Sockets
         /// Poll the error status of a socket.
         /// </summary>
         SelectError = 2
-    } // enum SelectMode
-} // namespace System.Net.Sockets
-
-
+    }
+}

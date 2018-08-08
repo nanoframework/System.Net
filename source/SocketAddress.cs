@@ -79,8 +79,5 @@ namespace System.Net
             get { return m_Buffer[offset]; }
             set { m_Buffer[offset] = value; }
         }
-
-    } // class SocketAddress
-} // namespace System.Net
-
-
+    }
+}

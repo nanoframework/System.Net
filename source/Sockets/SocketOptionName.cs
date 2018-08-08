@@ -274,8 +274,5 @@ namespace System.Net.Sockets
         /// </summary>
         UpdateConnectContext = 0x7010,
 
-    }; // enum SocketOptionName
-
-} // namespace System.Net.Sockets
-
-
+    }
+}

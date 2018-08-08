@@ -36,9 +36,5 @@ namespace System.Net.Sockets
         {
             get { return _errorCode; }
         }
-
-    }; // class SocketException
-
-} // namespace System.Net
-
-
+    }
+}

@@ -55,8 +55,5 @@ namespace System.Net.Sockets
         /// </summary>
         Partial = 0x8000,
 
-    }; // enum SocketFlags
-
-} // namespace System.Net.Sockets
-
-
+    }
+}

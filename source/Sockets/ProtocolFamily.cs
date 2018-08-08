@@ -136,8 +136,5 @@ namespace System.Net.Sockets
         /// </summary>
         Max = AddressFamily.Max,
 
-    }; // enum ProtocolFamily
-
-} // namespace System.Net.Sockets
-
-
+    };
+}

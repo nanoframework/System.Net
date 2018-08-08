@@ -111,7 +111,5 @@ namespace System.Net.Sockets
         /// Unknown protocol.
         /// </summary>
         Unknown = -1,   // unknown protocol type
-    } // enum ProtocolType
-} // namespace System.Net.Sockets
-
-
+    }
+}

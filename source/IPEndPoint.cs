@@ -152,8 +152,5 @@ namespace System.Net
 
             return ep.m_Address.Equals(m_Address) && ep.m_Port == m_Port;
         }
-
-    } // class IPEndPoint
-} // namespace System.Net
-
-
+    }
+}

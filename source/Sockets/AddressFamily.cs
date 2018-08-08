@@ -139,7 +139,5 @@ namespace System.Net.Sockets
         /// MAX address.
         /// </summary>
         Max = 29,   // Max
-    }; // enum AddressFamily
-} // namespace System.Net.Sockets
-
-
+    };
+}

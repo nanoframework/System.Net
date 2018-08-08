@@ -32,8 +32,5 @@ namespace System.Net
         /// </returns>
         public abstract EndPoint Create(SocketAddress socketAddress);
 
-    }; // abstract class EndPoint
-
-} // namespace System.Net
-
-
+    }
+}

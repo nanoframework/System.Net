@@ -50,7 +50,5 @@ namespace System.Net
                 return addressList;
             }
         }
-    } // class IPHostEntry
-} // namespace System.Net
-
-
+    }
+}
