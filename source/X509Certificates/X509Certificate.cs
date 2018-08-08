@@ -4,9 +4,6 @@
 // See LICENSE file in the project root for full license information.
 //
 
-/// <summary>
-/// The <see cref="System.Security.Cryptography.X509Certificates"/> namespace contains the common language runtime implementation of the Authenticode X.509 v.3 certificate. This certificate is signed with a private key that uniquely and positively identifies the holder of the certificate.
-/// </summary>
 namespace System.Security.Cryptography.X509Certificates 
 {
     using System;
