@@ -19,11 +19,16 @@ namespace System.Net.NetworkInformation
     public class NetworkInterface
     {
         //set update flags...
-        private const int UPDATE_FLAGS_DNS = 0x1;
-        private const int UPDATE_FLAGS_DHCP = 0x2;
-        private const int UPDATE_FLAGS_DHCP_RENEW = 0x4;
-        private const int UPDATE_FLAGS_DHCP_RELEASE = 0x8;
-        private const int UPDATE_FLAGS_MAC = 0x10;
+        [Flags]
+        internal enum UpdateOperation : byte
+        {
+            Invalid =       0x00,
+            Dns =           0x01,
+            Dhcp =          0x02,
+            DhcpRenew =     0x04,
+            DhcpRelease =   0x08,
+            Mac =           0x10,
+        }
 
         private readonly int _interfaceIndex;
 
@@ -127,7 +132,7 @@ namespace System.Net.NetworkInformation
                 _ipv4GatewayAddress = IPAddressFromString(ipv4GatewayAddress);
                 _startupAddressMode = AddressMode.Static;
 
-                UpdateConfiguration(UPDATE_FLAGS_DHCP);
+                UpdateConfiguration((int)UpdateOperation.Dhcp);
             }
             finally
             {
@@ -190,7 +195,7 @@ namespace System.Net.NetworkInformation
 
                 _startupAddressMode = AddressMode.Static;
 
-                UpdateConfiguration(UPDATE_FLAGS_DHCP);
+                UpdateConfiguration((int)UpdateOperation.Dhcp);
             }
             finally
             {
@@ -206,7 +211,7 @@ namespace System.Net.NetworkInformation
             try
             {
                 _startupAddressMode = AddressMode.DHCP;
-                UpdateConfiguration(UPDATE_FLAGS_DHCP);
+                UpdateConfiguration((int)UpdateOperation.Dhcp);
             }
             finally
             {
@@ -248,7 +253,7 @@ namespace System.Net.NetworkInformation
                 // clear flag
                 _automaticDns = false;
 
-                UpdateConfiguration(UPDATE_FLAGS_DNS);
+                UpdateConfiguration((int)UpdateOperation.Dns);
             }
             finally
             {
@@ -314,7 +319,7 @@ namespace System.Net.NetworkInformation
                 // set flag
                 _automaticDns = true;
 
-                UpdateConfiguration(UPDATE_FLAGS_DNS);
+                UpdateConfiguration((int)UpdateOperation.Dns);
             }
             finally
             {
@@ -403,7 +408,7 @@ namespace System.Net.NetworkInformation
         {
             try
             {
-                UpdateConfiguration(UPDATE_FLAGS_DHCP_RELEASE);
+                UpdateConfiguration((int)UpdateOperation.DhcpRelease);
             }
             finally
             {
@@ -418,7 +423,7 @@ namespace System.Net.NetworkInformation
         {
             try
             {
-                UpdateConfiguration(UPDATE_FLAGS_DHCP_RELEASE | UPDATE_FLAGS_DHCP_RENEW);
+                UpdateConfiguration((int)UpdateOperation.DhcpRenew);
             }
             finally
             {
@@ -437,7 +442,7 @@ namespace System.Net.NetworkInformation
                 try
                 {
                     _macAddress = value;
-                    UpdateConfiguration(UPDATE_FLAGS_MAC);
+                    UpdateConfiguration((int)UpdateOperation.Mac);
                 }
                 finally
                 {
