@@ -1,4 +1,4 @@
-[![NuGet](https://img.shields.io/nuget/vpre/nanoFramework.System.Net.svg)](https://www.nuget.org/packages/nanoFramework.System.Net/) [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=nanoframework/lib-nanoFramework.System.Net)](https://dependabot.com) [![#yourfirstpr](https://img.shields.io/badge/first--timers--only-friendly-blue.svg)](https://github.com/nanoframework/Home/blob/master/CONTRIBUTING.md)  [![Discord](https://img.shields.io/discord/478725473862549535.svg)](https://discord.gg/gCyBu8T)
+[![NuGet](https://img.shields.io/nuget/dt/nanoFramework.System.Net.svg)]() [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=nanoframework/lib-nanoFramework.System.Net)](https://dependabot.com) [![#yourfirstpr](https://img.shields.io/badge/first--timers--only-friendly-blue.svg)](https://github.com/nanoframework/Home/blob/master/CONTRIBUTING.md)  [![Discord](https://img.shields.io/discord/478725473862549535.svg)](https://discord.gg/gCyBu8T)
 
 
 ![nanoFramework logo](https://github.com/nanoframework/Home/blob/master/resources/logo/nanoFramework-repo-logo.png)
@@ -6,8 +6,6 @@
 -----
 
 ### Welcome to the **nanoFramework** System.Net Library repository!
-
-[![NuGet](https://img.shields.io/nuget/dt/nanoFramework.System.Net.svg)]() [![#yourfirstpr](https://img.shields.io/badge/first--timers--only-friendly-blue.svg)](https://github.com/nanoframework/Home/blob/master/CONTRIBUTING.md)
 
 
 ## Build status
