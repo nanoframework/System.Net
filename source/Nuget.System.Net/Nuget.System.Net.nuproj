@@ -10,20 +10,23 @@
       <Platform>AnyCPU</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <PropertyGroup>
+    <GitVersion_NuGetVersionV2 Condition=" '$(GitVersion_NuGetVersionV2)' == '' ">1.0.0-preview001</GitVersion_NuGetVersionV2>
+  </PropertyGroup>
   <ItemGroup>
-    <Content Include="..\bin\$(Configuration)\System.Net.dll">
+    <Content Include="..\nanoFramework.System.Net\bin\$(Configuration)\System.Net.dll">
       <Link>lib\System.Net.dll</Link>
     </Content>
-    <Content Include="..\bin\$(Configuration)\System.Net.pdb">
+    <Content Include="..\nanoFramework.System.Net\bin\$(Configuration)\System.Net.pdb">
       <Link>lib\System.Net.pdb</Link>
     </Content>
-    <Content Include="..\bin\$(Configuration)\System.Net.pdbx">
+    <Content Include="..\nanoFramework.System.Net\bin\$(Configuration)\System.Net.pdbx">
       <Link>lib\System.Net.pdbx</Link>
     </Content>
-    <Content Include="..\bin\$(Configuration)\System.Net.pe">
+    <Content Include="..\nanoFramework.System.Net\bin\$(Configuration)\System.Net.pe">
       <Link>lib\System.Net.pe</Link>
     </Content>
-    <Content Include="..\bin\$(Configuration)\System.Net.xml">
+    <Content Include="..\nanoFramework.System.Net\bin\$(Configuration)\System.Net.xml">
       <Link>lib\System.Net.xml</Link>
     </Content>
   </ItemGroup>
@@ -32,10 +35,10 @@
   </ItemGroup>
   <ItemGroup>
     <Dependency Include="nanoFramework.CoreLibrary">
-      <Version>[1.0.0-preview073]</Version>
+      <Version>[1.0.1-preview116]</Version>
     </Dependency>
     <Dependency Include="nanoFramework.Runtime.Events">
-      <Version>[1.0.0-preview191]</Version>
+      <Version>[1.0.0-preview209]</Version>
     </Dependency>
   </ItemGroup>
   <PropertyGroup Label="Globals">
