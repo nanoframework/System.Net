@@ -6,7 +6,7 @@ if ($env:appveyor_pull_request_number)
 else
 {
     # updated assembly info files   
-    git add "source\nanoFramework.Sytem.Net\Properties\AssemblyInfo.cs"
+    git add "source\nanoFramework.System.Net\Properties\AssemblyInfo.cs"
     git commit -m "Update assembly info file for v$env:GitVersion_NuGetVersionV2"
     git push origin --porcelain -q > $null
     
@@ -18,7 +18,7 @@ else
     cd nf-interpreter
 
     # new branch name
-    $newBranch = "$env:APPVEYOR_REPO_BRANCH-nfbot/update-version/nanoFramework.Sytem.Net/$env:GitVersion_NuGetVersionV2"
+    $newBranch = "$env:APPVEYOR_REPO_BRANCH-nfbot/update-version/nanoFramework.System.Net/$env:GitVersion_NuGetVersionV2"
 
     # create branch to perform updates
     git checkout -b "$newBranch" develop -q
@@ -28,7 +28,7 @@ else
     $newVersion = "{ $newVersion }"
     
     $versionRegex = "\{\s*\d+\,\s*\d+\,\s*\d+\,\s*\d+\s*}"
-    $assemblyFiles = (Get-ChildItem ".\src\DeviceInterfaces\System.Net\sys_net_native.cpp" -Recurse)
+    $assemblyFiles = (Get-ChildItem -Path ".\*" -Include "sys_net_native.cpp" -Recurse)
 
     foreach($file in $assemblyFiles)
     {

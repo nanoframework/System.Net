@@ -94,7 +94,11 @@
 
   # requires APPVEYOR_DISCORD_WEBHOOK_URL enviroment variable set with Discord webhook URL
   on_failure:
-  - ps: .\appveyor-discord.ps1 failure $env:APPVEYOR_DISCORD_WEBHOOK_URL
+    - ps: |
+
+          cd $env:APPVEYOR_BUILD_FOLDER
+
+          .\appveyor-discord.ps1 failure $env:APPVEYOR_DISCORD_WEBHOOK_URL
 
   cache:
     - source\packages -> **source\packages.config
@@ -203,7 +207,11 @@
 
   # requires APPVEYOR_DISCORD_WEBHOOK_URL enviroment variable set with Discord webhook URL
   on_failure:
-  - ps: .\appveyor-discord.ps1 failure $env:APPVEYOR_DISCORD_WEBHOOK_URL
+    - ps: |
+
+          cd $env:APPVEYOR_BUILD_FOLDER
+
+          .\appveyor-discord.ps1 failure $env:APPVEYOR_DISCORD_WEBHOOK_URL
 
   cache:
     - source\packages -> **source\packages.config
@@ -277,11 +285,10 @@
 
       msbuild source\nanoFramework.System.Net.sln /p:Configuration=Release /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
 
-  before_deploy:
-  - ps:  >-
-      .\commit-assemblyinfo-changes.ps1
-
-      .\generate-change-log.ps1
+  on_success:
+  # for this environment variable to work here it has to be set in AppVeyor UI
+  - nuget push source\Nuget.nanoFramework.System.Net\bin\Release\nanoFramework.System.Net.%GitVersion_NuGetVersionV2%.nupkg %MyGetToken% -Source https://www.myget.org/F/nanoframework-dev/api/v2/package
+  - nuget push source\Nuget.nanoFramework.System.Net.DELIVERABLES\bin\Release\nanoFramework.System.Net.DELIVERABLES.%GitVersion_NuGetVersionV2%.nupkg %MyGetToken% -Source https://www.myget.org/F/nanoframework-dev/api/v2/package
 
   artifacts:
   - path: '**\bin\Release\*.nupkg'
@@ -304,9 +311,19 @@
     prerelease: true
     force_update: true
 
+  before_deploy:
+    - ps:  >-
+        .\commit-assemblyinfo-changes.ps1
+
+        .\generate-change-log.ps1
+
   # requires APPVEYOR_DISCORD_WEBHOOK_URL enviroment variable set with Discord webhook URL
   on_failure:
-  - ps: .\appveyor-discord.ps1 failure $env:APPVEYOR_DISCORD_WEBHOOK_URL
+    - ps: |
+
+          cd $env:APPVEYOR_BUILD_FOLDER
+
+          .\appveyor-discord.ps1 failure $env:APPVEYOR_DISCORD_WEBHOOK_URL
 
   cache:
     - source\packages -> **source\packages.config
