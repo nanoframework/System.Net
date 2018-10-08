@@ -57,14 +57,12 @@
 
       nuget restore source\nanoFramework.System.Net.sln
 
-      C:\ProgramData\chocolatey\lib\GitVersion.Portable\tools\GitVersion.exe /l console /output buildserver /updateAssemblyInfo "source\Properties\AssemblyInfo.cs"
+      C:\ProgramData\chocolatey\lib\GitVersion.Portable\tools\GitVersion.exe /l console /output buildserver /updateAssemblyInfo "source\nanoFramework.System.Net\Properties\AssemblyInfo.cs"
 
   build_script:
   - ps: >-
 
       msbuild source\nanoFramework.System.Net.sln /p:Configuration=Release /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
-
-      msbuild source\nanoFramework.System.Net.Nuget.sln /p:Configuration=Release /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
 
   before_deploy:
     - ps:  >-
@@ -169,14 +167,12 @@
 
       nuget restore source\nanoFramework.System.Net.sln
 
-      C:\ProgramData\chocolatey\lib\GitVersion.Portable\tools\GitVersion.exe /l console /output buildserver /updateAssemblyInfo "source\Properties\AssemblyInfo.cs"
+      C:\ProgramData\chocolatey\lib\GitVersion.Portable\tools\GitVersion.exe /l console /output buildserver /updateAssemblyInfo "source\nanoFramework.System.Net\Properties\AssemblyInfo.cs"
 
   build_script:
   - ps: >-
 
       msbuild source\nanoFramework.System.Net.sln /p:Configuration=Release /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
-
-      msbuild source\nanoFramework.System.Net.Nuget.sln /p:Configuration=Release /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
 
   on_success:
   # for this environment variable to work here it has to be set in AppVeyor UI
@@ -274,14 +270,12 @@
 
       nuget restore source\nanoFramework.System.Net.sln
         
-      C:\ProgramData\chocolatey\lib\GitVersion.Portable\tools\GitVersion.exe /l console /output buildserver /updateAssemblyInfo "source\Properties\AssemblyInfo.cs"
+      C:\ProgramData\chocolatey\lib\GitVersion.Portable\tools\GitVersion.exe /l console /output buildserver /updateAssemblyInfo "source\nanoFramework.System.Net\Properties\AssemblyInfo.cs"
 
   build_script:
   - ps: >-
 
       msbuild source\nanoFramework.System.Net.sln /p:Configuration=Release /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
-
-      msbuild source\nanoFramework.System.Net.Nuget.sln /p:Configuration=Release /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
 
   before_deploy:
   - ps:  >-
