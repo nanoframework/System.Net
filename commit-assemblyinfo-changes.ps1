@@ -42,7 +42,8 @@ else
 
     if ($repoStatus -eq "") 
     {
-        # nothting changed
+        # nothing changed
+        &  cd .. > $null
     }
     else
     {
