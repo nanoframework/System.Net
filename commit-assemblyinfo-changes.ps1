@@ -7,7 +7,7 @@ else
 {
     # updated assembly info files   
     git add "source\nanoFramework.System.Net\Properties\AssemblyInfo.cs"
-    git commit -m "Update assembly info file for v$env:GitVersion_NuGetVersionV2"
+    git commit -m "Update assembly info file for v$env:GitVersion_NuGetVersionV2 [skip ci]" -m"[version update]"
     git push origin --porcelain -q > $null
     
     'Updated assembly info...' | Write-Host -ForegroundColor White -NoNewline
