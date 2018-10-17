@@ -15,6 +15,7 @@
 
 **Documentation and other chores:**
 
+- Merge 'develop' for Release 1.0.0 [\#39](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/39)
 - Update 2 NuGet dependencies [\#38](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/38)
 - Update 2 NuGet dependencies [\#34](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/34)
 - Update 2 NuGet dependencies [\#32](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/32)
