@@ -1,7 +1,6 @@
 # Change Log
 
-## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/HEAD)
-
+## [v1.0.0](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.0.0) (2018-10-17)
 **Implemented enhancements:**
 
 - Update snk to match mscorlib [\#18](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/18)
@@ -16,6 +15,7 @@
 
 **Documentation and other chores:**
 
+- Update 2 NuGet dependencies [\#38](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/38)
 - Update 2 NuGet dependencies [\#34](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/34)
 - Update 2 NuGet dependencies [\#32](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/32)
 - Update 2 NuGet dependencies [\#31](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/31)
