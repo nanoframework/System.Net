@@ -86,6 +86,9 @@ on_failure:
 
       & $env:APPVEYOR_BUILD_FOLDER\appveyor-discord.ps1 failure $env:APPVEYOR_DISCORD_WEBHOOK_URL
 
+on_success:
+  - ps: .\update-dependencies.ps1
+
 cache:
   - source\packages -> **source\packages.config
   - C:\ProgramData\chocolatey\bin -> appveyor.yml
