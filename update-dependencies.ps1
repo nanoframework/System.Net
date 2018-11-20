@@ -94,16 +94,19 @@ else
                 $packageName = $package[0]
                 $packageOriginVersion = $package[1]
     
-                # update package
-                if ($env:APPVEYOR_REPO_BRANCH -like '*release*' -or $env:APPVEYOR_REPO_BRANCH -like '*master*')
+                # update package, only on the first pass
+                if($updatePackageOutput -eq $null)
                 {
-                    # don't allow prerelease for release and master branches
-                    $updatePackage = nuget update $solutionFile[0].FullName -Source https://api.nuget.org/v3/index.json -Source https://api.nuget.org/v3/index.json 
-                }
-                else
-                {
-                    # allow prerelease for all others
-                    $updatePackage = nuget update $solutionFile[0].FullName -Source https://www.myget.org/F/nanoframework-dev/api/v3/index.json -Source https://api.nuget.org/v3/index.json -PreRelease
+                    if ($env:APPVEYOR_REPO_BRANCH -like '*release*' -or $env:APPVEYOR_REPO_BRANCH -like '*master*')
+                    {
+                        # don't allow prerelease for release and master branches
+                        $updatePackageOutput = nuget update $solutionFile[0].FullName -Source https://api.nuget.org/v3/index.json -Source https://api.nuget.org/v3/index.json
+                    }
+                    else
+                    {
+                        # allow prerelease for all others
+                        $updatePackageOutput = nuget update $solutionFile[0].FullName -Source https://www.myget.org/F/nanoframework-dev/api/v3/index.json -Source https://api.nuget.org/v3/index.json -PreRelease
+                    }
                 }
 
                 # need to get target version
@@ -119,6 +122,18 @@ else
                     {
                         $packageTargetVersion = $node.version
                     }
+                }
+
+                # sanity check
+                if($packageTargetVersion -eq $packageOriginVersion)
+                {
+                    "$packageName has the same version as before: $packageOriginVersion." | Write-Host -ForegroundColor White -BackgroundColor Red
+
+                    throw "$packageName has the same version as before: $packageOriginVersion."
+                }
+                else
+                {
+                    "Bumping $packageName from $packageOriginVersion to $packageTargetVersion." | Write-Host -ForegroundColor Cyan                
                 }
 
                 #  find csproj
@@ -170,6 +185,9 @@ else
 
                 # build PR title
                 $prTitle = "Bumps $packageName from $packageOriginVersion to $packageTargetVersion"
+
+                #clear 
+                $updatePackageOutput = $null
             }
 
             # rename csproj files back to nfproj
@@ -195,13 +213,15 @@ else
             # commit changes
             git add -A 2>&1
 
+            $packageCount = $packageList.length
+
             # commit message with a different title if one or more dependencies are updated
             if ($packageList.length -gt 1)
             {
-                git commit -m "Update $packageList.length NuGet dependencies" -m"$commitMessage" -q
+                git commit -m "Update $packageCount NuGet dependencies" -m"$commitMessage" -q
 
                 # fix PR title
-                $prTitle = "Update $packageList.length NuGet dependencies"
+                $prTitle = "Update $packageCount NuGet dependencies"
             }
             else 
             {
@@ -211,7 +231,7 @@ else
             git push --set-upstream origin $newBranchName --porcelain -q
 
             # start PR
-            # we are hardcoding to develop branch to have a fixed one
+            # we are hardcoding to 'develop' branch to have a fixed one
             # this is very important for tags (which don't have branch information)
             # considering that the base branch can be changed at the PR ther is no big deal about this 
             $prRequestBody = @{title="$prTitle";body="$commitMessage";head="$newBranchName";base="develop"} | ConvertTo-Json
