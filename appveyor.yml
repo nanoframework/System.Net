@@ -75,8 +75,6 @@ before_deploy:
   - ps:  >-
       .\commit-assemblyinfo-changes.ps1
       
-      .\generate-change-log.ps1
-      
       Push-AppveyorArtifact $env:APPVEYOR_BUILD_FOLDER\nanoFramework.System.Net.$env:MyNuGetVersion.nupkg
 
 after_deploy:
