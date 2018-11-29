@@ -1,8 +1,7 @@
 # Change Log
 
-## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/HEAD)
-
-[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.2-preview-001...HEAD)
+## [v1.0.2-preview-013](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.0.2-preview-013) (2018-11-20)
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.2-preview-001...v1.0.2-preview-013)
 
 **Documentation and other chores:**
 
