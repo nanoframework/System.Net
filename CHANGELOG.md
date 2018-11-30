@@ -1,5 +1,12 @@
 # Change Log
 
+## [v1.0.2-preview-018](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.0.2-preview-018) (2018-11-30)
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.2-preview-013...v1.0.2-preview-018)
+
+**Documentation and other chores:**
+
+- Update 2 NuGet dependencies [\#49](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/49)
+
 ## [v1.0.2-preview-013](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.0.2-preview-013) (2018-11-20)
 [Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.2-preview-001...v1.0.2-preview-013)
 
