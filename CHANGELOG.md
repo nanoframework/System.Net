@@ -1,5 +1,17 @@
 # Change Log
 
+## [v1.0.2-preview-028](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.0.2-preview-028) (2018-12-13)
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.2-preview-023...v1.0.2-preview-028)
+
+**Implemented enhancements:**
+
+- Rework SslStream API [\#53](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/53) [[Breaking-Change](https://github.com/nanoframework/lib-nanoFramework.System.Net/labels/Breaking-Change)]
+- Fix X509Certificate constructors from string [\#52](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/52)
+
+**Fixed bugs:**
+
+- Fix X509Certificate constructors from string [\#52](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/52)
+
 ## [v1.0.2-preview-023](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.0.2-preview-023) (2018-12-03)
 [Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.2-preview-021...v1.0.2-preview-023)
 
