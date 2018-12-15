@@ -91,7 +91,16 @@ namespace System.Security.Cryptography.X509Certificates
         /// </remarks>
         public X509Certificate(string certificate)
         {
-            _certificate = Encoding.UTF8.GetBytes(certificate);
+            var tempCertificate = Encoding.UTF8.GetBytes(certificate);
+
+            //////////////////////////////////////////////
+            // because this is parsing from a string    //
+            // we need to keep the terminator           //
+            //////////////////////////////////////////////
+            _certificate = new byte[tempCertificate.Length + 1];
+            Array.Copy(tempCertificate, _certificate, tempCertificate.Length);
+            _certificate[_certificate.Length - 1] = 0;
+
             _password = "";
 
             ParseCertificate(_certificate, _password, ref _issuer, ref _subject, ref _effectiveDate, ref _expirationDate);
@@ -108,10 +117,19 @@ namespace System.Security.Cryptography.X509Certificates
         /// </remarks>
         public X509Certificate(string certificate, string password)
         {
-            _certificate = Encoding.UTF8.GetBytes(certificate);
             _password = password;
 
-            ParseCertificate(Encoding.UTF8.GetBytes(certificate), _password, ref _issuer, ref _subject, ref _effectiveDate, ref _expirationDate);
+            var tempCertificate = Encoding.UTF8.GetBytes(certificate);
+
+            //////////////////////////////////////////////
+            // because this is parsing from a string    //
+            // we need to keep the terminator           //
+            //////////////////////////////////////////////
+            _certificate = new byte[tempCertificate.Length + 1];
+            Array.Copy(tempCertificate, _certificate, tempCertificate.Length);
+            _certificate[_certificate.Length - 1] = 0;
+
+            ParseCertificate(_certificate, _password, ref _issuer, ref _subject, ref _effectiveDate, ref _expirationDate);
         }
 
         /// <summary>

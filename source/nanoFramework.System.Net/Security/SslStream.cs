@@ -17,9 +17,17 @@ namespace System.Net.Security
     /// </summary>
     public class SslStream : NetworkStream
     {
+        private SslVerification _sslVerification;
+
         // Internal flags
         private int _sslContext;
         private bool _isServer;
+
+        /// <summary>
+        /// Option for SSL verification.
+        /// The default behaviour is <see cref="SslVerification.CertificateRequired"/>.
+        /// </summary>
+        public SslVerification SslVerification { get => _sslVerification; set => _sslVerification = value; }
 
         //--//
 
@@ -41,6 +49,8 @@ namespace System.Net.Security
 
             _sslContext = -1;
             _isServer = false;
+
+            _sslVerification = SslVerification.CertificateRequired;
         }
 
         /// <summary>
@@ -51,7 +61,7 @@ namespace System.Net.Security
         /// <param name="sslProtocols">The protocols that may be supported.</param>
         public void AuthenticateAsClient(string targetHost, params SslProtocols[] sslProtocols)
         {
-            AuthenticateAsClient(targetHost, null, null, SslVerification.NoVerification, sslProtocols);
+            Authenticate(false, targetHost, null, null, sslProtocols);
         }
 
         /// <summary>
@@ -59,12 +69,11 @@ namespace System.Net.Security
         /// The authentication process uses the specified certificate collections and SSL protocols.
         /// </summary>
         /// <param name="targetHost">The name of the server that will share this SslStream.</param>
-        /// <param name="cert">The client certificate.</param>
-        /// <param name="verify">The type of verification required for authentication.</param>
+        /// <param name="clientCertificate">The client certificate.</param>
         /// <param name="sslProtocols">The protocols that may be supported.</param>
-        public void AuthenticateAsClient(string targetHost, X509Certificate cert, SslVerification verify, params SslProtocols[] sslProtocols)
+        public void AuthenticateAsClient(string targetHost, X509Certificate clientCertificate, params SslProtocols[] sslProtocols)
         {
-            AuthenticateAsClient(targetHost, cert, null, verify, sslProtocols);
+            Authenticate(false, targetHost, clientCertificate, null, sslProtocols);
         }
 
         /// <summary>
@@ -72,38 +81,36 @@ namespace System.Net.Security
         /// The authentication process uses the specified certificate collections and SSL protocols.
         /// </summary>
         /// <param name="targetHost">The name of the server that will share this SslStream.</param>
-        /// <param name="cert">The client certificate.</param>
-        /// <param name="ca">The collection of certificates for client authorities to use for authentication.</param>
-        /// <param name="verify">The type of verification required for authentication.</param>
+        /// <param name="clientCertificate">The client certificate.</param>
+        /// <param name="ca">Certificate Authority certificate to use for authentication with the server.</param>
         /// <param name="sslProtocols">The protocols that may be supported.</param>
-        public void AuthenticateAsClient(string targetHost, X509Certificate cert, X509Certificate[] ca, SslVerification verify, params SslProtocols[] sslProtocols)
+        public void AuthenticateAsClient(string targetHost, X509Certificate clientCertificate, X509Certificate ca, params SslProtocols[] sslProtocols)
         {
-            Authenticate(false, targetHost, cert, ca, verify, sslProtocols);
-        }
-
-        /// <summary>
-        /// Called by servers to authenticate the server and optionally the client in a client-server connection.
-        /// This member is overloaded.For complete information about this member, including syntax, usage, and examples, click a name in the overload list.
-        /// </summary>
-        /// <param name="cert">The certificate used to authenticate the server.</param>
-        /// <param name="verify">An enumeration value that specifies the degree of verification required, such as whether the client must supply a certificate for authentication.</param>
-        /// <param name="sslProtocols">The protocols that may be used for authentication.</param>
-        public void AuthenticateAsServer(X509Certificate cert, SslVerification verify, params SslProtocols[] sslProtocols)
-        {
-            AuthenticateAsServer(cert, null, verify, sslProtocols);
+            Authenticate(false, targetHost, clientCertificate, ca, sslProtocols);
         }
 
         /// <summary>
         /// Called by servers to authenticate the server and optionally the client in a client-server connection using the specified certificate, 
         /// verification requirements and security protocol.
         /// </summary>
-        /// <param name="cert">The certificate used to authenticate the server.</param>
-        /// <param name="ca">The certifcates for certificate authorities to use for authentication.</param>
-        /// <param name="verify">An enumeration value that specifies the degree of verification required, such as whether the client must supply a certificate for authentication.</param>
+        /// <param name="serverCertificate">The certificate used to authenticate the server.</param>
         /// <param name="sslProtocols">The protocols that may be used for authentication.</param>
-        public void AuthenticateAsServer(X509Certificate cert, X509Certificate[] ca, SslVerification verify, params SslProtocols[] sslProtocols)
+        public void AuthenticateAsServer(X509Certificate serverCertificate, params SslProtocols[] sslProtocols)
         {
-            Authenticate(true, "", cert, ca, verify, sslProtocols);
+            Authenticate(true, "", null, serverCertificate, sslProtocols);
+        }
+
+        /// <summary>
+        /// Called by servers to authenticate the server and optionally the client in a client-server connection using the specified certificates, requirements and security protocol.
+        /// </summary>
+        /// <param name="serverCertificate">The X509Certificate used to authenticate the server.</param>
+        /// <param name="clientCertificateRequired">A <see cref="Boolean"/> value that specifies whether the client is asked for a certificate for authentication. Note that this is only a request, if no certificate is provided, the server still accepts the connection request.</param>
+        /// <param name="sslProtocols">The protocols that may be used for authentication.</param>
+        public void AuthenticateAsServer(X509Certificate serverCertificate, bool clientCertificateRequired, params SslProtocols[] sslProtocols)
+        {
+            SslVerification = SslVerification.VerifyClientOnce;
+
+            Authenticate(true, "", null, serverCertificate,  sslProtocols);
         }
 
         /// <summary>
@@ -118,7 +125,7 @@ namespace System.Net.Security
             SslNative.UpdateCertificates(_sslContext, cert, ca);
         }
 
-        internal void Authenticate(bool isServer, string targetHost, X509Certificate certificate, X509Certificate[] ca, SslVerification verify, params SslProtocols[] sslProtocols)
+        internal void Authenticate(bool isServer, string targetHost, X509Certificate certificate, X509Certificate ca, params SslProtocols[] sslProtocols)
         {
             SslProtocols vers = (SslProtocols)0;
 
@@ -135,12 +142,12 @@ namespace System.Net.Security
             {
                 if (isServer)
                 {
-                    _sslContext = SslNative.SecureServerInit((int)vers, (int)verify, certificate, ca);
+                    _sslContext = SslNative.SecureServerInit((int)vers, (int)_sslVerification, certificate, ca);
                     SslNative.SecureAccept(_sslContext, _socket);
                 }
                 else
                 {
-                    _sslContext = SslNative.SecureClientInit((int)vers, (int)verify, certificate, ca);
+                    _sslContext = SslNative.SecureClientInit((int)vers, (int)_sslVerification, certificate, ca);
                     SslNative.SecureConnect(_sslContext, targetHost, _socket);
                 }
             }

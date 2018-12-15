@@ -12,8 +12,8 @@
 
 | Component | Build Status | NuGet Package |
 |:-|---|---|
-| System.Net | [![Build status](https://ci.appveyor.com/api/projects/status/jw18rw9nibb41led/branch/master?svg=true)](https://ci.appveyor.com/project/nfbot/lib-system-net/branch/master) | [![NuGet](https://img.shields.io/nuget/vpre/nanoFramework.System.Net.svg)](https://www.nuget.org/packages/nanoFramework.System.Net/)  |
-| System.Net (preview) | [![Build status](https://ci.appveyor.com/api/projects/status/jw18rw9nibb41led/branch/develop?svg=true)](https://ci.appveyor.com/project/nfbot/lib-system-net/branch/develop) | [![MyGet Pre Release](https://img.shields.io/myget/nanoframework-dev/vpre/nanoFramework.System.Net.svg)](https://www.myget.org/feed/nanoframework-dev/package/nuget/nanoFramework.System.Net) |
+| System.Net | [![Build status](https://ci.appveyor.com/api/projects/status/jw18rw9nibb41led/branch/master?svg=true)](https://ci.appveyor.com/project/nfbot/lib-system-net/branch/master) | [![NuGet](https://img.shields.io/nuget/v/nanoFramework.System.Net.svg)](https://www.nuget.org/packages/nanoFramework.System.Net/)  |
+| System.Net (preview) | [![Build Status](https://dev.azure.com/nanoframework/nanoFramework.System.Net/_apis/build/status/nanoframework.lib-nanoFramework.System.Net)](https://dev.azure.com/nanoframework/nanoFramework.System.Net/_build/latest?definitionId=20) | [![MyGet Pre Release](https://img.shields.io/myget/nanoframework-dev/vpre/nanoFramework.System.Net.svg)](https://www.myget.org/feed/nanoframework-dev/package/nuget/nanoFramework.System.Net) |
 
 ## Feedback and documentation
 
