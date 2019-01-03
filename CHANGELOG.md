@@ -4,6 +4,10 @@
 
 [Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.2...HEAD)
 
+**Implemented enhancements:**
+
+- Add CertificateManager class [\#51](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/51) [[Breaking-Change](https://github.com/nanoframework/lib-nanoFramework.System.Net/labels/Breaking-Change)]
+
 **Documentation and other chores:**
 
 - Merge back from Release v1.0.2 [\#58](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/58)
