@@ -76,9 +76,6 @@ namespace System.Net.Security
         internal static extern int SecureClientInit(int sslProtocols, int sslCertVerify, X509Certificate certificate, X509Certificate ca);
 
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal static extern void UpdateCertificates(int contextHandle, X509Certificate certificate, X509Certificate[] ca);
-
-        [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal static extern void SecureAccept(int contextHandle, object socket);
 
         [MethodImplAttribute(MethodImplOptions.InternalCall)]

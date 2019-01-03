@@ -113,18 +113,6 @@ namespace System.Net.Security
             Authenticate(true, "", null, serverCertificate,  sslProtocols);
         }
 
-        /// <summary>
-        /// Updates the SSL stack to use updated certificates.
-        /// </summary>
-        /// <param name="cert">The personal certificate to update.</param>
-        /// <param name="ca">The certificate authority certificate to update.</param>
-        public void UpdateCertificates(X509Certificate cert, X509Certificate[] ca)
-        {
-            if(_sslContext == -1) throw new InvalidOperationException();
-            
-            SslNative.UpdateCertificates(_sslContext, cert, ca);
-        }
-
         internal void Authenticate(bool isServer, string targetHost, X509Certificate certificate, X509Certificate ca, params SslProtocols[] sslProtocols)
         {
             SslProtocols vers = (SslProtocols)0;
