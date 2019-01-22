@@ -1,10 +1,33 @@
 # Change Log
 
+## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/HEAD)
+
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.3-preview-003...HEAD)
+
 ## [v1.0.0](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.0.0) (2018-10-17)
 [Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.2-preview-028...HEAD)
 
 **Documentation and other chores:**
 
+- Update 2 NuGet dependencies [\#59](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/59)
+
+## [v1.0.3-preview-003](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.0.3-preview-003) (2019-01-03)
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.2...v1.0.3-preview-003)
+
+**Implemented enhancements:**
+
+- Add CertificateManager class [\#51](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/51) [[Breaking-Change](https://github.com/nanoframework/lib-nanoFramework.System.Net/labels/Breaking-Change)]
+
+**Documentation and other chores:**
+
+- Merge back from Release v1.0.2 [\#58](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/58)
+
+## [v1.0.2](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.0.2) (2018-12-15)
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.2-preview-028...v1.0.2)
+
+**Documentation and other chores:**
+
+- Release v1.0.2 [\#57](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/57)
 - Update 2 NuGet dependencies [\#56](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/56)
 
 ## [v1.0.2-preview-028](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.0.2-preview-028) (2018-12-13)
