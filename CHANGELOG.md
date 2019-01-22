@@ -1,11 +1,11 @@
 # Change Log
 
-## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/HEAD)
-
-[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.3-preview-003...HEAD)
+## [v1.0.4](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.0.4) (2019-01-22)
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.3-preview-003...v1.0.4)
 
 **Documentation and other chores:**
 
+- Release v1.0.4 [\#60](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/60)
 - Update 2 NuGet dependencies [\#59](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/59)
 
 ## [v1.0.3-preview-003](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.0.3-preview-003) (2019-01-03)
