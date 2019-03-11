@@ -108,8 +108,8 @@ namespace System.Net
                     else
                     {
                         i = i == length - 1 ? ++i : i;
-                        octet = (ulong)(ConvertStringToInt32(ipString.Substring(lastIndex, i - lastIndex)) & 0x00000000000000FF);
-                        ipAddress = ipAddress + (ulong)((octet << shiftIndex) & mask);
+                        octet = ulong.Parse(ipString.Substring(lastIndex, i - lastIndex)) & 0x00000000000000FF;
+                        ipAddress = ipAddress + ((octet << shiftIndex) & mask);
                         lastIndex = i + 1;
                         shiftIndex = shiftIndex + 8;
                         mask = (mask << 8);
@@ -139,57 +139,6 @@ namespace System.Net
                     "." +
                     ((byte)(m_Address >> 24)).ToString();
         }
-
-        //--//
-        ////////////////////////////////////////////////////////////////////////////////////////
-        // this method ToInt32 is part of teh Convert class which we will bring over later
-        // at that time we will get rid of this code
-        //
-
-        /// <summary>
-        /// Converts the specified System.String representation of a number to an equivalent
-        /// 32-bit signed integer.
-        /// </summary>
-        /// <param name="value">A System.String containing a number to convert.</param>
-        /// <returns>
-        /// A 32-bit signed integer equivalent to the value of value.-or- Zero if value
-        /// is null.
-        /// </returns>
-        private static int ConvertStringToInt32(string value)
-        {
-            char[] num = value.ToCharArray();
-            int result = 0;
-
-            bool isNegative = false;
-            int signIndex = 0;
-
-            if (num[0] == '-')
-            {
-                isNegative = true;
-                signIndex = 1;
-            }
-            else if (num[0] == '+')
-            {
-                signIndex = 1;
-            }
-
-            int exp = 1;
-            for (int i = num.Length - 1; i >= signIndex; i--)
-            {
-                if (num[i] < '0' || num[i] > '9')
-                {
-                    throw new ArgumentException();
-                }
-
-                result += ((num[i] - '0') * exp);
-                exp *= 10;
-            }
-
-            return (isNegative) ? (-1 * result) : result;
-        }
-
-        // this method ToInt32 is part of teh Convert class which we will bring over later
-        ////////////////////////////////////////////////////////////////////////////////////////
 
         /// <summary>
         /// Retrieves an IP address that is the local default address.
