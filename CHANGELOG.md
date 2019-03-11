@@ -6,6 +6,7 @@
 
 **Implemented enhancements:**
 
+- Remove local implementation of Int32 converter [\#66](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/66)
 - Fix GetDefaultLocalAddress [\#65](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/65)
 
 ## [v1.0.6-preview-005](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.0.6-preview-005) (2019-03-11)
