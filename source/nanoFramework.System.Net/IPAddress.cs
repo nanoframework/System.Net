@@ -4,6 +4,8 @@
 // See LICENSE file in the project root for full license information.
 //
 
+using System.Net.NetworkInformation;
+
 namespace System.Net
 {
     /// <summary>
@@ -195,52 +197,26 @@ namespace System.Net
         /// <returns>The default IP address.</returns>
         public static IPAddress GetDefaultLocalAddress()
         {
-            // Special conditions are implemented here because of a problem with GetHostEntry
-            // on the digi device and NetworkInterface from the emulator.
-            // In the emulator we must use GetHostEntry.
-            // On the device and Windows NetworkInterface works and is preferred.
-            try
+            NetworkInterface[] interfaces = NetworkInterface.GetAllNetworkInterfaces();
+
+            int cnt = interfaces.Length;
+            for (int i = 0; i < cnt; i++)
             {
-                //NetworkInterface[] interfaces = NetworkInterface.GetAllNetworkInterfaces();
+                NetworkInterface ni = interfaces[i];
 
-                //int cnt = interfaces.Length;
-                //for (int i = 0; i < cnt; i++)
+                if (ni.IPv4Address != "0.0.0.0" && ni.IPv4SubnetMask != "0.0.0.0")
+                {
+                    return Parse(ni.IPv4Address);
+                }
+                // FIXME
+                // TODO implement this when IPv6 support is added
+                //else (ni.IPv6Address != "0.0.0.0" )
                 //{
-                //    NetworkInterface ni = interfaces[i];
-
-                //    if (ni.IPAddress != "0.0.0.0" && ni.SubnetMask != "0.0.0.0")
-                //    {
-                //        return IPAddress.Parse(ni.IPAddress);
-                //    }
+                //    return IPAddress.Parse(ni.IPv6Address);
                 //}
             }
-            catch
-            {
-            }
 
-            try
-            {
-                IPAddress localAddress = null;
-              //  IPHostEntry hostEntry = Dns.GetHostEntry("");
-                IPHostEntry hostEntry = new IPHostEntry();
-
-                int cnt = hostEntry.AddressList.Length;
-                for (int i = 0; i < cnt; ++i)
-                {
-                    if ((localAddress = hostEntry.AddressList[i]) != null)
-                    {
-                        if(localAddress.m_Address != 0)
-                        {
-                            return localAddress;
-                        }
-                    }
-                }
-            }
-            catch
-            {
-            }
-
-            return IPAddress.Any;
+            return Any;
         }   
     }
 }
