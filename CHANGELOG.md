@@ -2,7 +2,14 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.6-preview-003...HEAD)
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.6-preview-005...HEAD)
+
+**Implemented enhancements:**
+
+- Fix GetDefaultLocalAddress [\#65](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/65)
+
+## [v1.0.6-preview-005](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.0.6-preview-005) (2019-03-11)
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.6-preview-003...v1.0.6-preview-005)
 
 **Documentation and other chores:**
 
