@@ -112,7 +112,8 @@ namespace System.Net.Sockets
             // Set the internal socket
             _socket = socket;
 
-            _socketType = (int)_socket.GetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Type);
+           // set the socket type
+            _socketType = (int)socket.SocketType;
 
             _ownsSocket = ownsSocket;
         }
