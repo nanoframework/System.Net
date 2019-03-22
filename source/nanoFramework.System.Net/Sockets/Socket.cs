@@ -29,6 +29,9 @@ namespace System.Net.Sockets
         private int m_recvTimeout = System.Threading.Timeout.Infinite;
         private int m_sendTimeout = System.Threading.Timeout.Infinite;
 
+        // socket type
+        private SocketType _socketType;
+
         /// <summary>
         /// Initializes a new instance of the Socket class using the specified address family, socket type and protocol.
         /// </summary>
@@ -44,6 +47,8 @@ namespace System.Net.Sockets
         public Socket(AddressFamily addressFamily, SocketType socketType, ProtocolType protocolType)
         {
             m_Handle = NativeSocket.socket((int)addressFamily, (int)socketType, (int)protocolType);
+
+            _socketType = socketType;
         }
 
         private Socket(int handle)
@@ -220,6 +225,23 @@ namespace System.Net.Sockets
 
                 // desktop implementation treats 0 as infinite
                 m_sendTimeout = ((value == 0) ? Timeout.Infinite : value);
+            }
+        }
+
+        /// <summary>
+        /// Gets the type of the <see cref="Socket"/>.
+        /// </summary>
+        /// <value>
+        /// One of the <see cref="SocketType"/> values.
+        /// </value>
+        /// <remarks>
+        /// <see cref="SocketType"/> is read-only and is set when the <see cref="Socket"/> is created.
+        /// </remarks>
+        public SocketType SocketType
+        {
+            get
+            {
+                return _socketType;
             }
         }
 
@@ -842,21 +864,24 @@ namespace System.Net.Sockets
                 throw new NotSupportedException();
             }
 
+            // socket options that don't require any request to the native end
+            if(optionLevel == SocketOptionLevel.Socket)
+            {
+                if(optionName == SocketOptionName.Type)
+                {
+                    return _socketType;
+                }
+            }
+
+            // reached here: have to make a request to the lower level to get it
+
             byte[] val = new byte[4];
 
             GetSocketOption(optionLevel, optionName, val);
 
-            //Use BitConverter.ToInt32
-            //endianness?
-            int iVal;
+            int iVal = (val[0] << 0) | (val[1] << 8) | (val[2] << 16) | (val[3] << 24);
 
-            //if(SystemInfo.IsBigEndian)
-            //    iVal = (val[3] << 0 | val[2] << 8 | val[1] << 16 | val[0] << 24);
-            //else
-                iVal = (val[0] << 0 | val[1] << 8 | val[2] << 16 | val[3] << 24);
-
-            
-            return (object)iVal;
+            return iVal;
         }
 
         /// <summary>
