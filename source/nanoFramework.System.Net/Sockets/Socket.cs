@@ -393,6 +393,10 @@ namespace System.Net.Sockets
 
             Socket socket = new Socket(socketHandle);
 
+            // creating a socket from Accept() is only possible for Stream sockets
+            // have to set the type here
+            socket._socketType = SocketType.Stream;
+
             socket.m_localEndPoint = this.m_localEndPoint;
 
             return socket;
