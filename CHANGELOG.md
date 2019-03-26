@@ -2,7 +2,14 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.6-preview-009...HEAD)
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.6-preview-011...HEAD)
+
+**Fixed bugs:**
+
+- Fix missing setting of socket type [\#68](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/68)
+
+## [v1.0.6-preview-011](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.0.6-preview-011) (2019-03-22)
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.6-preview-009...v1.0.6-preview-011)
 
 **Implemented enhancements:**
 
