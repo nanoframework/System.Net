@@ -2,7 +2,14 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.6-preview-017...HEAD)
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.6-preview-023...HEAD)
+
+**Documentation and other chores:**
+
+- Bumps nanoFramework.Runtime.Events from 1.0.5-preview-019 to 1.0.6-preview-001 [\#72](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/72)
+
+## [v1.0.6-preview-023](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.0.6-preview-023) (2019-04-23)
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.6-preview-017...v1.0.6-preview-023)
 
 **Documentation and other chores:**
 
