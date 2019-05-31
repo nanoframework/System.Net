@@ -2,7 +2,14 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.6-preview-023...HEAD)
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.6-preview-024...HEAD)
+
+**Implemented enhancements:**
+
+- Add remote end point field to Socket [\#73](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/73)
+
+## [v1.0.6-preview-024](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.0.6-preview-024) (2019-04-24)
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.6-preview-023...v1.0.6-preview-024)
 
 **Documentation and other chores:**
 
