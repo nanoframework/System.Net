@@ -24,6 +24,7 @@ namespace System.Net.Sockets
 
         private bool m_fBlocking = true;
         private EndPoint m_localEndPoint = null;
+        private EndPoint _remoteEndPoint = null;
 
         // timeout values are stored in uSecs since the Poll method requires it.
         private int m_recvTimeout = System.Threading.Timeout.Infinite;
@@ -312,6 +313,9 @@ namespace System.Net.Sockets
             {
                 throw new ObjectDisposedException();
             }
+
+            // store remote endpoint we are connecting to
+            _remoteEndPoint = remoteEP;
 
             NativeSocket.connect(this, remoteEP.Serialize().m_Buffer, !m_fBlocking);
 
