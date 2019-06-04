@@ -12,34 +12,34 @@ namespace System.Net.Security
     /// <summary>
     /// Defines the possible versions of Secure Sockets Layer (SSL).
     /// </summary>
+    /// <remarks>
+    /// Note: Following the recommendation of the .NET documentation, nanoFramework implementation does not have SSL3 nor Default because those are deprecated and unsecure.
+    /// </remarks>
     [FlagsAttribute]
     public enum SslProtocols
     {
         /// <summary>
-        /// No SSL protocol is specified.
+        /// Allows the operating system to choose the best protocol to use, and to block protocols that are not secure. Unless your app has a specific reason not to, you should use this field.
         /// </summary>
         None = 0x00,
+
         /// <summary>
-        /// Specifies the SSL 3.0 protocol. 
-        /// SSL 3.0 has been superseded by the TLS protocol and is provided for backward compatibility only.
+        /// Specifies the TLS 1.0 security protocol.
+        /// The TLS protocol is defined in IETF RFC 2246.
         /// </summary>
-        SSLv3 = 0x08,
+        Tls = 0x10,
+
         /// <summary>
-        /// Specifies the TLS 1.0 security protocol. The TLS protocol is defined in IETF RFC 2246.
+        /// Specifies the TLS 1.1 security protocol.
+        /// The TLS protocol is defined in IETF RFC 4346.
         /// </summary>
-        TLSv1 = 0x10,
+        Tls11 = 0x20,
+
         /// <summary>
-        /// Specifies the TLS 1.1 security protocol. The TLS protocol is defined in IETF RFC 4346.
+        /// Specifies the TLS 1.2 security protocol.
+        /// The TLS protocol is defined in IETF RFC 5246.
         /// </summary>
-        TLSv11 = 0x20,
-        /// <summary>
-        /// Specifies the TLS 1.2 security protocol. The TLS protocol is defined in IETF RFC 5246.
-        /// </summary>
-        TLSv12 = 0x40,
-        /// <summary>
-        /// Specifies that either Secure Sockets Layer (SSL) 3.0 or Transport Layer Security (TLS) 1.0 are acceptable for secure communications.
-        /// </summary>
-        Default = SSLv3 | TLSv1,
+        Tls12 = 0x40,
     }
 
     /// <summary>
