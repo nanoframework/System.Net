@@ -5,6 +5,7 @@
 //
 
 using System.Net.NetworkInformation;
+using System.Net.Sockets;
 
 namespace System.Net
 {
@@ -19,11 +20,37 @@ namespace System.Net
         /// This field is read-only.
         /// </summary>
         public static readonly IPAddress Any = new IPAddress(0x0000000000000000);
+        
         /// <summary>
         /// Provides the IP loopback address. This field is read-only.
         /// </summary>
         public static readonly IPAddress Loopback = new IPAddress(0x000000000100007F);
-        internal long m_Address;
+
+        [Diagnostics.DebuggerBrowsable(Diagnostics.DebuggerBrowsableState.Never)]
+        internal long _address;
+
+        [Diagnostics.DebuggerBrowsable(Diagnostics.DebuggerBrowsableState.Never)]
+        private AddressFamily _family = AddressFamily.InterNetwork;
+
+        [Diagnostics.DebuggerBrowsable(Diagnostics.DebuggerBrowsableState.Never)]
+        private ushort[] _numbers = new ushort[NumberOfLabels];
+
+        internal const int IPv4AddressBytes = 4;
+        internal const int IPv6AddressBytes = 16;
+
+        internal const int NumberOfLabels = IPv6AddressBytes / 2;
+
+        /// <summary>
+        /// Gets the address family of the IP address.
+        /// </summary>
+        /// <value>Returns <see cref="AddressFamily.InterNetwork"/> for IPv4 or <see cref="AddressFamily.InterNetworkV6"/> for IPv6.</value>
+        public AddressFamily AddressFamily
+        {
+            get
+            {
+                return _family;
+            }
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="IPAddress"/> class with the address specified as an Int64.
@@ -36,16 +63,32 @@ namespace System.Net
                 throw new ArgumentOutOfRangeException();
             }
 
-            m_Address = newAddress;
+            _address = newAddress;
+
+            // default to InterNetwork
+            _family = AddressFamily.InterNetwork;
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="IPAddress"/> class with the address specified as a Byte array.
         /// </summary>
-        /// <param name="newAddressBytes"></param>
-        public IPAddress(byte[] newAddressBytes)
-            : this(((((newAddressBytes[3] << 0x18) | (newAddressBytes[2] << 0x10)) | (newAddressBytes[1] << 0x08)) | newAddressBytes[0]) & ((long)0xFFFFFFFF))
+        /// <param name="address"></param>
+        public IPAddress(byte[] address)
         {
+            if (address.Length == IPv4AddressBytes)
+            {
+                _family = AddressFamily.InterNetwork;
+                _address = ((address[3] << 24 | address[2] << 16 | address[1] << 8 | address[0]) & 0x0FFFFFFFF);
+            }
+            else
+            {
+                _family = AddressFamily.InterNetworkV6;
+
+                for (int i = 0; i < NumberOfLabels; i++)
+                {
+                    _numbers[i] = (ushort)(address[i * 2] * 256 + address[i * 2 + 1]);
+                }
+            }
         }
 
         /// <summary>
@@ -59,7 +102,7 @@ namespace System.Net
 
             if (obj == null) return false;
 
-            return this.m_Address == addr.m_Address;
+            return this._address == addr._address;
         }
 
         /// <summary>
@@ -70,10 +113,10 @@ namespace System.Net
         {
             return new byte[]
             {
-                (byte)(m_Address),
-                (byte)(m_Address >> 8),
-                (byte)(m_Address >> 16),
-                (byte)(m_Address >> 24)
+                (byte)(_address),
+                (byte)(_address >> 8),
+                (byte)(_address >> 16),
+                (byte)(_address >> 24)
             };
         }
 
@@ -131,13 +174,13 @@ namespace System.Net
         /// </remarks>
         public override string ToString()
         {
-            return ((byte)(m_Address)).ToString() +
+            return ((byte)(_address)).ToString() +
                     "." +
-                    ((byte)(m_Address >> 8)).ToString() +
+                    ((byte)(_address >> 8)).ToString() +
                     "." +
-                    ((byte)(m_Address >> 16)).ToString() +
+                    ((byte)(_address >> 16)).ToString() +
                     "." +
-                    ((byte)(m_Address >> 24)).ToString();
+                    ((byte)(_address >> 24)).ToString();
         }
 
         /// <summary>
@@ -166,6 +209,21 @@ namespace System.Net
             }
 
             return Any;
-        }   
+        }
+
+        // For security, we need to be able to take an IPAddress and make a copy that's immutable and not derived.
+        internal IPAddress Snapshot()
+        {
+            switch (_family)
+            {
+                case AddressFamily.InterNetwork:
+                    return new IPAddress(_address);
+
+                //case AddressFamily.InterNetworkV6:
+                //    return new IPAddress(m_Numbers, (uint)m_ScopeId);
+            }
+
+            throw new NotSupportedException();
+        }
     }
 }

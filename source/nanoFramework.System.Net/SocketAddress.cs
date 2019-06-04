@@ -13,9 +13,14 @@ namespace System.Net
     /// </summary>
     public class SocketAddress
     {
+        internal const int IPv6AddressSize = 28;
         internal const int IPv4AddressSize = 16;
 
+        [Diagnostics.DebuggerBrowsable(Diagnostics.DebuggerBrowsableState.Never)]
         internal byte[] m_Buffer;
+
+        [Diagnostics.DebuggerBrowsable(Diagnostics.DebuggerBrowsableState.Never)]
+        internal long _address;
 
         /// <summary>
         /// Gets the address family for the current address.
@@ -32,6 +37,47 @@ namespace System.Net
         internal SocketAddress(byte[] address)
         {
             m_Buffer = address;
+        }
+
+        internal SocketAddress(IPAddress ipAddress)
+            :this(ipAddress.AddressFamily,
+                (ipAddress.AddressFamily == AddressFamily.InterNetwork) ? IPv4AddressSize : IPv6AddressSize)
+
+        {
+            // no Port
+            m_Buffer[2] = 0;
+            m_Buffer[3] = 0;
+
+            //if (ipAddress.AddressFamily == AddressFamily.InterNetworkV6)
+            //{
+            //    // No handling for Flow Information
+            //    m_Buffer[4] = 0;
+            //    m_Buffer[5] = 0;
+            //    m_Buffer[6] = 0;
+            //    m_Buffer[7] = 0;
+
+            //    // Scope serialization
+            //    long scope = ipAddress.ScopeId;
+            //    m_Buffer[24] = (byte)scope;
+            //    m_Buffer[25] = (byte)(scope >> 8);
+            //    m_Buffer[26] = (byte)(scope >> 16);
+            //    m_Buffer[27] = (byte)(scope >> 24);
+
+            //    // Address serialization
+            //    byte[] addressBytes = ipAddress.GetAddressBytes();
+            //    for (int i = 0; i < addressBytes.Length; i++)
+            //    {
+            //        m_Buffer[8 + i] = addressBytes[i];
+            //    }
+            //}
+            //else
+            {
+                // IPv4 Address serialization
+                m_Buffer[4] = unchecked((byte)(ipAddress._address));
+                m_Buffer[5] = unchecked((byte)(ipAddress._address >> 8));
+                m_Buffer[6] = unchecked((byte)(ipAddress._address >> 16));
+                m_Buffer[7] = unchecked((byte)(ipAddress._address >> 24));
+            }
         }
 
         /// <summary>
@@ -78,6 +124,44 @@ namespace System.Net
         {
             get { return m_Buffer[offset]; }
             set { m_Buffer[offset] = value; }
+        }
+
+        internal IPEndPoint GetIPEndPoint()
+        {
+            IPAddress address = GetIPAddress();
+            int port = (int)((m_Buffer[2] << 8 & 0xFF00) | (m_Buffer[3]));
+            return new IPEndPoint(address, port);
+        }
+
+        internal IPAddress GetIPAddress()
+        {
+            //if (Family == AddressFamily.InterNetworkV6)
+            //{
+            //    byte[] address = new byte[IPAddress.IPv6AddressBytes];
+            //    for (int i = 0; i < address.Length; i++)
+            //    {
+            //        address[i] = m_Buffer[i + 8];
+            //    }
+
+            //    long scope = (long)((m_Buffer[27] << 24) +
+            //                        (m_Buffer[26] << 16) +
+            //                        (m_Buffer[25] << 8) +
+            //                        (m_Buffer[24]));
+
+            //    return new IPAddress(address, scope);
+
+            //}
+            //else if (Family == AddressFamily.InterNetwork)
+            {
+                long address = (long)(
+                        (m_Buffer[4] & 0x000000FF) |
+                        (m_Buffer[5] << 8 & 0x0000FF00) |
+                        (m_Buffer[6] << 16 & 0x00FF0000) |
+                        (m_Buffer[7] << 24)
+                        ) & 0x00000000FFFFFFFF;
+
+                return new IPAddress(address);
+            }
         }
     }
 }

@@ -19,13 +19,17 @@ namespace System.Net
         /// Specifies the minimum value that can be assigned to the Port property. This field is read-only.
         /// </summary>
         public const int MinPort = 0x00000000;
+        
         /// <summary>
         /// Specifies the maximum value that can be assigned to the Port property. The MaxPort value is set to 0x0000FFFF. This field is read-only.
         /// </summary>
         public const int MaxPort = 0x0000FFFF;
 
-        private IPAddress m_Address;
-        private int m_Port;
+        [Diagnostics.DebuggerBrowsable(Diagnostics.DebuggerBrowsableState.Never)]
+        private IPAddress _address;
+
+        [Diagnostics.DebuggerBrowsable(Diagnostics.DebuggerBrowsableState.Never)]
+        private int _port;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="IPEndPoint"/> class with the specified address and port number.
@@ -34,8 +38,8 @@ namespace System.Net
         /// <param name="port">The port number associated with the address, or 0 to specify any available port. port is in host order.</param>
         public IPEndPoint(long address, int port)
         {
-            m_Port = port;
-            m_Address = new IPAddress(address);
+            _port = port;
+            _address = new IPAddress(address);
         }
 
         /// <summary>
@@ -45,8 +49,8 @@ namespace System.Net
         /// <param name="port"></param>
         public IPEndPoint(IPAddress address, int port)
         {
-            m_Port = port;
-            m_Address = address;
+            _port = port;
+            _address = address;
         }
 
         /// <summary>
@@ -57,7 +61,19 @@ namespace System.Net
         {
             get
             {
-                return m_Address;
+                return _address;
+            }
+        }
+
+        /// <summary>
+        /// Gets the Internet Protocol (IP) address family.
+        /// </summary>
+        /// <value>Returns <see cref="AddressFamily.InterNetwork"/>.</value>
+        public AddressFamily AddressFamily
+        {
+            get
+            {
+                return _address.AddressFamily;
             }
         }
 
@@ -69,7 +85,7 @@ namespace System.Net
         {
             get
             {
-                return m_Port;
+                return _port;
             }
         }
 
@@ -86,13 +102,13 @@ namespace System.Net
             //
             // populate it
             //
-            buffer[2] = unchecked((byte)(this.m_Port >> 8));
-            buffer[3] = unchecked((byte)(this.m_Port));
+            buffer[2] = unchecked((byte)(_port >> 8));
+            buffer[3] = unchecked((byte)(_port));
 
-            buffer[4] = unchecked((byte)(this.m_Address.m_Address));
-            buffer[5] = unchecked((byte)(this.m_Address.m_Address >> 8));
-            buffer[6] = unchecked((byte)(this.m_Address.m_Address >> 16));
-            buffer[7] = unchecked((byte)(this.m_Address.m_Address >> 24));
+            buffer[4] = unchecked((byte)(_address._address));
+            buffer[5] = unchecked((byte)(_address._address >> 8));
+            buffer[6] = unchecked((byte)(_address._address >> 16));
+            buffer[7] = unchecked((byte)(_address._address >> 24));
 
             return socketAddress;
         }
@@ -109,7 +125,7 @@ namespace System.Net
 
             byte[] buf = socketAddress.m_Buffer;
 
- //           Debug.Assert(socketAddress.Family == AddressFamily.InterNetwork);
+            //           Debug.Assert(socketAddress.Family == AddressFamily.InterNetwork);
 
             int port = (int)(
                     (buf[2] << 8 & 0xFF00) |
@@ -123,9 +139,7 @@ namespace System.Net
                     (buf[7] << 24)
                     ) & 0x00000000FFFFFFFF;
 
-            IPEndPoint created = new IPEndPoint(address, port);
-
-            return created;
+            return new IPEndPoint(address, port);
         }
 
         /// <summary>
@@ -134,7 +148,7 @@ namespace System.Net
         /// <returns>A string containing the IP address and the port number of the specified endpoint (for example, 192.168.1.2:80).</returns>
         public override string ToString()
         {
-            return m_Address.ToString() + ":" + m_Port.ToString();
+            return _address.ToString() + ":" + _port.ToString();
         }
 
         /// <summary>
@@ -150,7 +164,13 @@ namespace System.Net
                 return false;
             }
 
-            return ep.m_Address.Equals(m_Address) && ep.m_Port == m_Port;
+            return ep._address.Equals(_address) && ep._port == _port;
+        }
+
+        // For security, we need to be able to take an IPEndPoint and make a copy that's immutable and not derived.
+        internal IPEndPoint Snapshot()
+        {
+            return new IPEndPoint(Address.Snapshot(), Port);
         }
     }
 }
