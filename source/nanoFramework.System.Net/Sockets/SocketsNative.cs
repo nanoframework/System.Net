@@ -13,10 +13,10 @@ namespace System.Net.Sockets
         public static extern int socket(int family, int type, int protocol);
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        public static extern void bind(object socket, byte[] address);
+        public static extern void bind(object socket, EndPoint address);
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        public static extern void connect(object socket, byte[] address, bool fThrowOnWouldBlock);
+        public static extern void connect(object socket, EndPoint endPoint, bool fThrowOnWouldBlock);
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         public static extern int send(object socket, byte[] buf, int offset, int count, int flags, int timeout_ms);
@@ -41,10 +41,10 @@ namespace System.Net.Sockets
         public static extern void shutdown(object socket, int how, out int err);
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        public static extern int sendto(object socket, byte[] buf, int offset, int count, int flags, int timeout_ms, byte[] address);
+        public static extern int sendto(object socket, byte[] buf, int offset, int count, int flags, int timeout_ms, EndPoint address);
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        public static extern int recvfrom(object socket, byte[] buf, int offset, int count, int flags, int timeout_ms, ref byte[] address);
+        public static extern int recvfrom(object socket, byte[] buf, int offset, int count, int flags, int timeout_ms, ref EndPoint address);
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         public static extern void getpeername(object socket, out byte[] address);

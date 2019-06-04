@@ -22,16 +22,34 @@ namespace System.Net.Sockets
    //     [FieldNoReflection]
         internal int m_Handle = -1;
 
+        [Diagnostics.DebuggerBrowsable(Diagnostics.DebuggerBrowsableState.Never)]
         private bool m_fBlocking = true;
+
+        [Diagnostics.DebuggerBrowsable(Diagnostics.DebuggerBrowsableState.Never)]
         private EndPoint m_localEndPoint = null;
-        private EndPoint _remoteEndPoint = null;
 
         // timeout values are stored in uSecs since the Poll method requires it.
-        private int m_recvTimeout = System.Threading.Timeout.Infinite;
-        private int m_sendTimeout = System.Threading.Timeout.Infinite;
+        private int m_recvTimeout = Timeout.Infinite;
+        private int m_sendTimeout = Timeout.Infinite;
 
         // socket type
+        [Diagnostics.DebuggerBrowsable(Diagnostics.DebuggerBrowsableState.Never)]
         private SocketType _socketType;
+
+        // Our internal state doesn't automatically get updated after a non-blocking connect
+        // completes.  Keep track of whether we're doing a non-blocking connect, and make sure
+        // to poll for the real state until we're done connecting.
+        [Diagnostics.DebuggerBrowsable(Diagnostics.DebuggerBrowsableState.Never)]
+        private bool _nonBlockingConnectInProgress;
+
+        // Keep track of the kind of endpoint used to do a non-blocking connect, so we can set
+        // it to m_RightEndPoint when we discover we're connected.
+        [Diagnostics.DebuggerBrowsable(Diagnostics.DebuggerBrowsableState.Never)]
+        private EndPoint _nonBlockingConnectRightEndPoint;
+
+        // _rightEndPoint is null if the socket has not been bound. Otherwise, it is any EndPoint of the correct type (IPEndPoint, etc).
+        [Diagnostics.DebuggerBrowsable(Diagnostics.DebuggerBrowsableState.Never)]
+        internal EndPoint _rightEndPoint;
 
         /// <summary>
         /// Initializes a new instance of the Socket class using the specified address family, socket type and protocol.
@@ -65,11 +83,11 @@ namespace System.Net.Sockets
         /// </value>
         /// <remarks>
         /// <para>
-        /// If you are using a non-blocking <see cref="Socket"/>, Available is a good way to determine whether data is queued for reading, before calling <see cref="Receive(byte[])"/>. The available data
-        /// is the total amount of data queued in the network buffer for reading. If no data is queued in the network buffer, Available returns 0.
+        /// If you are using a non-blocking <see cref="Socket"/>, <see cref="Available"/> is a good way to determine whether data is queued for reading, before calling <see cref="Receive(byte[])"/>. The available data
+        /// is the total amount of data queued in the network buffer for reading. If no data is queued in the network buffer, <see cref="Available"/> returns 0.
         /// </para>
         /// <para>
-        /// If the remote host shuts down or closes the connection, Available can throw a <see cref="SocketException"/>. If you receive a <see cref="SocketException"/>, use the 
+        /// If the remote host shuts down or closes the connection, <see cref="Available"/> can throw a <see cref="SocketException"/>. If you receive a <see cref="SocketException"/>, use the 
         /// <see cref="SocketException.ErrorCode"/> property to obtain the specific error code. After you have obtained this code, refer to the Windows Sockets version 2 API 
         /// error code documentation in the MSDN library for a detailed description of the error.
         /// </para>
@@ -140,7 +158,7 @@ namespace System.Net.Sockets
         /// <para>
         /// The LocalEndPoint property is usually set after you make a call to the <see cref="Bind"/> method. If you allow the system to assign your socket's local IP address and
         /// port number, the LocalEndPoint property will be set after the first I/O operation. For connection-oriented protocols, the first I/O operation would be a call 
-        /// to the Connect or Accept method. For connectionless protocols, the first I/O operation would be any of the send or receive calls.
+        /// to the Connect or <see cref="Accept"/> method. For connectionless protocols, the first I/O operation would be any of the send or receive calls.
         /// </para>
         /// </remarks>
         public EndPoint LocalEndPoint
@@ -277,7 +295,21 @@ namespace System.Net.Sockets
                 throw new ObjectDisposedException();
             }
 
-            NativeSocket.bind(this, localEP.Serialize().m_Buffer);
+            EndPoint endPointSnapshot = localEP;
+            IPEndPoint ipSnapshot = localEP as IPEndPoint;
+
+            // take a snapshot that will make it immutable and not derived.
+            ipSnapshot = ipSnapshot.Snapshot();
+            // TODO IPv6
+            //endPointSnapshot = RemapIPEndPoint(ipSnapshot);
+
+            NativeSocket.bind(this, endPointSnapshot);
+
+            if (_rightEndPoint == null)
+            {
+                // save a copy of the EndPoint
+                _rightEndPoint = endPointSnapshot;
+            }
 
             m_localEndPoint = localEP;
         }
@@ -293,9 +325,9 @@ namespace System.Net.Sockets
         /// send data to the remote device with the <see cref="Send(Byte[])"/> method, or receive data from the remote device with the <see cref="Receive(Byte[])"/> method.
         /// </para>
         /// <para>
-        /// If you are using a connectionless protocol such as UDP, you do not have to call Connect before sending and receiving data. You can use <see cref="Socket.SendTo(byte[], EndPoint)"/> and 
-        /// <see cref="Socket.ReceiveFrom(byte[], int, int, SocketFlags, ref EndPoint)"/> to synchronously communicate with a remote host. If you do call Connect, any datagrams that arrive from an address other than the 
-        /// specified default will be discarded. If you want to set your default remote host to a broadcast address, you must first call the <see cref="Socket.SetSocketOption(SocketOptionLevel, SocketOptionName, bool)"/> method and 
+        /// If you are using a connectionless protocol such as UDP, you do not have to call Connect before sending and receiving data. You can use <see cref="SendTo(byte[], EndPoint)"/> and 
+        /// <see cref="ReceiveFrom(byte[], int, int, SocketFlags, ref EndPoint)"/> to synchronously communicate with a remote host. If you do call Connect, any datagrams that arrive from an address other than the 
+        /// specified default will be discarded. If you want to set your default remote host to a broadcast address, you must first call the <see cref="SetSocketOption(SocketOptionLevel, SocketOptionName, bool)"/> method and 
         /// set the socket option to <see cref="SocketOptionName.Broadcast"/>, or Connect will throw a SocketException. If you receive a <see cref="SocketException"/>, use the 
         /// <see cref="SocketException.ErrorCode"/> property to obtain the specific error code. After you have obtained this code, refer to the Windows Sockets version 2 API 
         /// error code documentation in the MSDN library for a detailed description of the error.
@@ -314,14 +346,34 @@ namespace System.Net.Sockets
                 throw new ObjectDisposedException();
             }
 
-            // store remote endpoint we are connecting to
-            _remoteEndPoint = remoteEP;
+            EndPoint endPointSnapshot = remoteEP;
+            Snapshot(ref endPointSnapshot);
 
-            NativeSocket.connect(this, remoteEP.Serialize().m_Buffer, !m_fBlocking);
+            if(m_fBlocking)
+            {
+                // blocking connect
+                _nonBlockingConnectInProgress = false;
+            }
+            else
+            {
+                // non blocking connect
+                _nonBlockingConnectInProgress = true;
+                _nonBlockingConnectRightEndPoint = endPointSnapshot;
+            }
+            
+            NativeSocket.connect(this, endPointSnapshot, !m_fBlocking);
 
             if (m_fBlocking)
             {
+                // if we are on blocking connect
+                // poll until connection is established or exception thrown
                 Poll(-1, SelectMode.SelectWrite);
+            }
+
+            if (_rightEndPoint == null)
+            {
+                // save a copy of the EndPoint
+                _rightEndPoint = endPointSnapshot;
             }
         }
 
@@ -440,7 +492,7 @@ namespace System.Net.Sockets
         /// </remarks>
         /// <seealso cref="o:Send"/>
         /// <seealso cref="Socket"/>
-        /// <seealso cref="System.Net.Sockets"/>
+        /// <seealso cref="Sockets"/>
         public int Send(byte[] buffer)
         {
             return Send(buffer, 0, buffer != null ? buffer.Length : 0, SocketFlags.None);
@@ -472,7 +524,7 @@ namespace System.Net.Sockets
         /// </remarks>
         /// <seealso cref="o:Send"/>
         /// <seealso cref="Socket"/>
-        /// <seealso cref="System.Net.Sockets"/>
+        /// <seealso cref="Sockets"/>
         public int Send(byte[] buffer, SocketFlags socketFlags)
         {
             return Send(buffer, 0, buffer != null ? buffer.Length : 0, socketFlags);
@@ -503,7 +555,7 @@ namespace System.Net.Sockets
         /// </remarks>
         /// <seealso cref="o:Send"/>
         /// <seealso cref="Socket"/>
-        /// <seealso cref="System.Net.Sockets"/>
+        /// <seealso cref="Sockets"/>
         public int Send(byte[] buffer, int size, SocketFlags socketFlags)
         {
             return Send(buffer, 0, size, socketFlags);
@@ -529,7 +581,7 @@ namespace System.Net.Sockets
         /// </remarks>
         /// <seealso cref="o:Send"/>
         /// <seealso cref="Socket"/>
-        /// <seealso cref="System.Net.Sockets"/>
+        /// <seealso cref="Sockets"/>
         public int Send(byte[] buffer, int offset, int size, SocketFlags socketFlags)
         {
             if (m_Handle == -1)
@@ -556,9 +608,17 @@ namespace System.Net.Sockets
                 throw new ObjectDisposedException();
             }
 
-            byte[] address = remoteEP.Serialize().m_Buffer;
+            EndPoint endPointSnapshot = remoteEP;
 
-            return NativeSocket.sendto(this, buffer, offset, size, (int)socketFlags, m_sendTimeout, address);
+            int bytesTransferred = NativeSocket.sendto(this, buffer, offset, size, (int)socketFlags, m_sendTimeout, endPointSnapshot);
+
+            if (_rightEndPoint == null)
+            {
+                // save a copy of the EndPoint
+                _rightEndPoint = endPointSnapshot;
+            }
+
+            return bytesTransferred;
         }
 
         /// <summary>
@@ -620,7 +680,7 @@ namespace System.Net.Sockets
         /// <see cref="SocketFlags"/> value defaults to <see cref="SocketFlags.None"/>.
         /// </para>
         /// <para>
-        /// If no data is available for reading, the <see cref="Receive(byte[])"/> method will block until data is available, unless a time-out value was set by using <see cref="Socket.ReceiveTimeout"/>. If 
+        /// If no data is available for reading, the <see cref="Receive(byte[])"/> method will block until data is available, unless a time-out value was set by using <see cref="ReceiveTimeout"/>. If 
         /// the time-out value was exceeded, the <see cref="Receive(Byte[])"/> call will throw a <see cref="SocketException"/>. If you are in non-blocking mode, and there is no data available in the
         /// in the protocol stack buffer, the <see cref="Receive(Byte[])"/> method will complete immediately and throw a <see cref="SocketException"/>. You can use the <see cref="Available"/> property to 
         /// determine if data is available for reading. When <see cref="Available"/> is non-zero, retry the receive operation.
@@ -665,9 +725,9 @@ namespace System.Net.Sockets
         /// both connection-oriented and connectionless sockets.</para>
         /// <para>This overload only requires you to provide a receive buffer, the number of bytes you want to receive, and the necessary <see cref="SocketFlags"/>.</para>
         /// <para>If no data is available for reading, the Receive method will block until data is available, unless a time-out value was set by using 
-        /// <see cref="Socket.ReceiveTimeout"/>. If the time-out value was exceeded, the <see cref="Socket.Receive(byte[])"/> call will throw a <see cref="SocketException"/>. If you are in non-blocking 
-        /// mode, and there is no data available in the in the protocol stack buffer, The <see cref="Socket.Receive(byte[])"/> method will complete immediately and throw a <see cref="SocketException"/>. 
-        /// You can use the Available property to determine if data is available for reading. When Available is non-zero, retry your receive operation.</para>
+        /// <see cref="ReceiveTimeout"/>. If the time-out value was exceeded, the <see cref="Receive(byte[])"/> call will throw a <see cref="SocketException"/>. If you are in non-blocking 
+        /// mode, and there is no data available in the in the protocol stack buffer, The <see cref="Receive(byte[])"/> method will complete immediately and throw a <see cref="SocketException"/>. 
+        /// You can use the <see cref="Available"/> property to determine if data is available for reading. When <see cref="Available"/> is non-zero, retry your receive operation.</para>
         /// </remarks>
         public int Receive(byte[] buffer, int size, SocketFlags socketFlags)
         {
@@ -684,7 +744,7 @@ namespace System.Net.Sockets
         /// <param name="socketFlags">A bitwise combination of the <see cref="SocketFlags"/> values.</param>
         /// <returns>The number of bytes received.</returns>
         /// <remarks>
-        /// <para>The <see cref="Socket.Receive(byte[])"/> method reads data into the buffer parameter and returns the number of bytes successfully read. You can call <see cref="Socket.Receive(byte[])"/> from both connection-
+        /// <para>The <see cref="Receive(byte[])"/> method reads data into the buffer parameter and returns the number of bytes successfully read. You can call <see cref="Receive(byte[])"/> from both connection-
         /// oriented and connectionless sockets.</para>
         /// </remarks>
         public int Receive(byte[] buffer, int offset, int size, SocketFlags socketFlags)
@@ -700,12 +760,23 @@ namespace System.Net.Sockets
         /// <summary>
         /// Receives the specified number of bytes of data into the specified location of the data buffer, using the specified <see cref="SocketFlags"/>, and stores the endpoint.
         /// </summary>
-        /// <param name="buffer">An array of type Byte that is the storage location for received data.</param>
+        /// <param name="buffer">An array of type <see cref="Byte"/> that is the storage location for received data.</param>
         /// <param name="offset">The position in the buffer parameter to store the received data.</param>
         /// <param name="size">The number of bytes to receive.</param>
         /// <param name="socketFlags">A bitwise combination of the <see cref="SocketFlags"/> values.</param>
         /// <param name="remoteEP">An <see cref="EndPoint"/>, passed by reference, that represents the remote server.</param>
         /// <returns>The number of bytes received.</returns>
+        /// <remarks>
+        /// The <see cref="ReceiveFrom(byte[], int, int, SocketFlags, ref EndPoint)"/> method reads data into the buffer parameter, returns the number of bytes successfully read, and captures the remote host endpoint from which the data was sent. This method is useful if you intend to receive connectionless datagrams from an unknown host or multiple hosts.
+        /// 
+        /// With connectionless protocols, <see cref="ReceiveFrom(byte[], int, int, SocketFlags, ref EndPoint)"/> will read the first enqueued datagram received into the local network buffer.If the datagram you receive is larger than the size of buffer, the <see cref="ReceiveFrom(byte[], int, int, SocketFlags, ref EndPoint)"/> method will fill buffer with as much of the message as is possible, and throw a <see cref="SocketException"/>.If you are using an unreliable protocol, the excess data will be lost.If you are using a reliable protocol, the excess data will be retained by the service provider and you can retrieve it by calling the <see cref="ReceiveFrom(byte[], int, int, SocketFlags, ref EndPoint)"/> method with a large enough buffer.
+        /// 
+        /// If no data is available for reading, the <see cref="ReceiveFrom(byte[], int, int, SocketFlags, ref EndPoint)"/> method will block until data is available.If you are in non-blocking mode, and there is no data available in the in the protocol stack buffer, the <see cref="ReceiveFrom(byte[], int, int, SocketFlags, ref EndPoint)"/> method will complete immediately and throw a <see cref="SocketException"/>. You can use the <see cref="Available"/> property to determine if data is available for reading. When <see cref="Available"/> is non-zero, retry the receive operation.
+        /// 
+        /// Although <see cref="ReceiveFrom(byte[], int, int, SocketFlags, ref EndPoint)"/> is intended for connectionless protocols, you can use a connection-oriented protocol as well.If you choose to do so, you must first either establish a remote host connection by calling the Connect method or accept an incoming remote host connection by calling the <see cref="Accept"/> method. If you do not establish or accept a connection before calling the <see cref="ReceiveFrom(byte[], int, int, SocketFlags, ref EndPoint)"/> method, you will get a <see cref="SocketException"/>.You can also establish a default remote host for a connectionless protocol prior to calling the <see cref="ReceiveFrom(byte[], int, int, SocketFlags, ref EndPoint)"/> method.In either of these cases, the <see cref="ReceiveFrom(byte[], int, int, SocketFlags, ref EndPoint)"/> method will ignore the remoteEP parameter and only receive data from the connected or default remote host.
+        /// 
+        /// With connection-oriented sockets, <see cref="ReceiveFrom(byte[], int, int, SocketFlags, ref EndPoint)"/> will read as much data as is available up to the amount of bytes specified by the size parameter. If the remote host shuts down the Socket connection with the Shutdown method, and all available data has been Received, the <see cref="ReceiveFrom(byte[], int, int, SocketFlags, ref EndPoint)"/> method will complete immediately and return zero bytes.
+        /// </remarks>
         public int ReceiveFrom(byte[] buffer, int offset, int size, SocketFlags socketFlags, ref EndPoint remoteEP)
         {
             if (m_Handle == -1)
@@ -713,15 +784,32 @@ namespace System.Net.Sockets
                 throw new ObjectDisposedException();
             }
 
-            byte[] address = remoteEP.Serialize().m_Buffer;
-            int len = 0;
+            if (_rightEndPoint == null)
+            {
+                // socket must have connection established or previously accepted a connection 
+                throw new SocketException(SocketError.NotConnected);
+            }
 
-            len = NativeSocket.recvfrom(this, buffer, offset, size, (int)socketFlags, m_recvTimeout, ref address);
+            EndPoint endPointSnapshot = remoteEP;
+            Snapshot(ref endPointSnapshot);
 
-            SocketAddress socketAddress = new SocketAddress(address);
-            remoteEP = remoteEP.Create(socketAddress);
+            int bytesTransferred = 0;
 
-            return len;
+            bytesTransferred = NativeSocket.recvfrom(this, buffer, offset, size, (int)socketFlags, m_recvTimeout, ref remoteEP);
+
+            if (!remoteEP.Equals(endPointSnapshot))
+            {
+                // no need to create a new EndPoint here if it's different from the orignal
+                // because the interpreter has already created a new instance of an IPEndPoint
+
+                if (_rightEndPoint == null)
+                {
+                    // save a copy of the EndPoint
+                    _rightEndPoint = remoteEP;
+                }
+            }
+
+            return bytesTransferred;
         }
 
         /// <summary>
@@ -794,12 +882,7 @@ namespace System.Net.Sockets
                 throw new ObjectDisposedException();
             }
 
-            //BitConverter.GetBytes(int). Or else deal with endianness here?
-            byte[] val;
-            //if(SystemInfo.IsBigEndian)
-            //    val = new byte[4] { (byte)(optionValue >> 24), (byte)(optionValue >> 16), (byte)(optionValue >> 8), (byte)(optionValue >> 0) };
-            //else
-                val = new byte[4] { (byte)(optionValue >> 0), (byte)(optionValue >> 8), (byte)(optionValue >> 16), (byte)(optionValue >> 24) };
+            byte[] val = new byte[4] { (byte)(optionValue >> 0), (byte)(optionValue >> 8), (byte)(optionValue >> 16), (byte)(optionValue >> 24) };
 
             switch (optionName)
             {
@@ -1007,6 +1090,20 @@ namespace System.Net.Sockets
         ~Socket()
         {
             Dispose(false);
+        }
+
+        private void Snapshot(ref EndPoint remoteEP)
+        {
+            IPEndPoint ipSnapshot = remoteEP as IPEndPoint;
+
+            if (ipSnapshot != null)
+            {
+                ipSnapshot = ipSnapshot.Snapshot();
+                // TODO IPv6
+                //remoteEP = RemapIPEndPoint(ipSnapshot);
+
+                remoteEP = ipSnapshot;
+            }
         }
     }
 }
