@@ -75,12 +75,13 @@ namespace System.Net
         /// <param name="address"></param>
         public IPAddress(byte[] address)
         {
-            if (address.Length == IPv4AddressBytes)
+            if (address[0] == (byte)AddressFamily.InterNetwork)
             {
                 _family = AddressFamily.InterNetwork;
-                _address = ((address[3] << 24 | address[2] << 16 | address[1] << 8 | address[0]) & 0x0FFFFFFFF);
+                // need to offset address by 4 (1st are family, 2nd are port
+                _address = ((address[3 + 4] << 24 | address[2 + 4] << 16 | address[1 + 4] << 8 | address[0 + 4]) & 0x0FFFFFFFF);
             }
-            else
+            else if (address[0] == (byte)AddressFamily.InterNetworkV6)
             {
                 _family = AddressFamily.InterNetworkV6;
 
@@ -88,6 +89,11 @@ namespace System.Net
                 {
                     _numbers[i] = (ushort)(address[i * 2] * 256 + address[i * 2 + 1]);
                 }
+            }
+            else
+            {
+                // unsupported address family
+                throw new NotSupportedException();
             }
         }
 
