@@ -2,7 +2,14 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.6-preview-026...HEAD)
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.1.0-preview.1...HEAD)
+
+**Fixed bugs:**
+
+- Fix calls address parameters [\#76](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/76)
+
+## [v1.1.0-preview.1](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.1.0-preview.1) (2019-06-04)
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.6-preview-026...v1.1.0-preview.1)
 
 **Implemented enhancements:**
 
