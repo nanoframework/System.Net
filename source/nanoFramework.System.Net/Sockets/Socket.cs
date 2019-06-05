@@ -123,23 +123,20 @@ namespace System.Net.Sockets
                 m_localEndPoint = new IPEndPoint(IPAddress.Any, 0);
             }
 
-            byte[] address = null;
+            EndPoint endPoint = null;
 
             if (fLocal)
             {
-                NativeSocket.getsockname(this, out address);
+                NativeSocket.getsockname(this, out endPoint);
             }
             else
             {
-                NativeSocket.getpeername(this, out address);
+                NativeSocket.getpeername(this, out endPoint);
             }
-
-            SocketAddress socketAddress = new SocketAddress(address);
-            ep = m_localEndPoint.Create(socketAddress);
 
             if (fLocal)
             {
-                m_localEndPoint = ep;
+                m_localEndPoint = endPoint;
             }
 
             return ep;

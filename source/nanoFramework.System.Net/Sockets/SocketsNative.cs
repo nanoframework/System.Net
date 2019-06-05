@@ -41,16 +41,16 @@ namespace System.Net.Sockets
         public static extern void shutdown(object socket, int how, out int err);
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        public static extern int sendto(object socket, byte[] buf, int offset, int count, int flags, int timeout_ms, EndPoint address);
+        public static extern int sendto(object socket, byte[] buf, int offset, int count, int flags, int timeout_ms, EndPoint endPoint);
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        public static extern int recvfrom(object socket, byte[] buf, int offset, int count, int flags, int timeout_ms, ref EndPoint address);
+        public static extern int recvfrom(object socket, byte[] buf, int offset, int count, int flags, int timeout_ms, ref EndPoint endPoint);
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        public static extern void getpeername(object socket, out byte[] address);
+        public static extern void getpeername(object socket, out EndPoint endPoint);
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        public static extern void getsockname(object socket, out byte[] address);
+        public static extern void getsockname(object socket, out EndPoint endPoint);
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         public static extern void getsockopt(object socket, int level, int optname, byte[] optval);
