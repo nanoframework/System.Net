@@ -2,7 +2,14 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.1.1-preview.9...HEAD)
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.1.1-preview.12...HEAD)
+
+**Documentation and other chores:**
+
+- Work on native assembly declaration [\#84](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/84) [[Breaking-Change](https://github.com/nanoframework/lib-nanoFramework.System.Net/labels/Breaking-Change)]
+
+## [v1.1.1-preview.12](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.1.1-preview.12) (2019-06-20)
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.1.1-preview.9...v1.1.1-preview.12)
 
 **Documentation and other chores:**
 
