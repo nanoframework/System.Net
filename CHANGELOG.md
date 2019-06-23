@@ -170,6 +170,7 @@
 **Documentation and other chores:**
 
 - Bumps nanoFramework.Runtime.Events from 1.0.2-preview-021 to 1.0.2-preview-023 [\#50](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/50)
+- Update 2 NuGet dependencies [\#38](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/38)
 
 ## [v1.0.2-preview-021](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.0.2-preview-021) (2018-12-02)
 [Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.2-preview-013...v1.0.2-preview-021)
@@ -205,7 +206,6 @@
 **Documentation and other chores:**
 
 - Merge 'develop' for Release 1.0.0 [\#39](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/39)
-- Update 2 NuGet dependencies [\#38](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/38)
 - Update 2 NuGet dependencies [\#34](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/34)
 - Update 2 NuGet dependencies [\#32](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/32)
 - Update 2 NuGet dependencies [\#31](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/31)
