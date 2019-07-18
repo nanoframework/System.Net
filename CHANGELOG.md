@@ -2,7 +2,14 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.1.1-preview.18...HEAD)
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.1.1-preview.24...HEAD)
+
+**Implemented enhancements:**
+
+- Add X509Certificate2 [\#89](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/89)
+
+## [v1.1.1-preview.24](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.1.1-preview.24) (2019-07-18)
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.1.1-preview.18...v1.1.1-preview.24)
 
 **Documentation and other chores:**
 
@@ -50,6 +57,7 @@
 
 **Implemented enhancements:**
 
+- Remove SSL3 and Default from SslProtocols [\#75](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/75) [[Breaking-Change](https://github.com/nanoframework/lib-nanoFramework.System.Net/labels/Breaking-Change)]
 - Major rework on Sockets [\#74](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/74) [[Breaking-Change](https://github.com/nanoframework/lib-nanoFramework.System.Net/labels/Breaking-Change)]
 
 ## [v1.0.6-preview-026](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.0.6-preview-026) (2019-05-31)
@@ -118,10 +126,6 @@
 
 ## [v1.0.6-preview-003](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.0.6-preview-003) (2019-03-10)
 [Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.5-preview-001...v1.0.6-preview-003)
-
-**Implemented enhancements:**
-
-- Remove SSL3 and Default from SslProtocols [\#75](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/75) [[Breaking-Change](https://github.com/nanoframework/lib-nanoFramework.System.Net/labels/Breaking-Change)]
 
 **Documentation and other chores:**
 
