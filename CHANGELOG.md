@@ -2,7 +2,15 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.1.1-preview.12...HEAD)
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.1.1-preview.18...HEAD)
+
+**Documentation and other chores:**
+
+- Update 2 NuGet dependencies [\#88](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/88)
+- Update readme.txt [\#87](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/87)
+
+## [v1.1.1-preview.18](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.1.1-preview.18) (2019-06-23)
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.1.1-preview.12...v1.1.1-preview.18)
 
 **Documentation and other chores:**
 
@@ -42,7 +50,6 @@
 
 **Implemented enhancements:**
 
-- Remove SSL3 and Default from SslProtocols [\#75](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/75) [[Breaking-Change](https://github.com/nanoframework/lib-nanoFramework.System.Net/labels/Breaking-Change)]
 - Major rework on Sockets [\#74](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/74) [[Breaking-Change](https://github.com/nanoframework/lib-nanoFramework.System.Net/labels/Breaking-Change)]
 
 ## [v1.0.6-preview-026](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.0.6-preview-026) (2019-05-31)
@@ -111,6 +118,10 @@
 
 ## [v1.0.6-preview-003](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.0.6-preview-003) (2019-03-10)
 [Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.5-preview-001...v1.0.6-preview-003)
+
+**Implemented enhancements:**
+
+- Remove SSL3 and Default from SslProtocols [\#75](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/75) [[Breaking-Change](https://github.com/nanoframework/lib-nanoFramework.System.Net/labels/Breaking-Change)]
 
 **Documentation and other chores:**
 
