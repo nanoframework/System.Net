@@ -1,8 +1,7 @@
 # Change Log
 
-## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/HEAD)
-
-[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.1.1-preview.24...HEAD)
+## [v1.2.0-preview.1](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.2.0-preview.1) (2019-07-18)
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.1.1-preview.24...v1.2.0-preview.1)
 
 **Implemented enhancements:**
 
@@ -33,6 +32,10 @@
 
 ## [v1.1.1-preview.9](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.1.1-preview.9) (2019-06-12)
 [Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.1.1-preview.5...v1.1.1-preview.9)
+
+**Implemented enhancements:**
+
+- Add SocketType property to Socket [\#67](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/67) [[Breaking-Change](https://github.com/nanoframework/lib-nanoFramework.System.Net/labels/Breaking-Change)]
 
 **Documentation and other chores:**
 
@@ -104,10 +107,6 @@
 
 ## [v1.0.6-preview-011](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.0.6-preview-011) (2019-03-22)
 [Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.6-preview-009...v1.0.6-preview-011)
-
-**Implemented enhancements:**
-
-- Add SocketType property to Socket [\#67](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/67) [[Breaking-Change](https://github.com/nanoframework/lib-nanoFramework.System.Net/labels/Breaking-Change)]
 
 ## [v1.0.6-preview-009](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.0.6-preview-009) (2019-03-11)
 [Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.6-preview-005...v1.0.6-preview-009)
@@ -186,6 +185,7 @@
 **Documentation and other chores:**
 
 - Bumps nanoFramework.Runtime.Events from 1.0.2-preview-021 to 1.0.2-preview-023 [\#50](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/50)
+- Update 2 NuGet dependencies [\#34](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/34)
 
 ## [v1.0.2-preview-021](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.0.2-preview-021) (2018-12-02)
 [Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.2-preview-013...v1.0.2-preview-021)
@@ -222,7 +222,6 @@
 
 - Merge 'develop' for Release 1.0.0 [\#39](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/39)
 - Update 2 NuGet dependencies [\#38](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/38)
-- Update 2 NuGet dependencies [\#34](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/34)
 - Update 2 NuGet dependencies [\#32](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/32)
 - Update 2 NuGet dependencies [\#31](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/31)
 - Bump nanoFramework.Runtime.Events from 1.0.0-preview188 to 1.0.0-preview191 in /source [\#19](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/19)
