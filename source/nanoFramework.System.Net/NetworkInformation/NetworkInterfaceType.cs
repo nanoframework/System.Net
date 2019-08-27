@@ -32,5 +32,11 @@ namespace System.Net.NetworkInformation
         /// The network interface uses a wireless LAN connection (IEEE 802.11 standard).
         /// </summary>
         Wireless80211 = 71,
+
+        /// <summary>
+        /// The network interface uses a wireless Soft AP connection (IEEE 802.11 standard).
+        /// </summary>
+        WirelessAP = 72,
+
     }
 }

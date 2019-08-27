@@ -70,6 +70,9 @@
     <Compile Include="NetworkInformation\NetworkInterface.cs" />
     <Compile Include="NetworkInformation\NetworkInterfaceType.cs" />
     <Compile Include="NetworkInformation\Wireless80211Configuration.cs" />
+    <Compile Include="NetworkInformation\WirelessAPStation.cs" />
+    <Compile Include="NetworkInformation\WirelessAPConfiguration.cs" />
+    <Compile Include="NetworkInformation\WirelessConfigurationFlags.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\CertificateManager.cs" />
     <Compile Include="Security\NetworkSecurity.cs" />

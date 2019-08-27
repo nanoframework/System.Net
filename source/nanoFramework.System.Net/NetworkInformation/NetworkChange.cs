@@ -33,6 +33,32 @@ namespace System.Net.NetworkInformation
     }
 
     /// <summary>
+    /// Contains argument values for network availability events.
+    /// </summary>
+    public class NetworkAPStationEventArgs : EventArgs
+    {
+        private int _stationIndex;
+        private bool _isConnected;
+
+        internal NetworkAPStationEventArgs(bool isConnected, int StationIndex)
+        {
+            _isConnected = isConnected;
+            _stationIndex = StationIndex;
+        }
+
+        /// <summary>
+        /// Indicates whether the client has connected or disconnected.
+        /// </summary>
+        public bool isConnected { get => _isConnected;  }
+
+        /// <summary>
+        /// Returns the Index of the connected Station.
+        /// </summary>
+        public Int32 StationIndex { get => _stationIndex; }
+    }
+
+
+    /// <summary>
     /// Provides an event handler that is called when the network address changes.
     /// </summary>
     /// <param name="sender">Specifies the object that sent the network address changed event. </param>
@@ -47,6 +73,13 @@ namespace System.Net.NetworkInformation
     public delegate void NetworkAddressChangedEventHandler(Object sender, EventArgs e);
 
     /// <summary>
+    /// Indicates a change in the connected clients to Access Point.
+    /// </summary>
+    /// <param name="NetworkIndex">Specifies the index of network interface that sent the event. </param>
+    /// <param name="e">Contains the network AP client changed event arguments. </param>
+    public delegate void NetworkAPStationChangedEventHandler(int NetworkIndex, NetworkAPStationEventArgs e);
+
+    /// <summary>
     /// Contains information about changes in the availability and address of the network.
     /// </summary>
     public static class NetworkChange
@@ -57,6 +90,7 @@ namespace System.Net.NetworkInformation
             Invalid = 0,
             AvailabilityChanged = 1,
             AddressChanged = 2,
+            APStationChanged = 3,
         }
 
         [Flags]
@@ -69,6 +103,8 @@ namespace System.Net.NetworkInformation
         {
             public NetworkEventType EventType;
             public byte Flags;
+            public UInt16 Index;
+            public UInt16 Data;
             public DateTime Time;
         }
 
@@ -83,6 +119,11 @@ namespace System.Net.NetworkInformation
                 NetworkEvent networkEvent = new NetworkEvent();
                 networkEvent.EventType = (NetworkEventType)(data1 & 0xFF);
                 networkEvent.Flags = (byte)((data1 >> 16) & 0xFF);
+
+                // Data2 - Low 8 bits are the Network interface index
+                //         Top 8 bits extra data ( i.e AP station index )
+                networkEvent.Index = (UInt16)(data2 & 0xff);
+                networkEvent.Data =  (UInt16)(data2 >> 8);
                 networkEvent.Time = time;
 
                 return networkEvent;
@@ -123,6 +164,18 @@ namespace System.Net.NetworkInformation
         /// </remarks>
         public static event NetworkAvailabilityChangedEventHandler NetworkAvailabilityChanged;
 
+        /// <summary>
+        /// Event occurs when a station connects or disconnects from Soft Acess Point.
+        /// </summary>
+        /// <remarks>
+        /// The NetworkChange class raises the NetworkAPStationChanged events when a client 
+        /// connects or disconnects from the Soft AP. 
+        /// 
+        /// To have a NetworkChange object call an event-handling method when a NetworkAPStationChanged event occurs, 
+        /// you must associate the method with a NetworkAPStationChangedEventHandler delegate, and add this delegate to this event. 
+        /// </remarks>
+        public static event NetworkAPStationChangedEventHandler NetworkAPStationChanged;
+
         static NetworkChange()
         {
             NetworkChangeListener networkChangeListener = new NetworkChangeListener();
@@ -134,6 +187,7 @@ namespace System.Net.NetworkInformation
 
         internal static void OnNetworkChangeCallback(NetworkEvent networkEvent)
         {
+     
             switch (networkEvent.EventType)
             {
                 case NetworkEventType.AvailabilityChanged:
@@ -143,7 +197,7 @@ namespace System.Net.NetworkInformation
                             bool isAvailable = ((networkEvent.Flags & (byte)NetworkEventFlags.NetworkAvailable) != 0);
                             NetworkAvailabilityEventArgs args = new NetworkAvailabilityEventArgs(isAvailable);
 
-                            NetworkAvailabilityChanged(null, args);
+                            NetworkAvailabilityChanged(networkEvent.Index, args);
                         }
                         break;
                     }
@@ -152,9 +206,23 @@ namespace System.Net.NetworkInformation
                         if (NetworkAddressChanged != null)
                         {
                             EventArgs args = new EventArgs();
-                            NetworkAddressChanged(null, args);
+                            NetworkAddressChanged(networkEvent.Index, args);
                         }
 
+                        break;
+                    }
+                case NetworkEventType.APStationChanged:
+                    {
+                        if (NetworkAPStationChanged != null)
+                        {
+                            bool isConnected = ((networkEvent.Flags & (byte)NetworkEventFlags.NetworkAvailable) != 0);
+                            
+                            // FIXME get station mac address details
+                           // byte[] mac = new byte[6] { 1, 2, 3, 4, 5, 0xfe }; // dummy MAC
+                            NetworkAPStationEventArgs args = new NetworkAPStationEventArgs(isConnected, networkEvent.Data);
+                    
+                            NetworkAPStationChanged((int)networkEvent.Index, args);
+                        }
                         break;
                     }
                 default:
