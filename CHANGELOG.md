@@ -2,7 +2,14 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.1.1-preview.24...HEAD)
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.2.0-preview.1...HEAD)
+
+**Documentation and other chores:**
+
+- Update 2 NuGet dependencies [\#90](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/90)
+
+## [v1.2.0-preview.1](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.2.0-preview.1) (2019-07-18)
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.1.1-preview.24...v1.2.0-preview.1)
 
 **Implemented enhancements:**
 
