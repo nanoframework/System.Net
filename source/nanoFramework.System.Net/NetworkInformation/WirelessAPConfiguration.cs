@@ -132,20 +132,20 @@ namespace System.Net.NetworkInformation
             // SSID can't be null
             if (_apSsid == null)
             {
-                throw new ArgumentNullException("Ssid is Null");
+                throw new ArgumentNullException();
             }
 
             // Check SSID length
             if (_apSsid.Length >= MaxApSsidLength)
             {
-                throw new ArgumentOutOfRangeException("Ssid too long");
+                throw new ArgumentOutOfRangeException();
             }
 
             // If not using an open Auth then check password length
             if ( (Authentication != AuthenticationType.Open && Authentication != AuthenticationType.None)  &&
                  ( (_apPassword.Length <  MinApPasswordLength) || (_apPassword.Length >= MaxApPasswordLength) ) )
             {
-                throw new ArgumentOutOfRangeException("Password too short or too long");
+                throw new ArgumentOutOfRangeException();
             }
         }
 
