@@ -26,10 +26,13 @@ namespace System.Net.NetworkInformation
         private const int MaxPasswordLength = 64;
 
 #pragma warning disable IDE0032 // nanoFramework doesn't support auto-properties
+
+#pragma warning disable S1144 // field used in native code
         /// <summary>
         /// This is the configuration index as provided by the device storage manager.
         /// </summary>
         private readonly int _configurationIndex;
+#pragma warning restore S1144 // Unused private types or members should be removed
 
         private readonly uint _id;
         private AuthenticationType _authentication;
@@ -37,8 +40,7 @@ namespace System.Net.NetworkInformation
         private RadioType _radio;
         private string _password;
         private string _ssid;
-        private WirelessConfigFlags _flags;
-#pragma warning disable IDE0032 // nanoFramework doesn't support auto-properties
+        private ConfigurationOptions _options;
 
         /// <summary>
         /// Specifies the type of authentication used on the wireless network.
@@ -56,9 +58,9 @@ namespace System.Net.NetworkInformation
         public RadioType Radio { get => _radio; set => _radio = value; }
 
         /// <summary>
-        /// Contains flags for the Wireless conection 
+        /// Contains flags for the Wireless connection 
         /// </summary>
-        public WirelessConfigFlags Flags { get => _flags; set => _flags = value; }
+        public ConfigurationOptions Options { get => _options; set => _options = value; }
 
         /// <summary>
         /// Contains the network passphrase.
@@ -75,6 +77,7 @@ namespace System.Net.NetworkInformation
         /// </summary>
         public uint Id => _id;
 
+#pragma warning disable IDE0032 // nanoFramework doesn't support auto-properties
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Wireless80211Configuration"/> class.
@@ -107,14 +110,18 @@ namespace System.Net.NetworkInformation
             // SSID can't be null
             if (_ssid == null)
             {
+#pragma warning disable S3928 // OK to not include a meaningful message
                 throw new ArgumentNullException();
+#pragma warning restore S3928 // Parameter names used into ArgumentException constructors should match an existing one 
             }
 
             // check password and SSID length
             if ((_password.Length    >= MaxPasswordLength) || 
                 (_ssid.Length        >= MaxSsidLength))
             {
+#pragma warning disable S3928 // OK to not include a meaningful message
                 throw new ArgumentOutOfRangeException();
+#pragma warning restore S3928 // Parameter names used into ArgumentException constructors should match an existing one 
             }
         }
 
@@ -135,114 +142,33 @@ namespace System.Net.NetworkInformation
             return configurations;
         }
 
-        #region enums
-
         /// <summary>
-        /// Specifies the authentication used in a wireless network.
+        /// Configuration flags used for Wireless configuration.
         /// </summary>
-        public enum AuthenticationType : byte
+        [Flags]
+        public enum ConfigurationOptions : byte
         {
             /// <summary>
-            /// No protocol.
+            /// No flags set.
             /// </summary>
             None = 0,
-            /// <summary>
-            /// Extensible Authentication Protocol.
-            /// </summary>
-            EAP,
-            /// <summary>
-            /// Protected Extensible Authentication Protocol.
-            /// </summary>
-            PEAP,
-            /// <summary>
-            /// Microsoft Windows Connect Now protocol.
-            /// </summary>
-            WCN,
-            /// <summary>
-            /// Open System authentication, for use with WEP encryption type.
-            /// </summary>
-            Open,
-            /// <summary>
-            /// Shared Key authentication, for use with WEP encryption type.
-            /// </summary>
-            Shared,
-            /// <summary>
-            /// Wired Equivalent Privacy protocol.
-            /// </summary>
-            WEP,
-            /// <summary>
-            /// Wi-Fi Protected Access protocol.
-            /// </summary>
-            WPA,
-            /// <summary>
-            /// Wi-Fi Protected Access 2 protocol.
-            /// </summary>
-            WPA2,
-        }
 
-        /// <summary>
-        /// Defines the available types of encryption for wireless networks.
-        /// </summary>
-        public enum EncryptionType : byte
-        {
             /// <summary>
-            /// No encryption.
+            /// Enables the Wireless station.
+            /// If not set the wireless station is disabled.
             /// </summary>
-            None = 0,
-            /// <summary>
-            /// Wired Equivalent Privacy encryption.
-            /// </summary>
-            WEP,
-            /// <summary>
-            /// Wireless Protected Access encryption.
-            /// </summary>
-            WPA,
-            /// <summary>
-            /// Wireless Protected Access 2 encryption.
-            /// </summary>
-            WPA2,
-            /// <summary>
-            /// Wireless Protected Access Pre-Shared Key encryption.
-            /// </summary>
-            WPA_PSK,
-            /// <summary>
-            /// Wireless Protected Access 2 Pre-Shared Key encryption.
-            /// </summary>
-            WPA2_PSK,
-            /// <summary>
-            /// Certificate encryption.
-            /// </summary>
-            Certificate,
-        }
+            Enable = 0x01,
 
-        /// <summary>
-        /// Specifies the type of radio that the wireless network uses.
-        /// </summary>
-        public enum RadioType : byte
-        {
             /// <summary>
-            /// Not specified.
+            /// Will auto connect when AP is available or after being disconnected.
             /// </summary>
-            NotSpecified = 0,
-            /// <summary>
-            /// 802.11a-compatible radio.
-            /// </summary>
-            _802_11a = 1,
-            /// <summary>
-            /// 802.11b-compatible radio.
-            /// </summary>
-            _802_11b = 2,
-            /// <summary>
-            /// 802.11g-compatible radio.
-            /// </summary>
-            _802_11g = 4,
-            /// <summary>
-            /// 802.11n-compatible radio.
-            /// </summary>
-            _802_11n = 8,
-        }
+            AutoConnect = 0x02,
 
-        #endregion
+            /// <summary>
+            /// Enables SmartConfig (if available) for this Wireless station
+            /// </summary>
+            SmartConfig = 0x04,
+        };
 
         #region native methods
 

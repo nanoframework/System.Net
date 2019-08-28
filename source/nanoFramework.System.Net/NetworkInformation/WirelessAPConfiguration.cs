@@ -3,7 +3,6 @@
 // Portions Copyright (c) Microsoft Corporation.  All rights reserved.
 // See LICENSE file in the project root for full license information.
 //
-using System.Collections;
 
 using System.Runtime.CompilerServices;
 
@@ -21,21 +20,25 @@ namespace System.Net.NetworkInformation
         /// Contains the SSID length. The value is set to 32.
         /// </summary>
         private const int MaxApSsidLength = 32;
+
         /// <summary>
         /// Contains the maximum password length. The value is set to 64.
         /// </summary>
         private const int MaxApPasswordLength = 64;
 
         /// <summary>
-        /// Minimum passwword length
+        /// Minimum password length
         /// </summary>
         private const int MinApPasswordLength = 8;
 
 #pragma warning disable IDE0032 // nanoFramework doesn't support auto-properties
+
         /// <summary>
         /// This is the configuration index as provided by the device storage manager.
         /// </summary>
+#pragma warning disable S1144 // field used in native code
         private readonly int _apConfigurationIndex;
+#pragma warning restore S1144 // Unused private types or members should be removed
 
         private readonly uint _apId;
         private AuthenticationType _apAuthentication;
@@ -43,10 +46,9 @@ namespace System.Net.NetworkInformation
         private RadioType _apRadio;
         private string _apPassword;
         private string _apSsid;
-        private WirelessAPConfigFlags _apFlags;
+        private ConfigurationOptions _options;
         private byte _apChannel;
         private byte _apMaxConnections;
-#pragma warning restore IDE0032 // nanoFramework doesn't support auto-properties
 
         /// <summary>
         /// Specifies the type of authentication used for the wireless AP.
@@ -76,7 +78,7 @@ namespace System.Net.NetworkInformation
         /// <summary>
         /// Contains flags for the Soft AP 
         /// </summary>
-        public WirelessAPConfigFlags Flags { get => _apFlags; set => _apFlags = value; }
+        public ConfigurationOptions Options { get => _options; set => _options = value; }
 
         /// <summary>
         /// Channel to use for AP.
@@ -93,6 +95,7 @@ namespace System.Net.NetworkInformation
         /// </summary>
         public uint Id => _apId;
 
+#pragma warning restore IDE0032 // nanoFramework doesn't support auto-properties
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WirelessAPConfiguration"/> class.
@@ -107,7 +110,7 @@ namespace System.Net.NetworkInformation
             Radio = RadioType.NotSpecified;
             Password = null;
             Ssid = null;
-            Flags = WirelessAPConfigFlags.Enable | WirelessAPConfigFlags.AutoStart;
+            Options = ConfigurationOptions.Enable | ConfigurationOptions.AutoStart;
             Channel = 8;
             MaxConnections = 1;
         }
@@ -132,20 +135,26 @@ namespace System.Net.NetworkInformation
             // SSID can't be null
             if (_apSsid == null)
             {
+#pragma warning disable S3928 // OK to not include a meaningful message
                 throw new ArgumentNullException();
+#pragma warning restore S3928 // Parameter names used into ArgumentException constructors should match an existing one 
             }
 
             // Check SSID length
             if (_apSsid.Length >= MaxApSsidLength)
             {
+#pragma warning disable S3928 // OK to not include a meaningful message
                 throw new ArgumentOutOfRangeException();
+#pragma warning restore S3928 // Parameter names used into ArgumentException constructors should match an existing one 
             }
 
             // If not using an open Auth then check password length
             if ( (Authentication != AuthenticationType.Open && Authentication != AuthenticationType.None)  &&
                  ( (_apPassword.Length <  MinApPasswordLength) || (_apPassword.Length >= MaxApPasswordLength) ) )
             {
+#pragma warning disable S3928 // OK to not include a meaningful message
                 throw new ArgumentOutOfRangeException();
+#pragma warning restore S3928 // Parameter names used into ArgumentException constructors should match an existing one 
             }
         }
 
@@ -168,13 +177,22 @@ namespace System.Net.NetworkInformation
         }
 
         /// <summary>
-        /// Returns an array of connected stations.
+        /// Returns an array of information about the connected stations.
         /// </summary>
-        /// <param name="stationIndex">The index of station to get Info or 0 to return info on all connected stations.</param>
-        /// <returns>An arry of WirelessAPStation</returns>
-        public WirelessAPStation[] GetConnectedStations(int stationIndex)
+        /// <returns>A <see cref="WirelessAPStation"/></returns>
+        public WirelessAPStation[] GetConnectedStations()
         {
-            return NativeGetConnectedClients(stationIndex);
+            return NativeGetConnectedClients(0);
+        }
+
+        /// <summary>
+        /// Returns information about the a connected station.
+        /// </summary>
+        /// <param name="stationIndex">The index of station to get information about.</param>
+        /// <returns>An <see cref="WirelessAPStation"/>.</returns>
+        public WirelessAPStation GetConnectedStations(int stationIndex)
+        {
+            return NativeGetConnectedClients(stationIndex)[0];
         }
 
         /// <summary>
@@ -186,114 +204,33 @@ namespace System.Net.NetworkInformation
             NativeDeauthStation(stationIndex);
         }
 
-        #region enums
-
         /// <summary>
-        /// Specifies the authentication used in a wireless network.
+        /// Configuration flags used for Wireless Soft AP configuration.
         /// </summary>
-        public enum AuthenticationType : byte
+        [Flags]
+        public enum ConfigurationOptions : byte
         {
             /// <summary>
-            /// No protocol.
+            /// No flags set.
             /// </summary>
             None = 0,
-            /// <summary>
-            /// Extensible Authentication Protocol.
-            /// </summary>
-            EAP,
-            /// <summary>
-            /// Protected Extensible Authentication Protocol.
-            /// </summary>
-            PEAP,
-            /// <summary>
-            /// Microsoft Windows Connect Now protocol.
-            /// </summary>
-            WCN,
-            /// <summary>
-            /// Open System authentication, for use with WEP encryption type.
-            /// </summary>
-            Open,
-            /// <summary>
-            /// Shared Key authentication, for use with WEP encryption type.
-            /// </summary>
-            Shared,
-            /// <summary>
-            /// Wired Equivalent Privacy protocol.
-            /// </summary>
-            WEP,
-            /// <summary>
-            /// Wi-Fi Protected Access protocol.
-            /// </summary>
-            WPA,
-            /// <summary>
-            /// Wi-Fi Protected Access 2 protocol.
-            /// </summary>
-            WPA2,
-        }
 
-        /// <summary>
-        /// Defines the available types of encryption for wireless networks.
-        /// </summary>
-        public enum EncryptionType : byte
-        {
             /// <summary>
-            /// No encryption.
+            /// Enables the Wireless Soft AP.
+            /// If not set the wireless Soft AP is disabled.
             /// </summary>
-            None = 0,
-            /// <summary>
-            /// Wired Equivalent Privacy encryption.
-            /// </summary>
-            WEP,
-            /// <summary>
-            /// Wireless Protected Access encryption.
-            /// </summary>
-            WPA,
-            /// <summary>
-            /// Wireless Protected Access 2 encryption.
-            /// </summary>
-            WPA2,
-            /// <summary>
-            /// Wireless Protected Access Pre-Shared Key encryption.
-            /// </summary>
-            WPA_PSK,
-            /// <summary>
-            /// Wireless Protected Access 2 Pre-Shared Key encryption.
-            /// </summary>
-            WPA2_PSK,
-            /// <summary>
-            /// Certificate encryption.
-            /// </summary>
-            Certificate,
-        }
+            Enable = 0x01,
 
-        /// <summary>
-        /// Specifies the type of radio that the wireless network uses.
-        /// </summary>
-        public enum RadioType : byte
-        {
             /// <summary>
-            /// Not specified.
+            /// Will automatically start AP when CLR starts.
             /// </summary>
-            NotSpecified = 0,
-            /// <summary>
-            /// 802.11a-compatible radio.
-            /// </summary>
-            _802_11a = 1,
-            /// <summary>
-            /// 802.11b-compatible radio.
-            /// </summary>
-            _802_11b = 2,
-            /// <summary>
-            /// 802.11g-compatible radio.
-            /// </summary>
-            _802_11g = 4,
-            /// <summary>
-            /// 802.11n-compatible radio.
-            /// </summary>
-            _802_11n = 8,
-        }
+            AutoStart = 0x02,
 
-        #endregion
+            /// <summary>
+            /// The SSID for the Soft AP will be hidden 
+            /// </summary>
+            HiddenSSID = 0x04,
+        };
 
         #region native methods
 
