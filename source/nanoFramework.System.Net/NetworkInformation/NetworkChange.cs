@@ -37,8 +37,8 @@ namespace System.Net.NetworkInformation
     /// </summary>
     public class NetworkAPStationEventArgs : EventArgs
     {
-        private int _stationIndex;
-        private bool _isConnected;
+        private readonly int _stationIndex;
+        private readonly bool _isConnected;
 
         internal NetworkAPStationEventArgs(bool isConnected, int StationIndex)
         {
@@ -217,8 +217,6 @@ namespace System.Net.NetworkInformation
                         {
                             bool isConnected = ((networkEvent.Flags & (byte)NetworkEventFlags.NetworkAvailable) != 0);
                             
-                            // FIXME get station mac address details
-                           // byte[] mac = new byte[6] { 1, 2, 3, 4, 5, 0xfe }; // dummy MAC
                             NetworkAPStationEventArgs args = new NetworkAPStationEventArgs(isConnected, networkEvent.Data);
                     
                             NetworkAPStationChanged((int)networkEvent.Index, args);

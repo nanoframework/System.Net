@@ -31,6 +31,7 @@ namespace System.Net.NetworkInformation
         /// </summary>
         private const int MinApPasswordLength = 8;
 
+#pragma warning disable IDE0032 // nanoFramework doesn't support auto-properties
         /// <summary>
         /// This is the configuration index as provided by the device storage manager.
         /// </summary>
@@ -45,6 +46,7 @@ namespace System.Net.NetworkInformation
         private WirelessAPConfigFlags _apFlags;
         private byte _apChannel;
         private byte _apMaxConnections;
+#pragma warning restore IDE0032 // nanoFramework doesn't support auto-properties
 
         /// <summary>
         /// Specifies the type of authentication used for the wireless AP.
@@ -130,20 +132,20 @@ namespace System.Net.NetworkInformation
             // SSID can't be null
             if (_apSsid == null)
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("Ssid is Null");
             }
 
             // Check SSID length
             if (_apSsid.Length >= MaxApSsidLength)
             {
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException("Ssid too long");
             }
 
             // If not using an open Auth then check password length
             if ( (Authentication != AuthenticationType.Open && Authentication != AuthenticationType.None)  &&
-                 ( (_apPassword.Length <  MinApPasswordLength) || (_apSsid.Length >= MaxApSsidLength) ) )
+                 ( (_apPassword.Length <  MinApPasswordLength) || (_apPassword.Length >= MaxApPasswordLength) ) )
             {
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException("Password too short or too long");
             }
         }
 

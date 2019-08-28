@@ -12,7 +12,7 @@ namespace System.Net.NetworkInformation
     /// Enum of Phy protocols used for connection.
     /// </summary>
     [Flags]
-    public enum PhyProtocol
+    public enum PhyProtocols
     {
         /// <summary>
         /// IEEE 802.11b  max 11 Mbit/s
@@ -37,11 +37,11 @@ namespace System.Net.NetworkInformation
     /// </summary>
     public class WirelessAPStation
     {
-        private byte[] _MacAddress;
-        private sbyte _Rssi;
-        private PhyProtocol _PhyModes;
+        private readonly byte[] _MacAddress;
+        private readonly sbyte _Rssi;
+        private readonly PhyProtocols _PhyModes;
 
-        internal WirelessAPStation(byte[] mac, sbyte rssi, PhyProtocol phyp)
+        internal WirelessAPStation(byte[] mac, sbyte rssi, PhyProtocols phyp)
         {
             _MacAddress = mac;
             _Rssi = rssi;
@@ -62,7 +62,7 @@ namespace System.Net.NetworkInformation
         /// <summary>
         /// Returns the PHY protcol used for connection.
         /// </summary>
-        public PhyProtocol PhyModes { get => _PhyModes; }
+        public PhyProtocols PhyModes { get => _PhyModes; }
 
     }
 }

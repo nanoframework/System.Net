@@ -25,6 +25,7 @@ namespace System.Net.NetworkInformation
         /// </summary>
         private const int MaxPasswordLength = 64;
 
+#pragma warning disable IDE0032 // nanoFramework doesn't support auto-properties
         /// <summary>
         /// This is the configuration index as provided by the device storage manager.
         /// </summary>
@@ -37,6 +38,7 @@ namespace System.Net.NetworkInformation
         private string _password;
         private string _ssid;
         private WirelessConfigFlags _flags;
+#pragma warning disable IDE0032 // nanoFramework doesn't support auto-properties
 
         /// <summary>
         /// Specifies the type of authentication used on the wireless network.
