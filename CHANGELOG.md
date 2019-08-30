@@ -1,8 +1,14 @@
 # Change Log
 
-## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/HEAD)
+## [v1.2.2-preview.1](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.2.2-preview.1) (2019-08-30)
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.2.0-preview.6...v1.2.2-preview.1)
 
-[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.2.0-preview.1...HEAD)
+**Implemented enhancements:**
+
+- Soft Access Point configuration for ESP32  [\#91](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/91)
+
+## [v1.2.0-preview.6](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.2.0-preview.6) (2019-08-23)
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.2.0-preview.1...v1.2.0-preview.6)
 
 **Documentation and other chores:**
 
@@ -134,10 +140,6 @@
 ## [v1.0.6-preview-003](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.0.6-preview-003) (2019-03-10)
 [Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.5-preview-001...v1.0.6-preview-003)
 
-**Documentation and other chores:**
-
-- Bumps nanoFramework.Runtime.Events from 1.0.5-preview-003 to 1.0.5-preview-007 [\#63](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/63)
-
 ## [v1.0.5-preview-001](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.0.5-preview-001) (2019-03-07)
 [Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.3-preview-009...v1.0.5-preview-001)
 
@@ -146,6 +148,7 @@
 
 **Documentation and other chores:**
 
+- Bumps nanoFramework.Runtime.Events from 1.0.5-preview-003 to 1.0.5-preview-007 [\#63](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/63)
 - Bumps nanoFramework.Runtime.Events from 1.0.4 to 1.0.5-preview-003 [\#61](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/61)
 
 ## [v1.0.4](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.0.4) (2019-01-22)
