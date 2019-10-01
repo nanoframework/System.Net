@@ -57,6 +57,9 @@ steps:
     repositoriesToUpdate: |
       lib-nanoFramework.System.Net.Http
       paho.mqtt.m2mqtt
+    pathsToSolutions: |
+      source
+      ''
   condition: or( and( succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/v'), contains(variables['getCommitMessage.COMMIT_MESSAGE'], '***UPDATE_DEPENDENTS***') ), eq(variables['UPDATE_DEPENDENTS'], 'true') )
   displayName: Update dependent class libs
 
