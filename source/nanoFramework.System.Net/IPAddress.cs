@@ -4,6 +4,9 @@
 // See LICENSE file in the project root for full license information.
 //
 
+using System.Net.NetworkInformation;
+using System.Net.Sockets;
+
 namespace System.Net
 {
     /// <summary>
@@ -17,11 +20,37 @@ namespace System.Net
         /// This field is read-only.
         /// </summary>
         public static readonly IPAddress Any = new IPAddress(0x0000000000000000);
+        
         /// <summary>
         /// Provides the IP loopback address. This field is read-only.
         /// </summary>
         public static readonly IPAddress Loopback = new IPAddress(0x000000000100007F);
-        internal long m_Address;
+
+        [Diagnostics.DebuggerBrowsable(Diagnostics.DebuggerBrowsableState.Never)]
+        internal long _address;
+
+        [Diagnostics.DebuggerBrowsable(Diagnostics.DebuggerBrowsableState.Never)]
+        private AddressFamily _family = AddressFamily.InterNetwork;
+
+        [Diagnostics.DebuggerBrowsable(Diagnostics.DebuggerBrowsableState.Never)]
+        private ushort[] _numbers = new ushort[NumberOfLabels];
+
+        internal const int IPv4AddressBytes = 4;
+        internal const int IPv6AddressBytes = 16;
+
+        internal const int NumberOfLabels = IPv6AddressBytes / 2;
+
+        /// <summary>
+        /// Gets the address family of the IP address.
+        /// </summary>
+        /// <value>Returns <see cref="AddressFamily.InterNetwork"/> for IPv4 or <see cref="AddressFamily.InterNetworkV6"/> for IPv6.</value>
+        public AddressFamily AddressFamily
+        {
+            get
+            {
+                return _family;
+            }
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="IPAddress"/> class with the address specified as an Int64.
@@ -34,16 +63,38 @@ namespace System.Net
                 throw new ArgumentOutOfRangeException();
             }
 
-            m_Address = newAddress;
+            _address = newAddress;
+
+            // default to InterNetwork
+            _family = AddressFamily.InterNetwork;
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="IPAddress"/> class with the address specified as a Byte array.
         /// </summary>
-        /// <param name="newAddressBytes"></param>
-        public IPAddress(byte[] newAddressBytes)
-            : this(((((newAddressBytes[3] << 0x18) | (newAddressBytes[2] << 0x10)) | (newAddressBytes[1] << 0x08)) | newAddressBytes[0]) & ((long)0xFFFFFFFF))
+        /// <param name="address"></param>
+        public IPAddress(byte[] address)
         {
+            if (address[0] == (byte)AddressFamily.InterNetwork)
+            {
+                _family = AddressFamily.InterNetwork;
+                // need to offset address by 4 (1st are family, 2nd are port
+                _address = ((address[3 + 4] << 24 | address[2 + 4] << 16 | address[1 + 4] << 8 | address[0 + 4]) & 0x0FFFFFFFF);
+            }
+            else if (address[0] == (byte)AddressFamily.InterNetworkV6)
+            {
+                _family = AddressFamily.InterNetworkV6;
+
+                for (int i = 0; i < NumberOfLabels; i++)
+                {
+                    _numbers[i] = (ushort)(address[i * 2] * 256 + address[i * 2 + 1]);
+                }
+            }
+            else
+            {
+                // unsupported address family
+                throw new NotSupportedException();
+            }
         }
 
         /// <summary>
@@ -57,7 +108,7 @@ namespace System.Net
 
             if (obj == null) return false;
 
-            return this.m_Address == addr.m_Address;
+            return this._address == addr._address;
         }
 
         /// <summary>
@@ -68,10 +119,10 @@ namespace System.Net
         {
             return new byte[]
             {
-                (byte)(m_Address),
-                (byte)(m_Address >> 8),
-                (byte)(m_Address >> 16),
-                (byte)(m_Address >> 24)
+                (byte)(_address),
+                (byte)(_address >> 8),
+                (byte)(_address >> 16),
+                (byte)(_address >> 24)
             };
         }
 
@@ -106,8 +157,8 @@ namespace System.Net
                     else
                     {
                         i = i == length - 1 ? ++i : i;
-                        octet = (ulong)(ConvertStringToInt32(ipString.Substring(lastIndex, i - lastIndex)) & 0x00000000000000FF);
-                        ipAddress = ipAddress + (ulong)((octet << shiftIndex) & mask);
+                        octet = ulong.Parse(ipString.Substring(lastIndex, i - lastIndex)) & 0x00000000000000FF;
+                        ipAddress = ipAddress + ((octet << shiftIndex) & mask);
                         lastIndex = i + 1;
                         shiftIndex = shiftIndex + 8;
                         mask = (mask << 8);
@@ -129,65 +180,14 @@ namespace System.Net
         /// </remarks>
         public override string ToString()
         {
-            return ((byte)(m_Address)).ToString() +
+            return ((byte)(_address)).ToString() +
                     "." +
-                    ((byte)(m_Address >> 8)).ToString() +
+                    ((byte)(_address >> 8)).ToString() +
                     "." +
-                    ((byte)(m_Address >> 16)).ToString() +
+                    ((byte)(_address >> 16)).ToString() +
                     "." +
-                    ((byte)(m_Address >> 24)).ToString();
+                    ((byte)(_address >> 24)).ToString();
         }
-
-        //--//
-        ////////////////////////////////////////////////////////////////////////////////////////
-        // this method ToInt32 is part of teh Convert class which we will bring over later
-        // at that time we will get rid of this code
-        //
-
-        /// <summary>
-        /// Converts the specified System.String representation of a number to an equivalent
-        /// 32-bit signed integer.
-        /// </summary>
-        /// <param name="value">A System.String containing a number to convert.</param>
-        /// <returns>
-        /// A 32-bit signed integer equivalent to the value of value.-or- Zero if value
-        /// is null.
-        /// </returns>
-        private static int ConvertStringToInt32(string value)
-        {
-            char[] num = value.ToCharArray();
-            int result = 0;
-
-            bool isNegative = false;
-            int signIndex = 0;
-
-            if (num[0] == '-')
-            {
-                isNegative = true;
-                signIndex = 1;
-            }
-            else if (num[0] == '+')
-            {
-                signIndex = 1;
-            }
-
-            int exp = 1;
-            for (int i = num.Length - 1; i >= signIndex; i--)
-            {
-                if (num[i] < '0' || num[i] > '9')
-                {
-                    throw new ArgumentException();
-                }
-
-                result += ((num[i] - '0') * exp);
-                exp *= 10;
-            }
-
-            return (isNegative) ? (-1 * result) : result;
-        }
-
-        // this method ToInt32 is part of teh Convert class which we will bring over later
-        ////////////////////////////////////////////////////////////////////////////////////////
 
         /// <summary>
         /// Retrieves an IP address that is the local default address.
@@ -195,52 +195,41 @@ namespace System.Net
         /// <returns>The default IP address.</returns>
         public static IPAddress GetDefaultLocalAddress()
         {
-            // Special conditions are implemented here because of a problem with GetHostEntry
-            // on the digi device and NetworkInterface from the emulator.
-            // In the emulator we must use GetHostEntry.
-            // On the device and Windows NetworkInterface works and is preferred.
-            try
+            NetworkInterface[] interfaces = NetworkInterface.GetAllNetworkInterfaces();
+
+            int cnt = interfaces.Length;
+            for (int i = 0; i < cnt; i++)
             {
-                //NetworkInterface[] interfaces = NetworkInterface.GetAllNetworkInterfaces();
+                NetworkInterface ni = interfaces[i];
 
-                //int cnt = interfaces.Length;
-                //for (int i = 0; i < cnt; i++)
+                if (ni.IPv4Address != "0.0.0.0" && ni.IPv4SubnetMask != "0.0.0.0")
+                {
+                    return Parse(ni.IPv4Address);
+                }
+                // FIXME
+                // TODO implement this when IPv6 support is added
+                //else (ni.IPv6Address != "0.0.0.0" )
                 //{
-                //    NetworkInterface ni = interfaces[i];
-
-                //    if (ni.IPAddress != "0.0.0.0" && ni.SubnetMask != "0.0.0.0")
-                //    {
-                //        return IPAddress.Parse(ni.IPAddress);
-                //    }
+                //    return IPAddress.Parse(ni.IPv6Address);
                 //}
             }
-            catch
+
+            return Any;
+        }
+
+        // For security, we need to be able to take an IPAddress and make a copy that's immutable and not derived.
+        internal IPAddress Snapshot()
+        {
+            switch (_family)
             {
+                case AddressFamily.InterNetwork:
+                    return new IPAddress(_address);
+
+                //case AddressFamily.InterNetworkV6:
+                //    return new IPAddress(m_Numbers, (uint)m_ScopeId);
             }
 
-            try
-            {
-                IPAddress localAddress = null;
-              //  IPHostEntry hostEntry = Dns.GetHostEntry("");
-                IPHostEntry hostEntry = new IPHostEntry();
-
-                int cnt = hostEntry.AddressList.Length;
-                for (int i = 0; i < cnt; ++i)
-                {
-                    if ((localAddress = hostEntry.AddressList[i]) != null)
-                    {
-                        if(localAddress.m_Address != 0)
-                        {
-                            return localAddress;
-                        }
-                    }
-                }
-            }
-            catch
-            {
-            }
-
-            return IPAddress.Any;
-        }   
+            throw new NotSupportedException();
+        }
     }
 }
