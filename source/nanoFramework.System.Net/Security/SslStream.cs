@@ -58,10 +58,10 @@ namespace System.Net.Security
         /// The authentication process uses the specified SSL protocols.
         /// </summary>
         /// <param name="targetHost">The name of the server that will share this SslStream.</param>
-        /// <param name="sslProtocols">The protocols that may be supported.</param>
-        public void AuthenticateAsClient(string targetHost, params SslProtocols[] sslProtocols)
+        /// <param name="enabledSslProtocols">The <see cref="SslProtocols"/> value that represents the protocol used for authentication.</param>
+        public void AuthenticateAsClient(string targetHost, SslProtocols enabledSslProtocols)
         {
-            Authenticate(false, targetHost, null, null, sslProtocols);
+            Authenticate(false, targetHost, null, null, enabledSslProtocols);
         }
 
         /// <summary>
@@ -70,10 +70,10 @@ namespace System.Net.Security
         /// </summary>
         /// <param name="targetHost">The name of the server that will share this SslStream.</param>
         /// <param name="clientCertificate">The client certificate.</param>
-        /// <param name="sslProtocols">The protocols that may be supported.</param>
-        public void AuthenticateAsClient(string targetHost, X509Certificate clientCertificate, params SslProtocols[] sslProtocols)
+        /// <param name="enabledSslProtocols">The <see cref="SslProtocols"/> value that represents the protocol used for authentication.</param>
+        public void AuthenticateAsClient(string targetHost, X509Certificate clientCertificate, SslProtocols enabledSslProtocols)
         {
-            Authenticate(false, targetHost, clientCertificate, null, sslProtocols);
+            Authenticate(false, targetHost, clientCertificate, null, enabledSslProtocols);
         }
 
         /// <summary>
@@ -83,10 +83,10 @@ namespace System.Net.Security
         /// <param name="targetHost">The name of the server that will share this SslStream.</param>
         /// <param name="clientCertificate">The client certificate.</param>
         /// <param name="ca">Certificate Authority certificate to use for authentication with the server.</param>
-        /// <param name="sslProtocols">The protocols that may be supported.</param>
-        public void AuthenticateAsClient(string targetHost, X509Certificate clientCertificate, X509Certificate ca, params SslProtocols[] sslProtocols)
+        /// <param name="enabledSslProtocols">The <see cref="SslProtocols"/> value that represents the protocol used for authentication.</param>
+        public void AuthenticateAsClient(string targetHost, X509Certificate clientCertificate, X509Certificate ca, SslProtocols enabledSslProtocols)
         {
-            Authenticate(false, targetHost, clientCertificate, ca, sslProtocols);
+            Authenticate(false, targetHost, clientCertificate, ca, enabledSslProtocols);
         }
 
         /// <summary>
@@ -94,10 +94,10 @@ namespace System.Net.Security
         /// verification requirements and security protocol.
         /// </summary>
         /// <param name="serverCertificate">The certificate used to authenticate the server.</param>
-        /// <param name="sslProtocols">The protocols that may be used for authentication.</param>
-        public void AuthenticateAsServer(X509Certificate serverCertificate, params SslProtocols[] sslProtocols)
+        /// <param name="enabledSslProtocols">The protocols that may be used for authentication.</param>
+        public void AuthenticateAsServer(X509Certificate serverCertificate, SslProtocols enabledSslProtocols)
         {
-            Authenticate(true, "", null, serverCertificate, sslProtocols);
+            Authenticate(true, "", serverCertificate, null, enabledSslProtocols);
         }
 
         /// <summary>
@@ -105,24 +105,17 @@ namespace System.Net.Security
         /// </summary>
         /// <param name="serverCertificate">The X509Certificate used to authenticate the server.</param>
         /// <param name="clientCertificateRequired">A <see cref="Boolean"/> value that specifies whether the client is asked for a certificate for authentication. Note that this is only a request, if no certificate is provided, the server still accepts the connection request.</param>
-        /// <param name="sslProtocols">The protocols that may be used for authentication.</param>
-        public void AuthenticateAsServer(X509Certificate serverCertificate, bool clientCertificateRequired, params SslProtocols[] sslProtocols)
+        /// <param name="enabledSslProtocols">The protocols that may be used for authentication.</param>
+        public void AuthenticateAsServer(X509Certificate serverCertificate, bool clientCertificateRequired, SslProtocols enabledSslProtocols)
         {
-            SslVerification = SslVerification.VerifyClientOnce;
+            SslVerification = clientCertificateRequired ? SslVerification.VerifyClientOnce : SslVerification.NoVerification;
 
-            Authenticate(true, "", null, serverCertificate,  sslProtocols);
+            Authenticate(true, "", serverCertificate, null, enabledSslProtocols);
         }
 
-        internal void Authenticate(bool isServer, string targetHost, X509Certificate certificate, X509Certificate ca, params SslProtocols[] sslProtocols)
+        internal void Authenticate(bool isServer, string targetHost, X509Certificate certificate, X509Certificate ca, SslProtocols enabledSslProtocols)
         {
-            SslProtocols vers = (SslProtocols)0;
-
             if (-1 != _sslContext) throw new InvalidOperationException();
-
-            for (int i = sslProtocols.Length - 1; i >= 0; i--)
-            {
-                vers |= sslProtocols[i];
-            }
 
             _isServer = isServer;
 
@@ -130,12 +123,12 @@ namespace System.Net.Security
             {
                 if (isServer)
                 {
-                    _sslContext = SslNative.SecureServerInit((int)vers, (int)_sslVerification, certificate, ca);
+                    _sslContext = SslNative.SecureServerInit((int)enabledSslProtocols, (int)_sslVerification, certificate, ca);
                     SslNative.SecureAccept(_sslContext, _socket);
                 }
                 else
                 {
-                    _sslContext = SslNative.SecureClientInit((int)vers, (int)_sslVerification, certificate, ca);
+                    _sslContext = SslNative.SecureClientInit((int)enabledSslProtocols, (int)_sslVerification, certificate, ca);
                     SslNative.SecureConnect(_sslContext, targetHost, _socket);
                 }
             }
