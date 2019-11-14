@@ -22,6 +22,7 @@ This package requires a target with nanoFramework..System.Net v$nativeVersion$.<
     <dependencies>
       <dependency id="nanoFramework.CoreLibrary" version="1.6.0-preview.1" />
       <dependency id="nanoFramework.Runtime.Events" version="1.4.1-preview.5" />
+      <dependency id="nanoFramework.System.Text" version="1.0.0-preview.1" />
     </dependencies>
   </metadata>
   <files>
