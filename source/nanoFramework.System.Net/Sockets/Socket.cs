@@ -116,8 +116,6 @@ namespace System.Net.Sockets
                 throw new ObjectDisposedException();
             }
 
-            EndPoint ep = null;
-
             if (m_localEndPoint == null)
             {
                 m_localEndPoint = new IPEndPoint(IPAddress.Any, 0);
@@ -139,7 +137,7 @@ namespace System.Net.Sockets
                 m_localEndPoint = endPoint;
             }
 
-            return ep;
+            return endPoint;
         }
 
         /// <summary>
