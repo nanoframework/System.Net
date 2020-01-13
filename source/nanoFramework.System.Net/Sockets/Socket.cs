@@ -19,7 +19,7 @@ namespace System.Net.Sockets
          * The m_Handle field MUST be the first field in the Socket class; it is expected by
          * the SPOT.NET.SocketNative class.
          */
-   //     [FieldNoReflection]
+        //     [FieldNoReflection]
         internal int m_Handle = -1;
 
         [Diagnostics.DebuggerBrowsable(Diagnostics.DebuggerBrowsableState.Never)]
