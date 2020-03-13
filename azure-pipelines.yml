@@ -57,6 +57,7 @@ steps:
     repositoriesToUpdate: |
       lib-nanoFramework.System.Net.Http
       paho.mqtt.m2mqtt
+      amqpnetlite
   condition: or( and( succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/v') ), and( succeeded(), contains(variables['Build.SourceVersionMessage'], '***UPDATE_DEPENDENTS***') ), eq(variables['UPDATE_DEPENDENTS'], 'true') )
   displayName: Update dependent class libs
 
