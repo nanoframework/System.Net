@@ -20,9 +20,9 @@ This package requires a target with nanoFramework..System.Net v$nativeVersion$.<
     <summary>nanoFramework.System.Net assembly for nanoFramework C# projects</summary>
     <tags>nanoFramework C# csharp netmf netnf nanoFramework.System.Net</tags>
     <dependencies>
-      <dependency id="nanoFramework.CoreLibrary" version="1.7.0-preview.12" />
-      <dependency id="nanoFramework.Runtime.Events" version="1.4.2-preview.1" />
-      <dependency id="nanoFramework.System.Text" version="1.0.0-preview.8" />
+      <dependency id="nanoFramework.CoreLibrary" version="1.7.1-preview.4" />
+      <dependency id="nanoFramework.Runtime.Events" version="1.4.2-preview.2" />
+      <dependency id="nanoFramework.System.Text" version="1.0.0-preview.11" />
     </dependencies>
   </metadata>
   <files>
