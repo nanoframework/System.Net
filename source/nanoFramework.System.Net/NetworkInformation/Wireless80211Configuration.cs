@@ -168,13 +168,13 @@ namespace System.Net.NetworkInformation
             /// Will auto connect when AP is available or after being disconnected.
             /// This option forces enabling the Wireless station.
             /// </summary>
-            AutoConnect = 0x04 & Enable,
+            AutoConnect = 0x04 | Enable,
 
             /// <summary>
             /// Enables SmartConfig (if available) for this Wireless station.
             /// This option forces enabling the Wireless station.
             /// </summary>
-            SmartConfig = 0x08 & Enable,
+            SmartConfig = 0x08 | Enable,
         };
 
         #region native methods
