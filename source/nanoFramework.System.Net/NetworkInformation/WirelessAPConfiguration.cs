@@ -230,7 +230,7 @@ namespace System.Net.NetworkInformation
             /// Will automatically start the Soft AP when CLR starts.
             /// This option forces enabling the Wireless Soft AP.
             /// </summary>
-            AutoStart = 0x04 & Enable,
+            AutoStart = 0x04 | Enable,
 
             /// <summary>
             /// The SSID for the Soft AP will be hidden.
