@@ -8,9 +8,9 @@ trigger:
   paths:
     exclude:
     - CHANGELOG.md
+    - README.md
     - /*.md
     - .gitignore
-    - appveyor.yml
   # waiting for feature to become available
   # tags:
   #   include:
@@ -56,7 +56,7 @@ jobs:
       sonarCloudProject: 'nanoframework_lib-nanoFramework.System.Net'
 
 ##############################
-- job: Update_Dependencies
+- job: Update_Dependents
   condition: or( and( succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/v'), eq(variables['StartReleaseCandidate'], 'false') ), and( succeeded(), contains(variables['getCommitMessage.COMMIT_MESSAGE'], '***UPDATE_DEPENDENTS***'), eq(variables['StartReleaseCandidate'], 'false') ), eq(variables['UPDATE_DEPENDENTS'], 'true') )
 
   dependsOn:
@@ -90,8 +90,8 @@ jobs:
 
   dependsOn:
   - Build_Library
-  - Update_Dependencies
-  condition: or( failed('Build_Library'), failed('Update_Dependencies'))
+  - Update_Dependents
+  condition: or( failed('Build_Library'), failed('Update_Dependents'))
 
   pool:
     vmImage: 'VS2017-Win2016'
