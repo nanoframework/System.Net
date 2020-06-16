@@ -1,8 +1,8 @@
 # Changelog
 
-## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/HEAD)
+## [v1.6.0-preview.6](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.6.0-preview.6) (2020-06-16)
 
-[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.5.0...HEAD)
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.5.0...v1.6.0-preview.6)
 
 **Documentation and other chores:**
 
