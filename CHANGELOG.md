@@ -2,7 +2,23 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.5.0-preview.2...HEAD)
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.5.0...HEAD)
+
+**Documentation and other chores:**
+
+- Update 3 NuGet dependencies [\#132](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/132)
+
+## [v1.5.0](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.5.0) (2020-06-12)
+
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.5.0-preview.7...v1.5.0)
+
+**Documentation and other chores:**
+
+- Release release-v1.5.0 [\#131](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/131)
+
+## [v1.5.0-preview.7](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.5.0-preview.7) (2020-06-12)
+
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.5.0-preview.2...v1.5.0-preview.7)
 
 **Documentation and other chores:**
 
