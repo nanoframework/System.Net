@@ -1,8 +1,12 @@
 # Changelog
 
-## [v1.5.0-preview.7](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.5.0-preview.7) (2020-06-12)
+## [v1.6.1-preview.2](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.6.1-preview.2) (2020-06-16)
 
-[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.5.0...HEAD)
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.6.0-preview.6...v1.6.1-preview.2)
+
+## [v1.6.0-preview.6](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.6.0-preview.6) (2020-06-16)
+
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.5.0...v1.6.0-preview.6)
 
 **Documentation and other chores:**
 
@@ -451,12 +455,15 @@
 
 **Implemented enhancements:**
 
-- Rework SslStream API [\#53](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/53)
 - Fix X509Certificate constructors from string [\#52](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/52)
 
 ## [v1.0.2-preview-023](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.0.2-preview-023) (2018-12-03)
 
 [Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.2-preview-021...v1.0.2-preview-023)
+
+**Implemented enhancements:**
+
+- Rework SslStream API [\#53](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/53)
 
 **Documentation and other chores:**
 
