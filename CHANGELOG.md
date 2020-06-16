@@ -1,5 +1,25 @@
 # Changelog
 
+## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/HEAD)
+
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.6.0...HEAD)
+
+**Documentation and other chores:**
+
+- Bumps nanoFramework.System.Text from 1.0.0 to 1.1.0 [\#134](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/134)
+
+## [v1.6.0](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.6.0) (2020-06-16)
+
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.6.1-preview.2...v1.6.0)
+
+**Documentation and other chores:**
+
+- Release release-v1.6.0 [\#133](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/133)
+
+## [v1.6.1-preview.2](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.6.1-preview.2) (2020-06-16)
+
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.6.0-preview.6...v1.6.1-preview.2)
+
 ## [v1.6.0-preview.6](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.6.0-preview.6) (2020-06-16)
 
 [Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.5.0...v1.6.0-preview.6)
