@@ -2,7 +2,23 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.6.0...HEAD)
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.6.1...HEAD)
+
+**Documentation and other chores:**
+
+- Bumps nanoFramework.Runtime.Events from 1.8.0 to 1.8.1-alpha.18 [\#136](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/136)
+
+## [v1.6.1](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.6.1) (2020-06-16)
+
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.6.1-preview.4...v1.6.1)
+
+**Documentation and other chores:**
+
+- Release release-v1.6.1 [\#135](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/135)
+
+## [v1.6.1-preview.4](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.6.1-preview.4) (2020-06-16)
+
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.6.0...v1.6.1-preview.4)
 
 **Documentation and other chores:**
 
