@@ -2,7 +2,15 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.6.2-preview.3...HEAD)
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.6.2-preview.5...HEAD)
+
+**Documentation and other chores:**
+
+- Update dependencies [\#138](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/138)
+
+## [v1.6.2-preview.5](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.6.2-preview.5) (2020-07-02)
+
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.6.2-preview.3...v1.6.2-preview.5)
 
 **Documentation and other chores:**
 
@@ -461,13 +469,16 @@
 
 [Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.4...v1.0.3-preview-009)
 
+**Documentation and other chores:**
+
+- Bumps nanoFramework.Runtime.Events from 1.0.4 to 1.0.5-preview-003 [\#61](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/61)
+
 ## [v1.0.4](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.0.4) (2019-01-22)
 
 [Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.3-preview-003...v1.0.4)
 
 **Documentation and other chores:**
 
-- Bumps nanoFramework.Runtime.Events from 1.0.4 to 1.0.5-preview-003 [\#61](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/61)
 - Update 2 NuGet dependencies [\#59](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/59)
 
 ## [v1.0.3-preview-003](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.0.3-preview-003) (2019-01-03)
