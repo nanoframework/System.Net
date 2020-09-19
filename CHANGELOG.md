@@ -2,7 +2,15 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.6.2-preview.5...HEAD)
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.6.2-preview.2...HEAD)
+
+**Documentation and other chores:**
+
+- Bumps nanoFramework.System.Text from 1.1.0 to 1.1.1-preview.2 [\#139](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/139)
+
+## [v1.6.2-preview.2](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.6.2-preview.2) (2020-09-19)
+
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.6.2-preview.5...v1.6.2-preview.2)
 
 **Documentation and other chores:**
 
