@@ -21,7 +21,7 @@ This package requires a target with nanoFramework..System.Net v$nativeVersion$.<
     <tags>nanoFramework C# csharp netmf netnf nanoFramework.System.Net</tags>
     <dependencies>
       <dependency id="nanoFramework.CoreLibrary" version="1.8.0-preview.6" />
-      <dependency id="nanoFramework.Runtime.Events" version="1.8.1-preview.22" />
+      <dependency id="nanoFramework.Runtime.Events" version="1.8.2-preview.1" />
       <dependency id="nanoFramework.System.Text" version="1.1.1-preview.2" />
     </dependencies>
   </metadata>
