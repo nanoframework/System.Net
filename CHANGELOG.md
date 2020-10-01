@@ -2,7 +2,15 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.6.3-preview.5...HEAD)
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.6.3-preview.7...HEAD)
+
+**Documentation and other chores:**
+
+- Bumps nanoFramework.System.Text from 1.1.1-preview.2 to 1.1.1-preview.10 [\#143](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/143)
+
+## [v1.6.3-preview.7](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.6.3-preview.7) (2020-09-30)
+
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.6.3-preview.5...v1.6.3-preview.7)
 
 **Documentation and other chores:**
 
@@ -118,6 +126,10 @@
 
 [Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.5.0-preview.1...v1.5.0-preview.2)
 
+**Fixed bugs:**
+
+- Fix declaration of wireless config enums [\#127](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/127)
+
 ## [v1.5.0-preview.1](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.5.0-preview.1) (2020-06-03)
 
 [Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.4.1-preview.21...v1.5.0-preview.1)
@@ -129,10 +141,6 @@
 ## [v1.4.1-preview.21](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.4.1-preview.21) (2020-05-31)
 
 [Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.4.1-preview.20...v1.4.1-preview.21)
-
-**Fixed bugs:**
-
-- Fix declaration of wireless config enums [\#127](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/127)
 
 **Documentation and other chores:**
 
@@ -415,11 +423,14 @@
 
 - Remove SSL3 and Default from SslProtocols [\#75](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/75)
 - Major rework on Sockets [\#74](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/74)
-- Add remote end point field to Socket [\#73](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/73)
 
 ## [v1.0.6-preview-026](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.0.6-preview-026) (2019-05-31)
 
 [Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.6-preview-024...v1.0.6-preview-026)
+
+**Implemented enhancements:**
+
+- Add remote end point field to Socket [\#73](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/73)
 
 ## [v1.0.6-preview-024](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.0.6-preview-024) (2019-04-24)
 
@@ -448,6 +459,10 @@
 ## [v1.0.6-preview-015](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.0.6-preview-015) (2019-04-03)
 
 [Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.6-preview-013...v1.0.6-preview-015)
+
+**Fixed bugs:**
+
+- Fix missing setting of socket type [\#68](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/68)
 
 **Documentation and other chores:**
 
@@ -498,10 +513,6 @@
 
 [Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.4...v1.0.3-preview-009)
 
-**Fixed bugs:**
-
-- Fix missing setting of socket type [\#68](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/68)
-
 **Documentation and other chores:**
 
 - Bumps nanoFramework.Runtime.Events from 1.0.4 to 1.0.5-preview-003 [\#61](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/61)
@@ -537,6 +548,7 @@
 **Implemented enhancements:**
 
 - Rework SslStream API [\#53](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/53)
+- Fix X509Certificate constructors from string [\#52](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/52)
 
 ## [v1.0.2-preview-023](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.0.2-preview-023) (2018-12-03)
 
@@ -557,10 +569,6 @@
 ## [v1.0.2-preview-013](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.0.2-preview-013) (2018-11-20)
 
 [Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.2-preview-001...v1.0.2-preview-013)
-
-**Implemented enhancements:**
-
-- Fix X509Certificate constructors from string [\#52](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/52)
 
 **Documentation and other chores:**
 
