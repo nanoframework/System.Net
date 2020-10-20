@@ -70,7 +70,6 @@ jobs:
       repositoriesToUpdate: |
         lib-nanoFramework.System.Net.Http
         paho.mqtt.m2mqtt
-        amqpnetlite
     displayName: Update dependent class libs
    
 ##################################
