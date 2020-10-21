@@ -2,7 +2,25 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.6.3-preview.7...HEAD)
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.6.3-preview.11...HEAD)
+
+**Documentation and other chores:**
+
+- Bumps nanoFramework.System.Text from 1.1.1-preview.12 to 1.1.1-preview.14 [\#147](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/147)
+- Update 2 NuGet dependencies [\#146](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/146)
+- Update 3 NuGet dependencies [\#145](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/145)
+
+## [v1.6.3-preview.11](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.6.3-preview.11) (2020-10-20)
+
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.6.3-preview.9...v1.6.3-preview.11)
+
+**Documentation and other chores:**
+
+- Update 3 NuGet dependencies [\#144](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/144)
+
+## [v1.6.3-preview.9](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.6.3-preview.9) (2020-10-01)
+
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.6.3-preview.7...v1.6.3-preview.9)
 
 **Documentation and other chores:**
 
@@ -423,14 +441,11 @@
 
 - Remove SSL3 and Default from SslProtocols [\#75](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/75)
 - Major rework on Sockets [\#74](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/74)
+- Add SocketType property to Socket [\#67](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/67)
 
 ## [v1.0.6-preview-026](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.0.6-preview-026) (2019-05-31)
 
 [Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.6-preview-024...v1.0.6-preview-026)
-
-**Implemented enhancements:**
-
-- Add remote end point field to Socket [\#73](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/73)
 
 ## [v1.0.6-preview-024](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.0.6-preview-024) (2019-04-24)
 
@@ -460,10 +475,6 @@
 
 [Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.6-preview-013...v1.0.6-preview-015)
 
-**Fixed bugs:**
-
-- Fix missing setting of socket type [\#68](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/68)
-
 **Documentation and other chores:**
 
 - Bumps nanoFramework.Runtime.Events from 1.0.5-preview-008 to 1.0.5-preview-010 [\#69](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/69)
@@ -472,13 +483,17 @@
 
 [Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.6-preview-011...v1.0.6-preview-013)
 
+**Fixed bugs:**
+
+- Fix missing setting of socket type [\#68](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/68)
+
 ## [v1.0.6-preview-011](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.0.6-preview-011) (2019-03-22)
 
 [Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.6-preview-009...v1.0.6-preview-011)
 
 **Implemented enhancements:**
 
-- Add SocketType property to Socket [\#67](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/67)
+- Add remote end point field to Socket [\#73](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/73)
 
 ## [v1.0.6-preview-009](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.0.6-preview-009) (2019-03-11)
 
