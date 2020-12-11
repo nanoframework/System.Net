@@ -9,6 +9,8 @@ namespace System.Net.Sockets
     using System.Net;
     using System.Runtime.CompilerServices;
     using System.Threading;
+    using System.Diagnostics;                       // skigrinder - added this
+
 
     /// <summary>
     /// Implements the Berkeley sockets interface.
@@ -65,9 +67,17 @@ namespace System.Net.Sockets
         /// </remarks>
         public Socket(AddressFamily addressFamily, SocketType socketType, ProtocolType protocolType)
         {
-            m_Handle = NativeSocket.socket((int)addressFamily, (int)socketType, (int)protocolType);
-
-            _socketType = socketType;
+            // skigrinder - 2020-12-10 Added exception handling to prevent Net library from crashing nanoFramework applications
+            try
+            {
+                m_Handle = NativeSocket.socket((int)addressFamily, (int)socketType, (int)protocolType);
+                _socketType = socketType;
+            }
+            catch (Exception e)
+            {
+                m_Handle = -1;
+                _socketType = SocketType.Unknown;
+            }
         }
 
         private Socket(int handle)
@@ -336,39 +346,69 @@ namespace System.Net.Sockets
         /// </remarks>
         public void Connect(EndPoint remoteEP)
         {
-            if (m_Handle == -1)
+            try
             {
-                throw new ObjectDisposedException();
-            }
+                if (m_Handle == -1) {
+                    throw new ObjectDisposedException();
+                }
 
-            EndPoint endPointSnapshot = remoteEP;
-            Snapshot(ref endPointSnapshot);
+                EndPoint endPointSnapshot = remoteEP;
+                Snapshot(ref endPointSnapshot);
 
-            if(m_fBlocking)
-            {
-                // blocking connect
-                _nonBlockingConnectInProgress = false;
-            }
-            else
-            {
-                // non blocking connect
-                _nonBlockingConnectInProgress = true;
-                _nonBlockingConnectRightEndPoint = endPointSnapshot;
-            }
-            
-            NativeSocket.connect(this, endPointSnapshot, !m_fBlocking);
+                if (m_fBlocking) {
+                    // blocking connect
+                    _nonBlockingConnectInProgress = false;
+                } else {
+                    // non blocking connect
+                    _nonBlockingConnectInProgress = true;
+                    _nonBlockingConnectRightEndPoint = endPointSnapshot;
+                }
 
-            if (m_fBlocking)
-            {
-                // if we are on blocking connect
-                // poll until connection is established or exception thrown
-                Poll(-1, SelectMode.SelectWrite);
-            }
+                //NativeSocket.connect(this, endPointSnapshot, !m_fBlocking);
 
-            if (_rightEndPoint == null)
+                //if (m_fBlocking) {
+                //    // if we are on blocking connect
+                //    // poll until connection is established or exception thrown
+                //    Poll(-1, SelectMode.SelectWrite);
+                //}
+
+                // skigrinder - 2020-12-10 added exception handling and timeout for Poll()
+                try
+                {
+                    NativeSocket.connect(this, endPointSnapshot, !m_fBlocking);
+                }
+                catch (Exception ec)
+                {
+                    Debug.WriteLine($"System.Net - Connect() - NativeSocket.connect() - Exception caught {ec.GetType().Name} ");
+                }
+
+                try
+                {
+                    if (m_fBlocking)
+                    {
+                        // if we are on blocking connect
+                        //Poll(-1, SelectMode.SelectWrite);                                 // skigrinder - old code would poll until connection was established or exception thrown - this hung nanoFramework applications
+                        if (!Poll(1500000, SelectMode.SelectWrite))                         // 'microseconds' values (1st param) - 1500000 is 1.5 seconds;
+                        {
+                            Debug.WriteLine($"System.Net - Connect() - call to Poll() timed out");
+                            return;
+                        }
+                    }
+                }
+                catch (Exception ep)
+                {
+                    Debug.WriteLine($"System.Net - Connect() - Exception caught {ep.GetType().Name} ");
+                    return;
+                }
+
+
+                if (_rightEndPoint == null) {
+                    // save a copy of the EndPoint
+                    _rightEndPoint = endPointSnapshot;
+                }
+            }
+            catch
             {
-                // save a copy of the EndPoint
-                _rightEndPoint = endPointSnapshot;
             }
         }
 
@@ -749,7 +789,15 @@ namespace System.Net.Sockets
                 throw new ObjectDisposedException();
             }
 
-            return NativeSocket.recv(this, buffer, offset, size, (int)socketFlags, m_recvTimeout);
+            // skigrinder - 2020-12-10 added exception handling to prevent crashing nanoFramework applications
+            try
+            {
+                return NativeSocket.recv(this, buffer, offset, size, (int)socketFlags, m_recvTimeout);
+            }
+            catch
+            {
+                return 0;
+            }
         }
 
         /// <summary>
@@ -1042,12 +1090,18 @@ namespace System.Net.Sockets
         /// </remarks>
         public bool Poll(int microSeconds, SelectMode mode)
         {
-            if (m_Handle == -1)
+            try
             {
-                throw new ObjectDisposedException();
+                if (m_Handle == -1)
+                {
+                    throw new ObjectDisposedException();
+                }
+                return NativeSocket.poll(this, (int)mode, microSeconds);
             }
-
-            return NativeSocket.poll(this, (int)mode, microSeconds);
+            catch
+            {
+                return false;
+            }
         }
 
         /// <summary>
