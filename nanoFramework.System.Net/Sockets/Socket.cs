@@ -36,7 +36,7 @@ namespace System.Net.Sockets
 
         // socket type
         [Diagnostics.DebuggerBrowsable(Diagnostics.DebuggerBrowsableState.Never)]
-        private SocketType _socketType;
+        private SocketType _socketType = SocketType.Unknown;
 
         // Our internal state doesn't automatically get updated after a non-blocking connect
         // completes.  Keep track of whether we're doing a non-blocking connect, and make sure
