@@ -73,9 +73,9 @@ namespace System.Net.Sockets
                 m_Handle = NativeSocket.socket((int)addressFamily, (int)socketType, (int)protocolType);
                 _socketType = socketType;
             }
-            catch
+            catch (SocketException e)
             {
-                throw new SocketException(SocketError.SocketError);
+                throw e;
             }
         }
 
