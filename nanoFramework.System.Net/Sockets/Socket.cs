@@ -73,10 +73,8 @@ namespace System.Net.Sockets
                 m_Handle = NativeSocket.socket((int)addressFamily, (int)socketType, (int)protocolType);
                 _socketType = socketType;
             }
-            catch (Exception e)
+            catch
             {
-                m_Handle = -1;
-                _socketType = SocketType.Unknown;
                 throw new SocketException(SocketError.SocketError);
             }
         }
