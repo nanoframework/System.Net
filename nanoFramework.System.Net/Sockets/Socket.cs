@@ -9,7 +9,7 @@ namespace System.Net.Sockets
     using System.Net;
     using System.Runtime.CompilerServices;
     using System.Threading;
-    using System.Diagnostics;                       // skigrinder - added this
+    using System.Diagnostics;
 
 
     /// <summary>
@@ -67,7 +67,7 @@ namespace System.Net.Sockets
         /// </remarks>
         public Socket(AddressFamily addressFamily, SocketType socketType, ProtocolType protocolType)
         {
-            // skigrinder - 2020-12-10 Added exception handling to prevent Net library from crashing nanoFramework applications
+            // Unhandled exceptions were causing nanoFramework applications to crash
             try
             {
                 m_Handle = NativeSocket.socket((int)addressFamily, (int)socketType, (int)protocolType);
@@ -77,6 +77,7 @@ namespace System.Net.Sockets
             {
                 m_Handle = -1;
                 _socketType = SocketType.Unknown;
+                throw new SocketException(SocketError.SocketError);
             }
         }
 
@@ -364,15 +365,7 @@ namespace System.Net.Sockets
                     _nonBlockingConnectRightEndPoint = endPointSnapshot;
                 }
 
-                //NativeSocket.connect(this, endPointSnapshot, !m_fBlocking);
-
-                //if (m_fBlocking) {
-                //    // if we are on blocking connect
-                //    // poll until connection is established or exception thrown
-                //    Poll(-1, SelectMode.SelectWrite);
-                //}
-
-                // skigrinder - 2020-12-10 added exception handling and timeout for Poll()
+                // Unhandled exceptions were causing nanoFramework applications to crash
                 try
                 {
                     NativeSocket.connect(this, endPointSnapshot, !m_fBlocking);
@@ -380,6 +373,7 @@ namespace System.Net.Sockets
                 catch (Exception ec)
                 {
                     Debug.WriteLine($"System.Net - Connect() - NativeSocket.connect() - Exception caught {ec.GetType().Name} ");
+                    throw new SocketException(SocketError.SocketError);
                 }
 
                 try
@@ -387,18 +381,18 @@ namespace System.Net.Sockets
                     if (m_fBlocking)
                     {
                         // if we are on blocking connect
-                        //Poll(-1, SelectMode.SelectWrite);                                 // skigrinder - old code would poll until connection was established or exception thrown - this hung nanoFramework applications
-                        if (!Poll(1500000, SelectMode.SelectWrite))                         // 'microseconds' values (1st param) - 1500000 is 1.5 seconds;
+                        //Poll(-1, SelectMode.SelectWrite);                                 // Original code would polled until connection was established or exception thrown - this hung nanoFramework applications
+                        if (!Poll(1500000, SelectMode.SelectWrite))                         // Workaround - Use this timeout for now.  Fix for this needs to be implemented in the nanoFramework interpreter 
                         {
                             Debug.WriteLine($"System.Net - Connect() - call to Poll() timed out");
-                            return;
+                            throw new SocketException(SocketError.TimedOut);
                         }
                     }
                 }
                 catch (Exception ep)
                 {
                     Debug.WriteLine($"System.Net - Connect() - Exception caught {ep.GetType().Name} ");
-                    return;
+                    throw new SocketException(SocketError.SocketError);
                 }
 
 
@@ -789,14 +783,14 @@ namespace System.Net.Sockets
                 throw new ObjectDisposedException();
             }
 
-            // skigrinder - 2020-12-10 added exception handling to prevent crashing nanoFramework applications
+            // Unhandled exceptions caused nanoFramework applications to crash here
             try
             {
                 return NativeSocket.recv(this, buffer, offset, size, (int)socketFlags, m_recvTimeout);
             }
             catch
             {
-                return 0;
+                throw new SocketException(SocketError.SocketError);
             }
         }
 
@@ -1100,7 +1094,7 @@ namespace System.Net.Sockets
             }
             catch
             {
-                return false;
+                throw new SocketException(SocketError.SocketError);
             }
         }
 
