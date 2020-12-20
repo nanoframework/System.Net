@@ -9,7 +9,6 @@ namespace System.Net.Sockets
     using System.Net;
     using System.Runtime.CompilerServices;
     using System.Threading;
-    using System.Diagnostics;
 
 
     /// <summary>
@@ -67,16 +66,8 @@ namespace System.Net.Sockets
         /// </remarks>
         public Socket(AddressFamily addressFamily, SocketType socketType, ProtocolType protocolType)
         {
-            // Unhandled exceptions were causing nanoFramework applications to crash
-            try
-            {
-                m_Handle = NativeSocket.socket((int)addressFamily, (int)socketType, (int)protocolType);
-                _socketType = socketType;
-            }
-            catch (SocketException e)
-            {
-                throw e;
-            }
+            m_Handle = NativeSocket.socket((int)addressFamily, (int)socketType, (int)protocolType);
+            _socketType = socketType;
         }
 
         private Socket(int handle)
@@ -345,62 +336,35 @@ namespace System.Net.Sockets
         /// </remarks>
         public void Connect(EndPoint remoteEP)
         {
-            try
+            if (m_Handle == -1) {
+                throw new ObjectDisposedException();
+            }
+
+            EndPoint endPointSnapshot = remoteEP;
+            Snapshot(ref endPointSnapshot);
+
+            if (m_fBlocking) {
+                // blocking connect
+                _nonBlockingConnectInProgress = false;
+            }
+            else
             {
-                if (m_Handle == -1) {
-                    throw new ObjectDisposedException();
-                }
+                // non blocking connect
+                _nonBlockingConnectInProgress = true;
+                _nonBlockingConnectRightEndPoint = endPointSnapshot;
+            }
 
-                EndPoint endPointSnapshot = remoteEP;
-                Snapshot(ref endPointSnapshot);
+            NativeSocket.connect(this, endPointSnapshot, !m_fBlocking);
 
-                if (m_fBlocking) {
-                    // blocking connect
-                    _nonBlockingConnectInProgress = false;
-                } else {
-                    // non blocking connect
-                    _nonBlockingConnectInProgress = true;
-                    _nonBlockingConnectRightEndPoint = endPointSnapshot;
-                }
+            if (m_fBlocking)
+            {
+                // if we are on blocking connect
+                Poll(-1, SelectMode.SelectWrite);
+            }
 
-                // Unhandled exceptions were causing nanoFramework applications to crash
-                try
-                {
-                    NativeSocket.connect(this, endPointSnapshot, !m_fBlocking);
-                }
-                catch (Exception ec)
-                {
-                    Debug.WriteLine($"System.Net - Connect() - NativeSocket.connect() - Exception caught {ec.GetType().Name} ");
-                    throw new SocketException(SocketError.SocketError);
-                }
-
-                try
-                {
-                    if (m_fBlocking)
-                    {
-                        // if we are on blocking connect
-                        //Poll(-1, SelectMode.SelectWrite);                                 // Original code would polled until connection was established or exception thrown - this hung nanoFramework applications
-                        if (!Poll(1500000, SelectMode.SelectWrite))                         // Workaround - Use this timeout for now.  Fix for this needs to be implemented in the nanoFramework interpreter 
-                        {
-                            Debug.WriteLine($"System.Net - Connect() - call to Poll() timed out");
-                            throw new SocketException(SocketError.TimedOut);
-                        }
-                    }
-                }
-                catch (Exception ep)
-                {
-                    Debug.WriteLine($"System.Net - Connect() - Exception caught {ep.GetType().Name} ");
-                    throw new SocketException(SocketError.SocketError);
-                }
-
-
-                if (_rightEndPoint == null) {
+            if (_rightEndPoint == null) {
                     // save a copy of the EndPoint
                     _rightEndPoint = endPointSnapshot;
-                }
-            }
-            catch
-            {
             }
         }
 
@@ -776,20 +740,12 @@ namespace System.Net.Sockets
         /// </remarks>
         public int Receive(byte[] buffer, int offset, int size, SocketFlags socketFlags)
         {
-            if (m_Handle == -1)
-            {
+            if (m_Handle == -1) {
                 throw new ObjectDisposedException();
             }
 
-            // Unhandled exceptions caused nanoFramework applications to crash here
-            try
-            {
-                return NativeSocket.recv(this, buffer, offset, size, (int)socketFlags, m_recvTimeout);
-            }
-            catch
-            {
-                throw new SocketException(SocketError.SocketError);
-            }
+            //return NativeSocket.recv(this, buffer, offset, size, (int)socketFlags, m_recvTimeout);
+            return NativeSocket.recv(this, buffer, offset, size, (int)socketFlags, 1500);
         }
 
         /// <summary>
@@ -1082,18 +1038,11 @@ namespace System.Net.Sockets
         /// </remarks>
         public bool Poll(int microSeconds, SelectMode mode)
         {
-            try
+            if (m_Handle == -1)
             {
-                if (m_Handle == -1)
-                {
-                    throw new ObjectDisposedException();
-                }
-                return NativeSocket.poll(this, (int)mode, microSeconds);
+                throw new ObjectDisposedException();
             }
-            catch
-            {
-                throw new SocketException(SocketError.SocketError);
-            }
+            return NativeSocket.poll(this, (int)mode, microSeconds);
         }
 
         /// <summary>
