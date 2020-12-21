@@ -744,8 +744,7 @@ namespace System.Net.Sockets
                 throw new ObjectDisposedException();
             }
 
-            //return NativeSocket.recv(this, buffer, offset, size, (int)socketFlags, m_recvTimeout);
-            return NativeSocket.recv(this, buffer, offset, size, (int)socketFlags, 1500);
+            return NativeSocket.recv(this, buffer, offset, size, (int)socketFlags, m_recvTimeout);
         }
 
         /// <summary>
