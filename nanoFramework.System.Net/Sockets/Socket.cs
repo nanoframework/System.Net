@@ -10,7 +10,6 @@ namespace System.Net.Sockets
     using System.Runtime.CompilerServices;
     using System.Threading;
 
-
     /// <summary>
     /// Implements the Berkeley sockets interface.
     /// </summary>
@@ -67,6 +66,7 @@ namespace System.Net.Sockets
         public Socket(AddressFamily addressFamily, SocketType socketType, ProtocolType protocolType)
         {
             m_Handle = NativeSocket.socket((int)addressFamily, (int)socketType, (int)protocolType);
+
             _socketType = socketType;
         }
 
@@ -336,14 +336,16 @@ namespace System.Net.Sockets
         /// </remarks>
         public void Connect(EndPoint remoteEP)
         {
-            if (m_Handle == -1) {
+            if (m_Handle == -1)
+            {
                 throw new ObjectDisposedException();
             }
 
             EndPoint endPointSnapshot = remoteEP;
             Snapshot(ref endPointSnapshot);
 
-            if (m_fBlocking) {
+            if (m_fBlocking)
+            {
                 // blocking connect
                 _nonBlockingConnectInProgress = false;
             }
@@ -359,12 +361,14 @@ namespace System.Net.Sockets
             if (m_fBlocking)
             {
                 // if we are on blocking connect
+                // poll until connection is established or exception thrown
                 Poll(-1, SelectMode.SelectWrite);
             }
 
-            if (_rightEndPoint == null) {
-                    // save a copy of the EndPoint
-                    _rightEndPoint = endPointSnapshot;
+            if (_rightEndPoint == null)
+            {
+                // save a copy of the EndPoint
+                _rightEndPoint = endPointSnapshot;
             }
         }
 
@@ -740,7 +744,8 @@ namespace System.Net.Sockets
         /// </remarks>
         public int Receive(byte[] buffer, int offset, int size, SocketFlags socketFlags)
         {
-            if (m_Handle == -1) {
+            if (m_Handle == -1)
+            {
                 throw new ObjectDisposedException();
             }
 
@@ -1041,6 +1046,7 @@ namespace System.Net.Sockets
             {
                 throw new ObjectDisposedException();
             }
+
             return NativeSocket.poll(this, (int)mode, microSeconds);
         }
 
