@@ -2,7 +2,36 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.6.3-preview.11...HEAD)
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.6.3-preview.19...HEAD)
+
+**Fixed bugs:**
+
+- Exception handling & memory leak fixes [\#152](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/152)
+
+**Documentation and other chores:**
+
+- Bumps nanoFramework.Runtime.Events from 1.8.2-preview.13 to 1.9.0-preview.2 [\#151](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/151)
+
+## [v1.6.3-preview.19](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.6.3-preview.19) (2020-12-07)
+
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.6.3-preview.17...v1.6.3-preview.19)
+
+**Documentation and other chores:**
+
+- Bumps nanoFramework.Runtime.Events from 1.8.2-preview.13 to 1.9.0-preview.2 [\#150](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/150)
+- Update 3 NuGet dependencies [\#149](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/149)
+
+## [v1.6.3-preview.17](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.6.3-preview.17) (2020-12-07)
+
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.6.3-preview.15...v1.6.3-preview.17)
+
+**Documentation and other chores:**
+
+- Update 3 NuGet dependencies [\#148](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/148)
+
+## [v1.6.3-preview.15](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.6.3-preview.15) (2020-10-21)
+
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.6.3-preview.11...v1.6.3-preview.15)
 
 **Documentation and other chores:**
 
@@ -246,6 +275,7 @@
 **Documentation and other chores:**
 
 - Update 2 NuGet dependencies [\#111](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/111)
+- Update 2 NuGet dependencies [\#109](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/109)
 
 ## [v1.4.1-preview.3](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.4.1-preview.3) (2020-01-13)
 
@@ -258,10 +288,6 @@
 ## [v1.4.1-preview.2](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.4.1-preview.2) (2019-11-14)
 
 [Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.4.1-preview.1...v1.4.1-preview.2)
-
-**Documentation and other chores:**
-
-- Update 2 NuGet dependencies [\#109](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/109)
 
 ## [v1.4.1-preview.1](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.4.1-preview.1) (2019-11-12)
 
@@ -278,6 +304,7 @@
 **Documentation and other chores:**
 
 - Update 2 NuGet dependencies [\#107](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/107)
+- Update 2 NuGet dependencies [\#103](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/103)
 
 ## [v1.4.0-preview.6](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.4.0-preview.6) (2019-11-05)
 
@@ -298,10 +325,6 @@
 ## [v1.4.0-preview.4](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.4.0-preview.4) (2019-10-23)
 
 [Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.4.0-preview.3...v1.4.0-preview.4)
-
-**Documentation and other chores:**
-
-- Update 2 NuGet dependencies [\#103](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/103)
 
 ## [v1.4.0-preview.3](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.4.0-preview.3) (2019-10-18)
 
@@ -441,11 +464,14 @@
 
 - Remove SSL3 and Default from SslProtocols [\#75](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/75)
 - Major rework on Sockets [\#74](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/74)
-- Add SocketType property to Socket [\#67](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/67)
 
 ## [v1.0.6-preview-026](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.0.6-preview-026) (2019-05-31)
 
 [Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.6-preview-024...v1.0.6-preview-026)
+
+**Implemented enhancements:**
+
+- Add remote end point field to Socket [\#73](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/73)
 
 ## [v1.0.6-preview-024](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.0.6-preview-024) (2019-04-24)
 
@@ -493,7 +519,7 @@
 
 **Implemented enhancements:**
 
-- Add remote end point field to Socket [\#73](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/73)
+- Add SocketType property to Socket [\#67](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/67)
 
 ## [v1.0.6-preview-009](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.0.6-preview-009) (2019-03-11)
 
@@ -544,10 +570,6 @@
 
 [Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.2...v1.0.3-preview-003)
 
-**Implemented enhancements:**
-
-- Add CertificateManager class [\#51](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/51)
-
 ## [v1.0.2](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.0.2) (2018-12-15)
 
 [Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.2-preview-028...v1.0.2)
@@ -584,6 +606,10 @@
 ## [v1.0.2-preview-013](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.0.2-preview-013) (2018-11-20)
 
 [Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.0.2-preview-001...v1.0.2-preview-013)
+
+**Implemented enhancements:**
+
+- Add CertificateManager class [\#51](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/51)
 
 **Documentation and other chores:**
 
