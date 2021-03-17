@@ -2,7 +2,15 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.6.3-preview.29...HEAD)
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.6.3-preview.33...HEAD)
+
+**Documentation and other chores:**
+
+- Bumps nanoFramework.System.Text from 1.1.1-preview.29 to 1.1.1-preview.33 [\#161](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/161)
+
+## [v1.6.3-preview.33](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.6.3-preview.33) (2021-03-02)
+
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.6.3-preview.29...v1.6.3-preview.33)
 
 **Documentation and other chores:**
 
@@ -656,7 +664,6 @@
 
 - Update 2 NuGet dependencies [\#47](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/47)
 - Bumps nanoFramework.Runtime.Events from 1.0.0 to 1.0.2-preview-004 [\#45](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/45)
-- Update 2 NuGet dependencies [\#32](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/32)
 
 ## [v1.0.2-preview-001](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.0.2-preview-001) (2018-11-07)
 
@@ -682,6 +689,7 @@
 
 - Update 2 NuGet dependencies [\#38](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/38)
 - Update 2 NuGet dependencies [\#34](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/34)
+- Update 2 NuGet dependencies [\#32](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/32)
 - Update 2 NuGet dependencies [\#31](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/31)
 - Bump nanoFramework.Runtime.Events from 1.0.0-preview188 to 1.0.0-preview191 in /source [\#19](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/19)
 - Bump nanoFramework.CoreLibrary and nanoFramework.Runtime.Events in /source [\#16](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/16)
