@@ -73,10 +73,10 @@ namespace System.Net
             //else
             {
                 // IPv4 Address serialization
-                m_Buffer[4] = unchecked((byte)(ipAddress._address));
-                m_Buffer[5] = unchecked((byte)(ipAddress._address >> 8));
-                m_Buffer[6] = unchecked((byte)(ipAddress._address >> 16));
-                m_Buffer[7] = unchecked((byte)(ipAddress._address >> 24));
+                m_Buffer[4] = unchecked((byte)(ipAddress.Address));
+                m_Buffer[5] = unchecked((byte)(ipAddress.Address >> 8));
+                m_Buffer[6] = unchecked((byte)(ipAddress.Address >> 16));
+                m_Buffer[7] = unchecked((byte)(ipAddress.Address >> 24));
             }
         }
 

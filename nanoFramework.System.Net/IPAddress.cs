@@ -26,8 +26,7 @@ namespace System.Net
         /// </summary>
         public static readonly IPAddress Loopback = new IPAddress(0x000000000100007F);
 
-        [Diagnostics.DebuggerBrowsable(Diagnostics.DebuggerBrowsableState.Never)]
-        internal long _address;
+        internal long Address;
 
         [Diagnostics.DebuggerBrowsable(Diagnostics.DebuggerBrowsableState.Never)]
         private AddressFamily _family = AddressFamily.InterNetwork;
@@ -63,7 +62,7 @@ namespace System.Net
                 throw new ArgumentOutOfRangeException();
             }
 
-            _address = newAddress;
+            Address = newAddress;
 
             // default to InterNetwork
             _family = AddressFamily.InterNetwork;
@@ -79,7 +78,7 @@ namespace System.Net
             {
                 _family = AddressFamily.InterNetwork;
                 // need to offset address by 4 (1st are family, 2nd are port
-                _address = ((address[3 + 4] << 24 | address[2 + 4] << 16 | address[1 + 4] << 8 | address[0 + 4]) & 0x0FFFFFFFF);
+                Address = ((address[3 + 4] << 24 | address[2 + 4] << 16 | address[1 + 4] << 8 | address[0 + 4]) & 0x0FFFFFFFF);
             }
             else if (address[0] == (byte)AddressFamily.InterNetworkV6)
             {
@@ -108,7 +107,7 @@ namespace System.Net
 
             if (obj == null) return false;
 
-            return this._address == addr._address;
+            return this.Address == addr.Address;
         }
 
         /// <summary>
@@ -119,10 +118,10 @@ namespace System.Net
         {
             return new byte[]
             {
-                (byte)(_address),
-                (byte)(_address >> 8),
-                (byte)(_address >> 16),
-                (byte)(_address >> 24)
+                (byte)(Address),
+                (byte)(Address >> 8),
+                (byte)(Address >> 16),
+                (byte)(Address >> 24)
             };
         }
 
@@ -180,13 +179,13 @@ namespace System.Net
         /// </remarks>
         public override string ToString()
         {
-            return ((byte)(_address)).ToString() +
+            return ((byte)(Address)).ToString() +
                     "." +
-                    ((byte)(_address >> 8)).ToString() +
+                    ((byte)(Address >> 8)).ToString() +
                     "." +
-                    ((byte)(_address >> 16)).ToString() +
+                    ((byte)(Address >> 16)).ToString() +
                     "." +
-                    ((byte)(_address >> 24)).ToString();
+                    ((byte)(Address >> 24)).ToString();
         }
 
         /// <summary>
@@ -223,7 +222,7 @@ namespace System.Net
             switch (_family)
             {
                 case AddressFamily.InterNetwork:
-                    return new IPAddress(_address);
+                    return new IPAddress(Address);
 
                 //case AddressFamily.InterNetworkV6:
                 //    return new IPAddress(m_Numbers, (uint)m_ScopeId);
