@@ -105,10 +105,10 @@ namespace System.Net
             buffer[2] = unchecked((byte)(_port >> 8));
             buffer[3] = unchecked((byte)(_port));
 
-            buffer[4] = unchecked((byte)(_address._address));
-            buffer[5] = unchecked((byte)(_address._address >> 8));
-            buffer[6] = unchecked((byte)(_address._address >> 16));
-            buffer[7] = unchecked((byte)(_address._address >> 24));
+            buffer[4] = unchecked((byte)(_address.Address));
+            buffer[5] = unchecked((byte)(_address.Address >> 8));
+            buffer[6] = unchecked((byte)(_address.Address >> 16));
+            buffer[7] = unchecked((byte)(_address.Address >> 24));
 
             return socketAddress;
         }
