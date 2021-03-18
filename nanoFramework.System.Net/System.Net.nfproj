@@ -32,9 +32,49 @@
     <NF_GenerateStubsDirectory>bin\$(Configuration)\Stubs</NF_GenerateStubsDirectory>
     <NF_GenerateSkeletonProjectName>sys_net_native</NF_GenerateSkeletonProjectName>
     <Name>System.Net</Name>
+    <CodeAnalysisRuleSet>..\.sonarlint\nanoframework_lib-nanoframework.system.netcsharp.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <NFMDP_PE_ExcludeClassByName Include="ThisAssembly">
+      <InProject>false</InProject>
+    </NFMDP_PE_ExcludeClassByName>
+    <NFMDP_PE_ExcludeClassByName Include="NetworkInformationOptions">
+      <InProject>false</InProject>
+    </NFMDP_PE_ExcludeClassByName>
+    <NFMDP_PE_ExcludeClassByName Include="PhyProtocols">
+      <InProject>false</InProject>
+    </NFMDP_PE_ExcludeClassByName>
+    <NFMDP_PE_ExcludeClassByName Include="SslProtocols">
+      <InProject>false</InProject>
+    </NFMDP_PE_ExcludeClassByName>
+    <NFMDP_PE_ExcludeClassByName Include="SslVerification">
+      <InProject>false</InProject>
+    </NFMDP_PE_ExcludeClassByName>
+    <NFMDP_PE_ExcludeClassByName Include="AddressFamily">
+      <InProject>false</InProject>
+    </NFMDP_PE_ExcludeClassByName>
+    <NFMDP_PE_ExcludeClassByName Include="ProtocolFamily">
+      <InProject>false</InProject>
+    </NFMDP_PE_ExcludeClassByName>
+    <NFMDP_PE_ExcludeClassByName Include="ProtocolType">
+      <InProject>false</InProject>
+    </NFMDP_PE_ExcludeClassByName>
+    <NFMDP_PE_ExcludeClassByName Include="SelectMode">
+      <InProject>false</InProject>
+    </NFMDP_PE_ExcludeClassByName>
+    <NFMDP_PE_ExcludeClassByName Include="SocketError">
+      <InProject>false</InProject>
+    </NFMDP_PE_ExcludeClassByName>
+    <NFMDP_PE_ExcludeClassByName Include="SocketFlags">
+      <InProject>false</InProject>
+    </NFMDP_PE_ExcludeClassByName>
+    <NFMDP_PE_ExcludeClassByName Include="SocketOptionLevel">
+      <InProject>false</InProject>
+    </NFMDP_PE_ExcludeClassByName>
+    <NFMDP_PE_ExcludeClassByName Include="SocketOptionName">
+      <InProject>false</InProject>
+    </NFMDP_PE_ExcludeClassByName>
+    <NFMDP_PE_ExcludeClassByName Include="SocketType">
       <InProject>false</InProject>
     </NFMDP_PE_ExcludeClassByName>
   </ItemGroup>
@@ -57,6 +97,7 @@
     <Compile Include="IPEndPoint.cs" />
     <Compile Include="IPHostEntry.cs" />
     <Compile Include="NetworkInformation\AuthenticationType.cs" />
+    <Compile Include="NetworkInformation\IPGlobalProperties.cs" />
     <Compile Include="NetworkInformation\RadioType.cs" />
     <Compile Include="NetworkInformation\EncryptionType.cs" />
     <Compile Include="NetworkInformation\NetworkInformationOptions.cs" />
@@ -93,6 +134,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <AdditionalFiles Include="..\.sonarlint\nanoframework_lib-nanoframework.system.net\CSharp\SonarLint.xml" Link="SonarLint.xml" />
     <Content Include="README.txt" />
   </ItemGroup>
   <ItemGroup>
