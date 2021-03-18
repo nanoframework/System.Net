@@ -22,12 +22,12 @@ namespace System.Net.NetworkInformation
         [Flags]
         internal enum UpdateOperation : byte
         {
-            Invalid =       0x00,
-            Dns =           0x01,
-            Dhcp =          0x02,
-            DhcpRenew =     0x04,
-            DhcpRelease =   0x08,
-            Mac =           0x10,
+            Invalid = 0x00,
+            Dns = 0x01,
+            Dhcp = 0x02,
+            DhcpRenew = 0x04,
+            DhcpRelease = 0x08,
+            Mac = 0x10,
         }
 
         private readonly int _interfaceIndex;
@@ -52,6 +52,13 @@ namespace System.Net.NetworkInformation
         private uint[] _ipv6dnsAddress2;
 
         private NetworkInterfaceType _networkInterfaceType;
+
+        /// <summary>
+        /// Indicates whether any network connection is available.
+        /// </summary>
+        /// <returns><see langword="true"/> if a network connection is available; otherwise, <see langword="false"/>.</returns>
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        public extern static bool GetIsNetworkAvailable();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NetworkInterface"/> class.
