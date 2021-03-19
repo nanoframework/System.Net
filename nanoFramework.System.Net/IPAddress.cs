@@ -6,6 +6,7 @@
 
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
+using System.Runtime.CompilerServices;
 
 namespace System.Net
 {
@@ -133,38 +134,7 @@ namespace System.Net
         /// </returns>
         public static IPAddress Parse(string ipString)
         {
-            if (ipString == null)
-                throw new ArgumentNullException();
-
-            ulong ipAddress = 0L;
-            int lastIndex = 0;
-            int shiftIndex = 0;
-            ulong mask = 0x00000000000000FF;
-            ulong octet = 0L;
-            int length = ipString.Length;
-
-            for (int i = 0; i < length; ++i)
-            {
-                // Parse to '.' or end of IP address
-                if (ipString[i] == '.' || i == length - 1)
-                    // If the IP starts with a '.'
-                    // or a segment is longer than 3 characters or shiftIndex > last bit position throw.
-                    if (i == 0 || i - lastIndex > 3 || shiftIndex > 24)
-                    {
-                        throw new ArgumentException();
-                    }
-                    else
-                    {
-                        i = i == length - 1 ? ++i : i;
-                        octet = ulong.Parse(ipString.Substring(lastIndex, i - lastIndex)) & 0x00000000000000FF;
-                        ipAddress = ipAddress + ((octet << shiftIndex) & mask);
-                        lastIndex = i + 1;
-                        shiftIndex = shiftIndex + 8;
-                        mask = (mask << 8);
-                    }
-            }
-
-            return new IPAddress((long)ipAddress);
+            return new IPAddress(NetworkInterface.IPAddressFromString(ipString));
         }
 
         /// <summary>
@@ -179,13 +149,7 @@ namespace System.Net
         /// </remarks>
         public override string ToString()
         {
-            return ((byte)(Address)).ToString() +
-                    "." +
-                    ((byte)(Address >> 8)).ToString() +
-                    "." +
-                    ((byte)(Address >> 16)).ToString() +
-                    "." +
-                    ((byte)(Address >> 24)).ToString();
+            return IPv4ToString((uint)Address);
         }
 
         /// <summary>
@@ -230,5 +194,12 @@ namespace System.Net
 
             throw new NotSupportedException();
         }
+
+        #region native methods
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern string IPv4ToString(uint ipv4Address);
+
+        #endregion
     }
 }
