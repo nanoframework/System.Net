@@ -2,7 +2,17 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.6.3-preview.33...HEAD)
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.6.3-preview.35...HEAD)
+
+**Implemented enhancements:**
+
+- Replace conversion with native implementations [\#164](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/164)
+- Expose Address field in IPAddress [\#163](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/163)
+- Improvements in Network information [\#162](https://github.com/nanoframework/lib-nanoFramework.System.Net/pull/162)
+
+## [v1.6.3-preview.35](https://github.com/nanoframework/lib-nanoFramework.System.Net/tree/v1.6.3-preview.35) (2021-03-17)
+
+[Full Changelog](https://github.com/nanoframework/lib-nanoFramework.System.Net/compare/v1.6.3-preview.33...v1.6.3-preview.35)
 
 **Documentation and other chores:**
 
