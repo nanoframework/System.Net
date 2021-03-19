@@ -18,6 +18,7 @@ namespace System.Net.Security
     public class SslStream : NetworkStream
     {
         private SslVerification _sslVerification;
+        private bool _useStoredDeviceCertificate = false;
 
         // Internal flags
         private int _sslContext;
@@ -28,6 +29,16 @@ namespace System.Net.Security
         /// The default behaviour is <see cref="SslVerification.CertificateRequired"/>.
         /// </summary>
         public SslVerification SslVerification { get => _sslVerification; set => _sslVerification = value; }
+
+        /// <summary>
+        /// Option to use the certificate stored in the device as client or server certificate.
+        /// The default option is <see langword="false"/>.
+        /// </summary>
+        /// <remarks>
+        /// This property is exclusive of .NET nanoFramework.
+        /// In case there is no device certificate stored, the authentication will use whatever is provided (or not) in the parameter of the method being called.
+        /// </remarks>
+        public bool UseStoredDeviceCertificate { get => _useStoredDeviceCertificate; set => _useStoredDeviceCertificate = value; }
 
         //--//
 
@@ -71,6 +82,9 @@ namespace System.Net.Security
         /// <param name="targetHost">The name of the server that will share this SslStream.</param>
         /// <param name="clientCertificate">The client certificate.</param>
         /// <param name="enabledSslProtocols">The <see cref="SslProtocols"/> value that represents the protocol used for authentication.</param>
+        /// <remarks>
+        /// Instead of providing the client certificate in the <paramref name="clientCertificate"/> parameter the <see cref="UseStoredDeviceCertificate"/> property can be used to use the certificate stored in the device.
+        /// </remarks>
         public void AuthenticateAsClient(string targetHost, X509Certificate clientCertificate, SslProtocols enabledSslProtocols)
         {
             Authenticate(false, targetHost, clientCertificate, null, enabledSslProtocols);
@@ -84,6 +98,9 @@ namespace System.Net.Security
         /// <param name="clientCertificate">The client certificate.</param>
         /// <param name="ca">Certificate Authority certificate to use for authentication with the server.</param>
         /// <param name="enabledSslProtocols">The <see cref="SslProtocols"/> value that represents the protocol used for authentication.</param>
+        /// <remarks>
+        /// Instead of providing the client certificate in the <paramref name="clientCertificate"/> parameter the <see cref="UseStoredDeviceCertificate"/> property can be used to use the certificate stored in the device.
+        /// </remarks>
         public void AuthenticateAsClient(string targetHost, X509Certificate clientCertificate, X509Certificate ca, SslProtocols enabledSslProtocols)
         {
             Authenticate(false, targetHost, clientCertificate, ca, enabledSslProtocols);
@@ -95,6 +112,9 @@ namespace System.Net.Security
         /// </summary>
         /// <param name="serverCertificate">The certificate used to authenticate the server.</param>
         /// <param name="enabledSslProtocols">The protocols that may be used for authentication.</param>
+        /// <remarks>
+        /// Instead of providing the server certificate in the <paramref name="serverCertificate"/> parameter the <see cref="UseStoredDeviceCertificate"/> property can be used to use the certificate stored in the device.
+        /// </remarks>
         public void AuthenticateAsServer(X509Certificate serverCertificate, SslProtocols enabledSslProtocols)
         {
             Authenticate(true, "", serverCertificate, null, enabledSslProtocols);
@@ -106,6 +126,9 @@ namespace System.Net.Security
         /// <param name="serverCertificate">The X509Certificate used to authenticate the server.</param>
         /// <param name="clientCertificateRequired">A <see cref="Boolean"/> value that specifies whether the client is asked for a certificate for authentication. Note that this is only a request, if no certificate is provided, the server still accepts the connection request.</param>
         /// <param name="enabledSslProtocols">The protocols that may be used for authentication.</param>
+        /// <remarks>
+        /// Instead of providing the server certificate in the <paramref name="serverCertificate"/> parameter the <see cref="UseStoredDeviceCertificate"/> property can be used to use the certificate stored in the device.
+        /// </remarks>
         public void AuthenticateAsServer(X509Certificate serverCertificate, bool clientCertificateRequired, SslProtocols enabledSslProtocols)
         {
             SslVerification = clientCertificateRequired ? SslVerification.VerifyClientOnce : SslVerification.NoVerification;
@@ -123,12 +146,24 @@ namespace System.Net.Security
             {
                 if (isServer)
                 {
-                    _sslContext = SslNative.SecureServerInit((int)enabledSslProtocols, (int)_sslVerification, certificate, ca);
+                    _sslContext = SslNative.SecureServerInit(
+                        (int)enabledSslProtocols,
+                        (int)_sslVerification,
+                        certificate,
+                        ca,
+                        _useStoredDeviceCertificate);
+                    
                     SslNative.SecureAccept(_sslContext, _socket);
                 }
                 else
                 {
-                    _sslContext = SslNative.SecureClientInit((int)enabledSslProtocols, (int)_sslVerification, certificate, ca);
+                    _sslContext = SslNative.SecureClientInit(
+                        (int)enabledSslProtocols,
+                        (int)_sslVerification,
+                        certificate,
+                        ca,
+                        _useStoredDeviceCertificate);
+                    
                     SslNative.SecureConnect(_sslContext, targetHost, _socket);
                 }
             }
