@@ -70,10 +70,20 @@ namespace System.Net.Security
     internal static class SslNative
     {
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal static extern int SecureServerInit(int sslProtocols, int sslCertVerify, X509Certificate certificate, X509Certificate ca);
+        internal static extern int SecureServerInit(
+            int sslProtocols,
+            int sslCertVerify,
+            X509Certificate certificate,
+            X509Certificate ca,
+            bool useDeviceCertificate);
 
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal static extern int SecureClientInit(int sslProtocols, int sslCertVerify, X509Certificate certificate, X509Certificate ca);
+        internal static extern int SecureClientInit(
+            int sslProtocols,
+            int sslCertVerify,
+            X509Certificate certificate,
+            X509Certificate ca,
+            bool useDeviceCertificate);
 
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal static extern void SecureAccept(int contextHandle, object socket);
