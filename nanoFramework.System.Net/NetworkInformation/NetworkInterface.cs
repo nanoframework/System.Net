@@ -96,19 +96,6 @@ namespace System.Net.NetworkInformation
             return ifaces;
         }
 
-        private string IPv4AddressToString(uint ipv4Address)
-        {
-            return string.Concat(
-                            ((ipv4Address >> 0) & 0xFF).ToString(),
-                                ".",
-                            ((ipv4Address >> 8) & 0xFF).ToString(),
-                                ".",
-                            ((ipv4Address >> 16) & 0xFF).ToString(),
-                                ".",
-                            ((ipv4Address >> 24) & 0xFF).ToString()
-                            );
-        }
-
         private string IPv6AddressToString(uint[] ipv6Address)
         {
             throw new NotImplementedException();
@@ -134,9 +121,9 @@ namespace System.Net.NetworkInformation
         {
             try
             {
-                _ipv4Address = IPAddressFromString(ipv4Address);
-                _ipv4NetMask = IPAddressFromString(ipv4SubnetMask);
-                _ipv4GatewayAddress = IPAddressFromString(ipv4GatewayAddress);
+                _ipv4Address = (uint)IPAddressFromString(ipv4Address);
+                _ipv4NetMask = (uint)IPAddressFromString(ipv4SubnetMask);
+                _ipv4GatewayAddress = (uint)IPAddressFromString(ipv4GatewayAddress);
                 _startupAddressMode = AddressMode.Static;
 
                 UpdateConfiguration((int)UpdateOperation.Dhcp);
@@ -190,9 +177,9 @@ namespace System.Net.NetworkInformation
             {
                 throw new NotImplementedException();
 
-                _ipv4Address = IPAddressFromString(ipv4Address);
-                _ipv4NetMask = IPAddressFromString(ipv4subnetMask);
-                _ipv4GatewayAddress = IPAddressFromString(ipv4gatewayAddress);
+                _ipv4Address = (uint)IPAddressFromString(ipv4Address);
+                _ipv4NetMask = (uint)IPAddressFromString(ipv4subnetMask);
+                _ipv4GatewayAddress = (uint)IPAddressFromString(ipv4gatewayAddress);
 
                 // FIXME
                 // need to test this
@@ -242,7 +229,7 @@ namespace System.Net.NetworkInformation
             int iAddress = 0;
             for (int i = 0; i < dnsAddresses.Length; i++)
             {
-                uint address = IPAddressFromString(dnsAddresses[i]);
+                uint address = (uint)IPAddressFromString(dnsAddresses[i]);
 
                 addresses[iAddress] = address;
 
@@ -351,7 +338,7 @@ namespace System.Net.NetworkInformation
         /// </summary>
         public string IPv4Address
         {
-            get { return IPv4AddressToString(_ipv4Address); }
+            get { return IPAddress.IPv4ToString(_ipv4Address); }
         }
 
         /// <summary>
@@ -359,7 +346,7 @@ namespace System.Net.NetworkInformation
         /// </summary>
         public string IPv4GatewayAddress
         {
-            get { return IPv4AddressToString(_ipv4GatewayAddress); }
+            get { return IPAddress.IPv4ToString(_ipv4GatewayAddress); }
         }
 
         /// <summary>
@@ -367,7 +354,7 @@ namespace System.Net.NetworkInformation
         /// </summary>
         public string IPv4SubnetMask
         {
-            get { return IPv4AddressToString(_ipv4NetMask); }
+            get { return IPAddress.IPv4ToString(_ipv4NetMask); }
         }
 
         /// <summary>
@@ -390,12 +377,12 @@ namespace System.Net.NetworkInformation
 
                 if (_ipv4dnsAddress1 != 0)
                 {
-                    list.Add(IPv4AddressToString(_ipv4dnsAddress1));
+                    list.Add(IPAddress.IPv4ToString(_ipv4dnsAddress1));
                 }
 
                 if (_ipv4dnsAddress2 != 0)
                 {
-                    list.Add(IPv4AddressToString(_ipv4dnsAddress2));
+                    list.Add(IPAddress.IPv4ToString(_ipv4dnsAddress2));
                 }
 
                 return (string[])list.ToArray(typeof(string));
@@ -489,7 +476,7 @@ namespace System.Net.NetworkInformation
         private extern void UpdateConfiguration(int updateType);
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        private static extern uint IPAddressFromString(string ipAddress);
+        internal static extern long IPAddressFromString(string ipAddress);
 
         #endregion
     }
