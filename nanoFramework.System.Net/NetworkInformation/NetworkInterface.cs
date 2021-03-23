@@ -56,7 +56,12 @@ namespace System.Net.NetworkInformation
         /// <summary>
         /// Indicates whether any network connection is available.
         /// </summary>
-        /// <returns><see langword="true"/> if a network connection is available; otherwise, <see langword="false"/>.</returns>
+        /// <returns>
+        /// <see langword="true"/> if a network connection is available; otherwise, <see langword="false"/>.
+        /// </returns>
+        /// <remarks>
+        /// A network connection is considered to be available if any network interface is marked "up" and is not a loopback or tunnel interface.
+        /// </remarks>
         [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static bool GetIsNetworkAvailable();
 
