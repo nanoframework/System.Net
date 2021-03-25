@@ -31,7 +31,7 @@ jobs:
     buildPlatform: 'Any CPU'
     buildConfiguration: 'Release'
     nugetPackageName: 'nanoFramework.System.Net'
-    repoName: 'lib-nanoFramework.System.Net'
+    repoName: 'nanoFramework.System.Net'
 
   steps:
 
@@ -68,7 +68,7 @@ jobs:
     inputs:
       gitHubToken: $(GitHubToken)
       repositoriesToUpdate: |
-        lib-nanoFramework.System.Net.Http
+        nanoFramework.System.Net.Http
         paho.mqtt.m2mqtt
     displayName: Update dependent class libs
    
