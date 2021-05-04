@@ -23,7 +23,7 @@ jobs:
   condition: or( eq(variables['UPDATE_DEPENDENTS'], 'false'), eq(variables['StartReleaseCandidate'], 'true') )
   
   pool:
-    vmImage: 'VS2017-Win2016'
+    vmImage: 'windows-2019'
 
   variables:
     DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
@@ -49,7 +49,7 @@ jobs:
   - Build_Library
 
   pool:
-    vmImage: 'VS2017-Win2016'
+    vmImage: 'windows-2019'
 
   variables:
     DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
@@ -82,7 +82,7 @@ jobs:
   condition: or( failed('Build_Library'), failed('Update_Dependents'))
 
   pool:
-    vmImage: 'VS2017-Win2016'
+    vmImage: 'windows-2019'
   steps:
 
   - checkout: self
