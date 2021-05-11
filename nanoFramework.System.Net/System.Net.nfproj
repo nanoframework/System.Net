@@ -82,7 +82,7 @@
     <NFMDP_PE_LoadHints Include="..\packages\nanoFramework.CoreLibrary.1.10.3-preview.20\lib\mscorlib.dll">
       <InProject>false</InProject>
     </NFMDP_PE_LoadHints>
-    <NFMDP_PE_LoadHints Include="..\packages\nanoFramework.Runtime.Events.1.9.0-preview.16\lib\nanoFramework.Runtime.Events.dll">
+    <NFMDP_PE_LoadHints Include="..\packages\nanoFramework.Runtime.Events.1.9.0-preview.22\lib\nanoFramework.Runtime.Events.dll">
       <InProject>false</InProject>
     </NFMDP_PE_LoadHints>
     <NFMDP_PE_LoadHints Include="..\packages\nanoFramework.System.Text.1.1.1-preview.46\lib\nanoFramework.System.Text.dll">
@@ -143,7 +143,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="nanoFramework.Runtime.Events, Version=1.9.0.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
-      <HintPath>..\packages\nanoFramework.Runtime.Events.1.9.0-preview.16\lib\nanoFramework.Runtime.Events.dll</HintPath>
+      <HintPath>..\packages\nanoFramework.Runtime.Events.1.9.0-preview.22\lib\nanoFramework.Runtime.Events.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="nanoFramework.System.Text, Version=1.1.1.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
