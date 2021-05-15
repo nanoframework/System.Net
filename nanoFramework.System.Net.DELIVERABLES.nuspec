@@ -31,7 +31,6 @@
     <file src="nanoFramework.System.Net\obj\Release\*.strings" target="content\dump\" />
     <file src="nanoFramework.System.Net\obj\Release\*.resources" target="content\resources\" />
     <file src="nanoFramework.System.Net\obj\Release\*.il" target="content\disasm\" />
-
     <file src="assets\nf-logo.png" target="images" />
   </files>
 </package>
