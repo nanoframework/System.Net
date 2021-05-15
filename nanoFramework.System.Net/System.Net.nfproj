@@ -85,7 +85,7 @@
     <NFMDP_PE_LoadHints Include="..\packages\nanoFramework.Runtime.Events.1.9.0-preview.24\lib\nanoFramework.Runtime.Events.dll">
       <InProject>false</InProject>
     </NFMDP_PE_LoadHints>
-    <NFMDP_PE_LoadHints Include="..\packages\nanoFramework.System.Text.1.1.1-preview.47\lib\nanoFramework.System.Text.dll">
+    <NFMDP_PE_LoadHints Include="..\packages\nanoFramework.System.Text.1.1.1-preview.48\lib\nanoFramework.System.Text.dll">
       <InProject>false</InProject>
     </NFMDP_PE_LoadHints>
   </ItemGroup>
@@ -147,7 +147,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="nanoFramework.System.Text, Version=1.1.1.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
-      <HintPath>..\packages\nanoFramework.System.Text.1.1.1-preview.47\lib\nanoFramework.System.Text.dll</HintPath>
+      <HintPath>..\packages\nanoFramework.System.Text.1.1.1-preview.48\lib\nanoFramework.System.Text.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
