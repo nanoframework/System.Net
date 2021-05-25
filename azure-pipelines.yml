@@ -68,7 +68,7 @@ jobs:
     inputs:
       gitHubToken: $(GitHubToken)
       repositoriesToUpdate: |
-        nanoFramework.System.Net.Http
+        System.Net.Http
         paho.mqtt.m2mqtt
     displayName: Update dependent class libs
    
