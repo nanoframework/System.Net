@@ -57,7 +57,7 @@ jobs:
 
   - checkout: none
 
-  - template: install-nuget.yml
+  - template: azure-pipelines-templates/install-nuget.yml@templates
 
   # update dependencies
   - task: UpdatenFDependencies@1
