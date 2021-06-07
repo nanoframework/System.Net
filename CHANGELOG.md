@@ -6,6 +6,7 @@
 
 **Documentation and other chores:**
 
+- Update 3 nuget dependencies [\#191](https://github.com/nanoframework/System.Net/pull/191)
 - Update 2 NuGet dependencies [\#181](https://github.com/nanoframework/System.Net/pull/181)
 - Update 1 nuget dependencies [\#180](https://github.com/nanoframework/System.Net/pull/180)
 - Update 1 nuget dependencies [\#179](https://github.com/nanoframework/System.Net/pull/179)
