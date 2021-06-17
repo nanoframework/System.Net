@@ -156,6 +156,18 @@ namespace System.Security.Cryptography.X509Certificates
         }
 
         /// <summary>
+        /// Gets the private key, null if no private key
+        /// </summary>
+        /// <remarks>This will give you access directly to the raw decoded byte array of the private key</remarks>
+        public byte[] PrivateKey => _privateKey;
+
+        /// <summary>
+        /// Gets the public key
+        /// </summary>
+        /// <remarks>This will give you access directly to the raw decoded byte array of the public key</remarks>
+        public byte[] PublicKey => RawData;
+
+        /// <summary>
         /// Gets the date in local time after which a certificate is no longer valid.
         /// </summary>
         /// <value>A <see cref="DateTime"/> object that represents the expiration date for the certificate.</value>
