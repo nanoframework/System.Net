@@ -2,7 +2,27 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/System.Net/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.6.5-preview.31...HEAD)
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.6.5-preview.35...HEAD)
+
+**Implemented enhancements:**
+
+- Adding X509Certificate2 Public and Private Key buffer access [\#194](https://github.com/nanoframework/System.Net/pull/194)
+
+**Documentation and other chores:**
+
+- Update 3 NuGet dependencies [\#193](https://github.com/nanoframework/System.Net/pull/193)
+
+## [v1.6.5-preview.35](https://github.com/nanoframework/System.Net/tree/v1.6.5-preview.35) (2021-06-07)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.6.5-preview.33...v1.6.5-preview.35)
+
+**Documentation and other chores:**
+
+- Update 3 NuGet dependencies [\#192](https://github.com/nanoframework/System.Net/pull/192)
+
+## [v1.6.5-preview.33](https://github.com/nanoframework/System.Net/tree/v1.6.5-preview.33) (2021-06-07)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.6.5-preview.31...v1.6.5-preview.33)
 
 **Documentation and other chores:**
 
