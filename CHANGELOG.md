@@ -2,7 +2,24 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/System.Net/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.6.5-preview.35...HEAD)
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.7.0-preview.4...HEAD)
+
+**Documentation and other chores:**
+
+- Update 1 nuget dependencies [\#197](https://github.com/nanoframework/System.Net/pull/197)
+- Update 3 NuGet dependencies [\#196](https://github.com/nanoframework/System.Net/pull/196)
+
+## [v1.7.0-preview.4](https://github.com/nanoframework/System.Net/tree/v1.7.0-preview.4) (2021-06-19)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.7.0-preview.1...v1.7.0-preview.4)
+
+**Documentation and other chores:**
+
+- Update 3 NuGet dependencies [\#195](https://github.com/nanoframework/System.Net/pull/195)
+
+## [v1.7.0-preview.1](https://github.com/nanoframework/System.Net/tree/v1.7.0-preview.1) (2021-06-17)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.6.5-preview.35...v1.7.0-preview.1)
 
 **Implemented enhancements:**
 
