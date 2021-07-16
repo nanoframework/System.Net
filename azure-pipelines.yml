@@ -66,7 +66,7 @@ jobs:
       gitHubToken: $(GitHubToken)
       repositoriesToUpdate: |
         System.Net.Http
-        paho.mqtt.m2mqtt
+        nanoFramework.m2mqtt
    
 ##################################
 # report build failure to Discord
