@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>nanoFramework.System.Net</id>
+    <version>$version$</version>
+    <title>nanoFramework.System.Net</title>
+    <authors>nanoFramework project contributors</authors>
+    <owners>nanoFramework project contributors,dotnetfoundation</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="file">LICENSE.md</license>
+    <releaseNotes>
+    </releaseNotes>
+    <developmentDependency>false</developmentDependency>
+    <projectUrl>https://github.com/nanoframework/System.Net</projectUrl>
+    <icon>images\nf-logo.png</icon>
+    <repository type="git" url="https://github.com/nanoframework/System.Net" commit="$commit$" />
+    <copyright>Copyright (c) .NET Foundation and Contributors</copyright>
+    <description>This package includes the .NET nanoFramework System.Net assembly for .NET nanoFramework C# projects.
+This package requires a target with System.Net v$nativeVersion$ (checksum $checksum$).</description>
+    <tags>nanoFramework C# csharp netmf netnf nanoFramework.System.Net</tags>
+    <dependencies>
+      <dependency id="nanoFramework.CoreLibrary" version="1.10.5" />
+      <dependency id="nanoFramework.Runtime.Events" version="1.9.1" />
+      <dependency id="nanoFramework.System.Text" version="1.1.1" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="nanoFramework.System.Net\bin\Release\System.Net.dll" target="lib\System.Net.dll" />
+    <file src="nanoFramework.System.Net\bin\Release\System.Net.pdb" target="lib\System.Net.pdb" />
+    <file src="nanoFramework.System.Net\bin\Release\System.Net.pdbx" target="lib\System.Net.pdbx" />
+    <file src="nanoFramework.System.Net\bin\Release\System.Net.pe" target="lib\System.Net.pe" />
+    <file src="nanoFramework.System.Net\bin\Release\System.Net.xml" target="lib\System.Net.xml" />
+    <file src="assets\readme.txt" target="" />
+    <file src="assets\nf-logo.png" target="images" />
+    <file src="LICENSE.md" target="" />
+  </files>
+</package>

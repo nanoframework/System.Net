@@ -1,8 +1,8 @@
 trigger:
   branches:
-    include: [master, develop, "release-*" ]
+    include: [main, develop, "release-*" ]
   paths:
-    exclude: ["*.md", .gitignore]
+    exclude: [README.md, LICENSE.md, NuGet.Config, .github_changelog_generator, .gitignore]
   tags:
     include: ["v*"]
 
@@ -23,15 +23,14 @@ jobs:
   condition: or( eq(variables['UPDATE_DEPENDENTS'], 'false'), eq(variables['StartReleaseCandidate'], 'true') )
   
   pool:
-    vmImage: 'VS2017-Win2016'
+    vmImage: 'windows-2019'
 
   variables:
-    DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
-    solution: '**/source/*.sln'
+    DOTNET_NOLOGO: true
+    solution: '**/*.sln'
     buildPlatform: 'Any CPU'
     buildConfiguration: 'Release'
     nugetPackageName: 'nanoFramework.System.Net'
-    repoName: 'lib-nanoFramework.System.Net'
 
   steps:
 
@@ -49,7 +48,7 @@ jobs:
   - Build_Library
 
   pool:
-    vmImage: 'VS2017-Win2016'
+    vmImage: 'windows-2019'
 
   variables:
     DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
@@ -58,32 +57,29 @@ jobs:
 
   - checkout: none
 
-  - task: NuGetToolInstaller@0
-    inputs:
-      versionSpec: '5.4.0'
-    displayName: 'Install specific version of NuGet'
+  - template: azure-pipelines-templates/install-nuget.yml@templates
 
   # update dependencies
   - task: UpdatenFDependencies@1
+    displayName: Update dependent class libs
     inputs:
       gitHubToken: $(GitHubToken)
       repositoriesToUpdate: |
-        lib-nanoFramework.System.Net.Http
+        System.Net.Http
         paho.mqtt.m2mqtt
-        amqpnetlite
-    displayName: Update dependent class libs
    
 ##################################
 # report build failure to Discord
 - job: Report_Build_Failure
+  condition: or( failed('Build_Library'), failed('Update_Dependents'))
 
   dependsOn:
   - Build_Library
   - Update_Dependents
-  condition: or( failed('Build_Library'), failed('Update_Dependents'))
 
   pool:
-    vmImage: 'VS2017-Win2016'
+    vmImage: 'windows-2019'
+
   steps:
 
   - checkout: self
