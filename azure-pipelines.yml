@@ -66,6 +66,7 @@ jobs:
       gitHubToken: $(GitHubToken)
       repositoriesToUpdate: |
         System.Net.Http
+        nanoFramework.System.Net.WebSockets
         nanoFramework.m2mqtt
    
 ##################################
