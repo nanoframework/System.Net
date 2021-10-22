@@ -2,7 +2,15 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/System.Net/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.7.0...HEAD)
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.7.1-preview.6...HEAD)
+
+**Documentation and other chores:**
+
+- Bumps nanoFramework.Runtime.Events from 1.9.2-preview.5 to 1.9.2-preview.8 [\#204](https://github.com/nanoframework/System.Net/pull/204)
+
+## [v1.7.1-preview.6](https://github.com/nanoframework/System.Net/tree/v1.7.1-preview.6) (2021-10-17)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.7.0...v1.7.1-preview.6)
 
 **Documentation and other chores:**
 
