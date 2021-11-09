@@ -54,9 +54,9 @@ namespace System.Net.NetworkInformation
         }
 
         /// <summary>
-        /// Returns the MAc address of the connected Client.
+        /// Returns the MAC address of the connected Client.
         /// </summary>
-        public byte[] MacAddres { get => _macAddress;  }
+        public byte[] MacAddress { get => _macAddress;  }
 
         /// <summary>
         /// Returns the Received signal strength indication(RSSI) of connected Client.
