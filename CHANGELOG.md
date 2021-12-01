@@ -2,7 +2,19 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/System.Net/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.7.1-preview.6...HEAD)
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.7.1-preview.9...HEAD)
+
+**Fixed bugs:**
+
+- Fix spelling of MacAddress property [\#205](https://github.com/nanoframework/System.Net/pull/205)
+
+**Documentation and other chores:**
+
+- Update 2 nuget dependencies [\#206](https://github.com/nanoframework/System.Net/pull/206)
+
+## [v1.7.1-preview.9](https://github.com/nanoframework/System.Net/tree/v1.7.1-preview.9) (2021-10-22)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.7.1-preview.6...v1.7.1-preview.9)
 
 **Documentation and other chores:**
 
