@@ -1,7 +1,5 @@
 # Changelog
 
-## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/System.Net/tree/HEAD)
-
 [Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.7.1-preview.21...HEAD)
 
 **Documentation and other chores:**
