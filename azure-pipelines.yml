@@ -7,6 +7,8 @@ trigger:
     include: ["v*"]
 
 # PR always trigger build
+pr:
+  autoCancel: true
 
 # add nf-tools repo to resources (for Azure Pipelines templates)
 resources:
@@ -27,7 +29,7 @@ jobs:
 
   variables:
     DOTNET_NOLOGO: true
-    solution: '**/*.sln'
+    solution: 'nanoFramework.System.Net.sln'
     buildPlatform: 'Any CPU'
     buildConfiguration: 'Release'
     nugetPackageName: 'nanoFramework.System.Net'
@@ -66,7 +68,8 @@ jobs:
       gitHubToken: $(GitHubToken)
       repositoriesToUpdate: |
         System.Net.Http
-        paho.mqtt.m2mqtt
+        nanoFramework.System.Net.WebSockets
+        nanoFramework.m2mqtt
    
 ##################################
 # report build failure to Discord

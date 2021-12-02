@@ -1,5 +1,76 @@
 # Changelog
 
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.7.1-preview.21...HEAD)
+
+**Documentation and other chores:**
+
+- Bumps nanoFramework.System.Text from 1.1.2-preview.14 to 1.1.2 [\#212](https://github.com/nanoframework/System.Net/pull/212)
+
+## [v1.7.1-preview.21](https://github.com/nanoframework/System.Net/tree/v1.7.1-preview.21) (2021-12-02)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.7.1-preview.19...v1.7.1-preview.21)
+
+**Documentation and other chores:**
+
+- Bumps nanoFramework.Runtime.Events from 1.9.2-preview.14 to 1.9.2 [\#211](https://github.com/nanoframework/System.Net/pull/211)
+- Update 3 NuGet dependencies [\#210](https://github.com/nanoframework/System.Net/pull/210)
+
+## [v1.7.1-preview.19](https://github.com/nanoframework/System.Net/tree/v1.7.1-preview.19) (2021-12-02)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.7.1-preview.17...v1.7.1-preview.19)
+
+**Documentation and other chores:**
+
+- Update 3 NuGet dependencies [\#209](https://github.com/nanoframework/System.Net/pull/209)
+
+## [v1.7.1-preview.17](https://github.com/nanoframework/System.Net/tree/v1.7.1-preview.17) (2021-12-02)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.7.1-preview.15...v1.7.1-preview.17)
+
+**Documentation and other chores:**
+
+- Bumps nanoFramework.System.Text from 1.1.2-preview.9 to 1.1.2-preview.12 [\#208](https://github.com/nanoframework/System.Net/pull/208)
+
+## [v1.7.1-preview.15](https://github.com/nanoframework/System.Net/tree/v1.7.1-preview.15) (2021-12-01)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.7.1-preview.13...v1.7.1-preview.15)
+
+**Documentation and other chores:**
+
+- Bumps nanoFramework.System.Text from 1.1.1 to 1.1.2-preview.9 [\#207](https://github.com/nanoframework/System.Net/pull/207)
+
+## [v1.7.1-preview.13](https://github.com/nanoframework/System.Net/tree/v1.7.1-preview.13) (2021-12-01)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.7.1-preview.9...v1.7.1-preview.13)
+
+**Fixed bugs:**
+
+- Fix spelling of MacAddress property [\#205](https://github.com/nanoframework/System.Net/pull/205)
+
+**Documentation and other chores:**
+
+- Update 2 nuget dependencies [\#206](https://github.com/nanoframework/System.Net/pull/206)
+
+## [v1.7.1-preview.9](https://github.com/nanoframework/System.Net/tree/v1.7.1-preview.9) (2021-10-22)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.7.1-preview.6...v1.7.1-preview.9)
+
+**Documentation and other chores:**
+
+- Bumps nanoFramework.Runtime.Events from 1.9.2-preview.5 to 1.9.2-preview.8 [\#204](https://github.com/nanoframework/System.Net/pull/204)
+
+## [v1.7.1-preview.6](https://github.com/nanoframework/System.Net/tree/v1.7.1-preview.6) (2021-10-17)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.7.0...v1.7.1-preview.6)
+
+**Documentation and other chores:**
+
+- Bumps nanoFramework.Runtime.Events from 1.9.1 to 1.9.2-preview.5 [\#202](https://github.com/nanoframework/System.Net/pull/202)
+
+## [v1.7.0](https://github.com/nanoframework/System.Net/tree/v1.7.0) (2021-07-16)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.7.0-preview.10...v1.7.0)
+
 ## [v1.7.0-preview.10](https://github.com/nanoframework/System.Net/tree/v1.7.0-preview.10) (2021-07-15)
 
 [Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.7.0-preview.8...v1.7.0-preview.10)
