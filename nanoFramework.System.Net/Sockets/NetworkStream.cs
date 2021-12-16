@@ -91,7 +91,7 @@ namespace System.Net.Sockets
         /// </summary>
         /// <param name="socket">The <see cref="Socket"/> that the <see cref="NetworkStream"/> will
         /// use to send and receive data.</param>
-        /// <param name="ownsSocket">true to indicate that the <see cref="NetworkStream"/> will take ownership of the <see cref="Socket"/>; 
+        /// <param name="ownsSocket"><see langword="true"/> to indicate that the <see cref="NetworkStream"/> will take ownership of the <see cref="Socket"/>; 
         /// otherwise, false.</param>
         public NetworkStream(Socket socket, bool ownsSocket)
         {
