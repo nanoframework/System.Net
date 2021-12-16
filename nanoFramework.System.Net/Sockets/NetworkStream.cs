@@ -53,9 +53,9 @@ namespace System.Net.Sockets
         //     nonblocking state.
 
         /// <summary>
-        /// Creates a new instance of the System.Net.Sockets.NetworkStream class for the specified System.Net.Sockets.Socket.
+        /// Creates a new instance of the <see cref="NetworkStream"/> class for the specified <see cref="Socket"/>.
         /// </summary>
-        /// <param name="socket">The System.Net.Sockets.Socket that the System.Net.Sockets.NetworkStream will use to send and receive data.</param>
+        /// <param name="socket">The <see cref="Socket"/> that the <see cref="NetworkStream"/> will use to send and receive data.</param>
         public NetworkStream(Socket socket)
             : this(socket, false)
         {
@@ -86,12 +86,12 @@ namespace System.Net.Sockets
         //     socket is null.
 
         /// <summary>
-        /// Initializes a new instance of the System.Net.Sockets.NetworkStream class for the specified 
-        /// System.Net.Sockets.Socket with the specified System.Net.Sockets.Socket ownership.
+        /// Initializes a new instance of the <see cref="NetworkStream"/> class for the specified 
+        /// <see cref="Socket"/> with the specified <see cref="Socket"/> ownership.
         /// </summary>
-        /// <param name="socket">The System.Net.Sockets.Socket that the System.Net.Sockets.NetworkStream will
+        /// <param name="socket">The <see cref="Socket"/> that the <see cref="NetworkStream"/> will
         /// use to send and receive data.</param>
-        /// <param name="ownsSocket">true to indicate that the System.Net.Sockets.NetworkStream will take ownership of the System.Net.Sockets.Socket; 
+        /// <param name="ownsSocket">true to indicate that the <see cref="NetworkStream"/> will take ownership of the <see cref="Socket"/>; 
         /// otherwise, false.</param>
         public NetworkStream(Socket socket, bool ownsSocket)
         {
