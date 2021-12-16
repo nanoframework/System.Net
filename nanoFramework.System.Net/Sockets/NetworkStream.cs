@@ -89,10 +89,10 @@ namespace System.Net.Sockets
         /// Initializes a new instance of the System.Net.Sockets.NetworkStream class for the specified 
         /// System.Net.Sockets.Socket with the specified System.Net.Sockets.Socket ownership.
         /// </summary>
-        /// <param name="socket">true to indicate that the System.Net.Sockets.NetworkStream will take ownership of the System.Net.Sockets.Socket; 
-        /// otherwise, false.</param>
-        /// <param name="ownsSocket">The System.Net.Sockets.Socket that the System.Net.Sockets.NetworkStream will
+        /// <param name="socket">The System.Net.Sockets.Socket that the System.Net.Sockets.NetworkStream will
         /// use to send and receive data.</param>
+        /// <param name="ownsSocket">true to indicate that the System.Net.Sockets.NetworkStream will take ownership of the System.Net.Sockets.Socket; 
+        /// otherwise, false.</param>
         public NetworkStream(Socket socket, bool ownsSocket)
         {
             if (socket == null) throw new ArgumentNullException();
