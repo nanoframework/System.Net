@@ -92,7 +92,7 @@ namespace System.Net.Sockets
         /// <param name="socket">The <see cref="Socket"/> that the <see cref="NetworkStream"/> will
         /// use to send and receive data.</param>
         /// <param name="ownsSocket"><see langword="true"/> to indicate that the <see cref="NetworkStream"/> will take ownership of the <see cref="Socket"/>; 
-        /// otherwise, false.</param>
+        /// otherwise, <see langword="false"/>.</param>
         public NetworkStream(Socket socket, bool ownsSocket)
         {
             if (socket == null) throw new ArgumentNullException();
