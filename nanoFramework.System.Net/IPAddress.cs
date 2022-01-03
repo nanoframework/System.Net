@@ -21,7 +21,7 @@ namespace System.Net
         /// This field is read-only.
         /// </summary>
         public static readonly IPAddress Any = new IPAddress(0x0000000000000000);
-
+        
         /// <summary>
         /// Provides the IP loopback address. This field is read-only.
         /// </summary>
@@ -75,23 +75,13 @@ namespace System.Net
         /// <param name="address"></param>
         public IPAddress(byte[] address)
         {
-            if (address == null)
-            {
-                throw new ArgumentNullException();
-            }
-
-            if (address.Length != IPv4AddressBytes && address.Length != IPv6AddressBytes)
-            {
-                // unsupported address family
-                throw new NotSupportedException();
-            }
-
-            if (address.Length == IPv4AddressBytes)
+            if (address[0] == (byte)AddressFamily.InterNetwork)
             {
                 _family = AddressFamily.InterNetwork;
-                Address = ((address[3] << 24 | address[2] << 16 | address[1] << 8 | address[0]) & 0x0FFFFFFFF);
+                // need to offset address by 4 (1st are family, 2nd are port
+                Address = ((address[3 + 4] << 24 | address[2 + 4] << 16 | address[1 + 4] << 8 | address[0 + 4]) & 0x0FFFFFFFF);
             }
-            else
+            else if (address[0] == (byte)AddressFamily.InterNetworkV6)
             {
                 _family = AddressFamily.InterNetworkV6;
 
@@ -99,6 +89,11 @@ namespace System.Net
                 {
                     _numbers[i] = (ushort)(address[i * 2] * 256 + address[i * 2 + 1]);
                 }
+            }
+            else
+            {
+                // unsupported address family
+                throw new NotSupportedException();
             }
         }
 
@@ -193,8 +188,8 @@ namespace System.Net
                 case AddressFamily.InterNetwork:
                     return new IPAddress(Address);
 
-                    //case AddressFamily.InterNetworkV6:
-                    //    return new IPAddress(m_Numbers, (uint)m_ScopeId);
+                //case AddressFamily.InterNetworkV6:
+                //    return new IPAddress(m_Numbers, (uint)m_ScopeId);
             }
 
             throw new NotSupportedException();
