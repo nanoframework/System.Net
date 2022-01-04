@@ -70,9 +70,11 @@ jobs:
       gitHubToken: $(GitHubToken)
       repositoriesToUpdate: |
         System.Net.Http
-        nanoFramework.System.Net.WebSockets
+        System.Net.WebSockets
+        System.Device.WiFi
         nanoFramework.m2mqtt
-   
+        nanoFramework.Azure.Devices
+
 ##################################
 # report build failure to Discord
 - job: Report_Build_Failure
