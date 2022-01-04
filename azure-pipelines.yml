@@ -41,6 +41,8 @@ jobs:
   - template: azure-pipelines-templates/class-lib-build.yml@templates
     parameters:
       sonarCloudProject: 'nanoframework_lib-nanoFramework.System.Net'
+      runUnitTests: true
+      unitTestRunsettings: '$(System.DefaultWorkingDirectory)\NetworkHelperTests\nano.runsettings'
 
 ##############################
 - job: Update_Dependents
