@@ -5,21 +5,27 @@
 
 using nanoFramework.TestFramework;
 using System;
-using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 
-namespace NFUnitTestScocketTests
+namespace NFUnitTestSocketTests
 {
     [TestClass]
     public class SocketExceptionsTests
     {
+        [Setup]
+        public void SetupConnectToEthernetTests()
+        {
+            // Comment next line to run the tests on a real hardware
+            Assert.SkipTest("Skipping tests using nanoCLR Win32 in a pipeline");
+        }
+
         [TestMethod]
         public void SocketExceptionTest2_AddressAlreadyInUse()
         {
             Socket socketClient = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             Socket socketServer = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            Assert.Trows(typeof(SocketException), () =>
+            Assert.Throws(typeof(SocketException), () =>
             {
 
                 socketClient.Bind(new IPEndPoint(IPAddress.Loopback, 10));
@@ -71,7 +77,7 @@ namespace NFUnitTestScocketTests
         {
             SocketPair testSockets = new SocketPair(ProtocolType.Tcp, SocketType.Stream);
 
-            Assert.Trows(typeof(SocketException), () =>
+            Assert.Throws(typeof(SocketException), () =>
             {
                 testSockets.Startup(0, 0);
                 testSockets.socketServer.Listen(1);
@@ -87,7 +93,7 @@ namespace NFUnitTestScocketTests
         public void SocketExceptionTest11_AccessDenied()
         {
             SocketPair testSockets = new SocketPair(ProtocolType.Udp, SocketType.Dgram);
-            Assert.Trows(typeof(SocketException), () =>
+            Assert.Throws(typeof(SocketException), () =>
             {
                 int clientPort = SocketTools.nextPort;
                 int serverPort = SocketTools.nextPort;
@@ -107,7 +113,7 @@ namespace NFUnitTestScocketTests
         {
             SocketPair testSockets = new SocketPair(ProtocolType.Tcp, SocketType.Stream);
 
-            Assert.Trows(typeof(SocketException), () =>
+            Assert.Throws(typeof(SocketException), () =>
             {
                 testSockets.Startup(0, 0);
                 Socket socketTemp = new Socket(AddressFamily.InterNetwork,
@@ -124,7 +130,7 @@ namespace NFUnitTestScocketTests
         {
 
             SocketPair testSockets = new SocketPair(ProtocolType.Tcp, SocketType.Stream);
-            Assert.Trows(typeof(SocketException), () =>
+            Assert.Throws(typeof(SocketException), () =>
             {
                 int clientPort = SocketTools.nextPort;
                 int serverPort = SocketTools.nextPort;
@@ -141,7 +147,7 @@ namespace NFUnitTestScocketTests
         public void SocketExceptionTest14_AddressNotAvailable()
         {
             SocketPair testSockets = new SocketPair(ProtocolType.Tcp, SocketType.Stream);
-            Assert.Trows(typeof(SocketException), () =>
+            Assert.Throws(typeof(SocketException), () =>
             {
                 int clientPort = SocketTools.nextPort;
                 int serverPort = SocketTools.nextPort;
@@ -157,7 +163,7 @@ namespace NFUnitTestScocketTests
         [TestMethod]
         public void SocketExceptionTest16_HostNotFound()
         {
-            Assert.Trows(typeof(SocketException), () =>
+            Assert.Throws(typeof(SocketException), () =>
             {
                 IPHostEntry ipHostEntry = Dns.GetHostEntry("fakeHostName");
             });
@@ -166,7 +172,7 @@ namespace NFUnitTestScocketTests
         [TestMethod]
         public void SocketExceptionTest17_SocketError()
         {
-            Assert.Trows(typeof(SocketException), () =>
+            Assert.Throws(typeof(SocketException), () =>
             {
                 SocketPair testSockets = new SocketPair(ProtocolType.Udp, SocketType.Stream);
             });
@@ -177,7 +183,7 @@ namespace NFUnitTestScocketTests
         {
 
             SocketPair testSockets = new SocketPair(ProtocolType.Tcp, SocketType.Stream);
-            Assert.Trows(typeof(SocketException), () =>
+            Assert.Throws(typeof(SocketException), () =>
             {
                 testSockets.socketClient.SetSocketOption(SocketOptionLevel.Socket,
                         SocketOptionName.Linger, new byte[] { (byte)0 });
@@ -191,7 +197,7 @@ namespace NFUnitTestScocketTests
         public void SocketExceptionTest19_ProtocolOption()
         {
             SocketPair testSockets = new SocketPair(ProtocolType.Tcp, SocketType.Stream);
-            Assert.Trows(typeof(SocketException), () =>
+            Assert.Throws(typeof(SocketException), () =>
             {
                 testSockets.Startup(0, 0);
                 testSockets.socketClient.GetSocketOption(SocketOptionLevel.IP,
@@ -206,7 +212,7 @@ namespace NFUnitTestScocketTests
         public void SocketExceptionTest20_OperationNotSupported()
         {
             SocketPair testSockets = new SocketPair(ProtocolType.Tcp, SocketType.Stream);
-            Assert.Trows(typeof(SocketException), () =>
+            Assert.Throws(typeof(SocketException), () =>
             {
                 testSockets.Startup(0, 0);
 

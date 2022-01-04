@@ -1,7 +1,13 @@
-﻿using System;
+﻿//
+// Copyright (c) .NET Foundation and Contributors
+// Portions Copyright (c) Microsoft Corporation.  All rights reserved.
+// See LICENSE file in the project root for full license information.
+//
+
+using System;
 using System.Net;
 
-namespace NFUnitTestScocketTests
+namespace NFUnitTestSocketTests
 {
     public class SocketTools
     {
@@ -43,44 +49,53 @@ namespace NFUnitTestScocketTests
                     // or a segment is longer than 3 characters or shiftIndex > 
                     // last bit position throw.
                     if (i == 0 || i - lastIndex > 3 || shiftIndex > 24)
-                        throw new Exception("invalid address format (###.###.###.###) "
-                            + ipString);
+                    {
+                        throw new Exception($"invalid address format (###.###.###.###) {ipString}");
+                    }
                     else
                     {
                         i = i == length - 1 ? ++i : i;
 
-                        octet = (ulong)(ToInt32(ipString.Substring(lastIndex, i - lastIndex))
-                            & 0x00000000000000FF);
-                        ipAddress = ipAddress + (ulong)((octet << shiftIndex) & mask);
+                        octet = (ulong)(ToInt32(ipString.Substring(lastIndex, i - lastIndex)) & 0x00000000000000FF);
+                        ipAddress = ipAddress + ((octet << shiftIndex) & mask);
                         lastIndex = i + 1;
                         shiftIndex += 8;
                         mask <<= 8;
                     }
             }
+
             return new IPAddress((long)ipAddress);
         }
 
         static public bool ArrayEquals(bool[] array1, bool[] array2)
         {
             if (array1.Length != array2.Length)
+            {
                 return false;
+            }
+
             for (int i = 0; i < array1.Length; i++)
             {
                 if (array1[i] != array2[i])
                     return false;
             }
+
             return true;
         }
 
         static public bool ArrayEquals(byte[] array1, byte[] array2)
         {
             if (array1.Length != array2.Length)
+            {
                 return false;
+            }
+
             for (int i = 0; i < array1.Length; i++)
             {
                 if (array1[i] != array2[i])
                     return false;
             }
+
             return true;
         }
 
@@ -89,7 +104,9 @@ namespace NFUnitTestScocketTests
         static private int ToInt32(string number)
         {
             if (number == null)
+            {
                 throw new ArgumentNullException("number", "Must not be null.");
+            }
 
             int result = 0;
             int digit = 0;
@@ -106,20 +123,23 @@ namespace NFUnitTestScocketTests
                     throw new ArgumentException(
                "any octet in an IP address can be up to 3 digits long");
             }
+
             for (int i = 0; i < length; ++i)
             {
                 digit = (int)(num[i] - '0');
 
                 // Make sure argument number is valid. If not this is not a format specifier
                 if (digit < 0 || digit > 9)
+                {
                     throw new ArgumentOutOfRangeException("Format_Argument", number);
+                }
 
-                result = result + (digit * exp);
+                result += (digit * exp);
 
                 exp /= 10;
             }
+
             return result;
         }
-
     }
 }
