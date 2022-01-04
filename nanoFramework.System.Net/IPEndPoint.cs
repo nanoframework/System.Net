@@ -1,4 +1,3 @@
-// namespace System.Net
 //
 // Copyright (c) .NET Foundation and Contributors
 // Portions Copyright (c) Microsoft Corporation.  All rights reserved.
@@ -19,17 +18,17 @@ namespace System.Net
         /// Specifies the minimum value that can be assigned to the Port property. This field is read-only.
         /// </summary>
         public const int MinPort = 0x00000000;
-        
+
         /// <summary>
         /// Specifies the maximum value that can be assigned to the Port property. The MaxPort value is set to 0x0000FFFF. This field is read-only.
         /// </summary>
         public const int MaxPort = 0x0000FFFF;
 
         [Diagnostics.DebuggerBrowsable(Diagnostics.DebuggerBrowsableState.Never)]
-        private IPAddress _address;
+        private readonly IPAddress _address;
 
         [Diagnostics.DebuggerBrowsable(Diagnostics.DebuggerBrowsableState.Never)]
-        private int _port;
+        private readonly int _port;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="IPEndPoint"/> class with the specified address and port number.
@@ -96,9 +95,12 @@ namespace System.Net
         public override SocketAddress Serialize()
         {
             // create a new SocketAddress
-            //
-            SocketAddress socketAddress = new SocketAddress(AddressFamily.InterNetwork, SocketAddress.IPv4AddressSize);
+            SocketAddress socketAddress = new(
+                AddressFamily.InterNetwork,
+                SocketAddress.IPv4AddressSize);
+
             byte[] buffer = socketAddress.m_Buffer;
+
             //
             // populate it
             //
@@ -127,10 +129,10 @@ namespace System.Net
 
             //           Debug.Assert(socketAddress.Family == AddressFamily.InterNetwork);
 
-            int port = (int)(
+            int port =
                     (buf[2] << 8 & 0xFF00) |
                     (buf[3])
-                    );
+                    ;
 
             long address = (long)(
                     (buf[4] & 0x000000FF) |
@@ -158,13 +160,18 @@ namespace System.Net
         /// <returns>true if the objects are equal.</returns>
         public override bool Equals(object obj)
         {
-            IPEndPoint ep = obj as IPEndPoint;
-            if (ep == null)
+            if (obj is not IPEndPoint ep)
             {
                 return false;
             }
 
             return ep._address.Equals(_address) && ep._port == _port;
+        }
+
+        /// <inheritdoc/>
+        public override int GetHashCode()
+        {
+            return _address.GetHashCode() ^ _port;
         }
 
         // For security, we need to be able to take an IPEndPoint and make a copy that's immutable and not derived.

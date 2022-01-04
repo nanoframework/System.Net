@@ -17,7 +17,7 @@ namespace System.Net
         internal const int IPv4AddressSize = 16;
 
         [Diagnostics.DebuggerBrowsable(Diagnostics.DebuggerBrowsableState.Never)]
-        internal byte[] m_Buffer;
+        internal readonly byte[] m_Buffer;
 
         [Diagnostics.DebuggerBrowsable(Diagnostics.DebuggerBrowsableState.Never)]
         internal long _address;
@@ -40,7 +40,7 @@ namespace System.Net
         }
 
         internal SocketAddress(IPAddress ipAddress)
-            :this(ipAddress.AddressFamily,
+            : this(ipAddress.AddressFamily,
                 (ipAddress.AddressFamily == AddressFamily.InterNetwork) ? IPv4AddressSize : IPv6AddressSize)
 
         {
@@ -90,11 +90,11 @@ namespace System.Net
         /// </remarks>
         public SocketAddress(AddressFamily family, int size)
         {
-           // Debug.Assert(size > 2);
+            // Debug.Assert(size > 2);
 
             m_Buffer = new byte[size]; //(size / IntPtr.Size + 2) * IntPtr.Size];//sizeof DWORD
 
-            m_Buffer[0] = unchecked((byte)((int)family     ));
+            m_Buffer[0] = unchecked((byte)((int)family));
             m_Buffer[1] = unchecked((byte)((int)family >> 8));
         }
 
@@ -129,8 +129,60 @@ namespace System.Net
         internal IPEndPoint GetIPEndPoint()
         {
             IPAddress address = GetIPAddress();
-            int port = (int)((m_Buffer[2] << 8 & 0xFF00) | (m_Buffer[3]));
+            int port = ((m_Buffer[2] << 8) & 0xFF00) | (m_Buffer[3]);
             return new IPEndPoint(address, port);
+        }
+
+        /// <inheritdoc/>
+        public override bool Equals(object obj)
+        {
+            if (obj is not SocketAddress castedComparand || Size != castedComparand.Size)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < Size; i++)
+            {
+                if (this[i] != castedComparand[i])
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        /// <inheritdoc/>
+        public override int GetHashCode()
+        {
+            int i;
+            int hash = 0;
+            int size = Size & ~3;
+
+            for (i = 0; i < size; i += 4)
+            {
+                hash ^= m_Buffer[i]
+                        | (m_Buffer[i + 1] << 8)
+                        | (m_Buffer[i + 2] << 16)
+                        | (m_Buffer[i + 3] << 24);
+            }
+
+            if ((Size & 3) != 0)
+            {
+
+                int remnant = 0;
+                int shift = 0;
+
+                for (; i < Size; ++i)
+                {
+                    remnant |= m_Buffer[i] << shift;
+                    shift += 8;
+                }
+
+                hash ^= remnant;
+            }
+
+            return hash;
         }
 
         internal IPAddress GetIPAddress()
@@ -153,7 +205,7 @@ namespace System.Net
             //}
             //else if (Family == AddressFamily.InterNetwork)
             {
-                long address = (long)(
+                long address = (
                         (m_Buffer[4] & 0x000000FF) |
                         (m_Buffer[5] << 8 & 0x0000FF00) |
                         (m_Buffer[6] << 16 & 0x00FF0000) |

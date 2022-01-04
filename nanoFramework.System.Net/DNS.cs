@@ -26,20 +26,28 @@ namespace System.Net
         /// </remarks>
         public static IPHostEntry GetHostEntry(string hostNameOrAddress)
         {
+            NativeSocket.getaddrinfo(hostNameOrAddress, out string canonicalName, out byte[][] addresses);
 
-            //Do we need to try to pase this as an Address????
-            string canonicalName;
-            byte[][] addresses;
+            int addressesCount = addresses.Length;
+            IPAddress[] ipAddresses = new IPAddress[addressesCount];
+            IPHostEntry ipHostEntry = new();
 
-            NativeSocket.getaddrinfo(hostNameOrAddress, out canonicalName, out addresses);
-
-            int cAddresses = addresses.Length;
-            IPAddress[] ipAddresses = new IPAddress[cAddresses];
-            IPHostEntry ipHostEntry = new IPHostEntry();
-
-            for (int i = 0; i < cAddresses; i++)
+            for (int i = 0; i < addressesCount; i++)
             {
-                ipAddresses[i] = new IPAddress(addresses[i]);
+                byte[] address = addresses[i];
+
+                AddressFamily family = (AddressFamily)((address[1] << 8) | address[0]);
+
+                if (family == AddressFamily.InterNetwork)
+                {
+                    uint ipAddr = (uint)((address[7] << 24) | (address[6] << 16) | (address[5] << 8) | (address[4]));
+
+                    ipAddresses[i] = new IPAddress(ipAddr);
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
             }
 
             ipHostEntry.hostName = canonicalName;
