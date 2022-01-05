@@ -16,7 +16,7 @@ namespace nanoFramework.Networking
     public static class NetworkHelper
     {
         private static ManualResetEvent _ipAddressAvailable;
-        private static ManualResetEvent _networkReady;
+        private static ManualResetEvent _networkReady = new(false);
 
         private static bool _requiresDateTime;
         private static NetworkHelperStatus _networkHelperStatus = NetworkHelperStatus.None;
@@ -257,9 +257,6 @@ namespace nanoFramework.Networking
 
                     // setup handler
                     NetworkChange.NetworkAddressChanged += new NetworkAddressChangedEventHandler(AddressChangedCallback);
-
-                    // instantiate events
-                    _networkReady = new(false);
                 }
 
                 NetworkHelperInternal.InternalSetupHelper(nis, _workingNetworkInterface, _ipConfiguration);
@@ -276,7 +273,7 @@ namespace nanoFramework.Networking
         internal static void ResetInstance()
         {
             _ipAddressAvailable = null;
-            _networkReady = null;
+            _networkReady = new(false);
             _requiresDateTime = false;
             _networkHelperStatus = NetworkHelperStatus.None;
             _helperException = null;
