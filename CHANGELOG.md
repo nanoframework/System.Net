@@ -2,7 +2,61 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/System.Net/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.7.1-preview.21...HEAD)
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.8.0-preview.3...HEAD)
+
+**Implemented enhancements:**
+
+- NetworkReady event is now instanciated on constructor [\#222](https://github.com/nanoframework/System.Net/pull/222)
+
+## [v1.8.0-preview.3](https://github.com/nanoframework/System.Net/tree/v1.8.0-preview.3) (2022-01-04)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.7.2-preview.7...v1.8.0-preview.3)
+
+**Implemented enhancements:**
+
+- Various fixes and improvements [\#221](https://github.com/nanoframework/System.Net/pull/221)
+- Add NetworkHelper class [\#216](https://github.com/nanoframework/System.Net/pull/216)
+
+**Documentation and other chores:**
+
+- Add Unit Tests [\#220](https://github.com/nanoframework/System.Net/pull/220)
+
+## [v1.7.2-preview.7](https://github.com/nanoframework/System.Net/tree/v1.7.2-preview.7) (2022-01-03)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.7.2-preview.6...v1.7.2-preview.7)
+
+**Documentation and other chores:**
+
+- Revert \#217 [\#219](https://github.com/nanoframework/System.Net/pull/219)
+
+## [v1.7.2-preview.6](https://github.com/nanoframework/System.Net/tree/v1.7.2-preview.6) (2022-01-03)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.7.2-preview.5...v1.7.2-preview.6)
+
+**Documentation and other chores:**
+
+- Bumps nanoFramework.System.Text from 1.1.2 to 1.1.3-preview.4 [\#218](https://github.com/nanoframework/System.Net/pull/218)
+
+## [v1.7.2-preview.5](https://github.com/nanoframework/System.Net/tree/v1.7.2-preview.5) (2021-12-30)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.7.2-preview.4...v1.7.2-preview.5)
+
+## [v1.7.2-preview.4](https://github.com/nanoframework/System.Net/tree/v1.7.2-preview.4) (2021-12-28)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.7.1...v1.7.2-preview.4)
+
+**Documentation and other chores:**
+
+- Bumps nanoFramework.Runtime.Events from 1.9.2 to 1.10.0-preview.1 [\#215](https://github.com/nanoframework/System.Net/pull/215)
+- Parameter description misplacement [\#214](https://github.com/nanoframework/System.Net/pull/214)
+
+## [v1.7.1](https://github.com/nanoframework/System.Net/tree/v1.7.1) (2021-12-02)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.7.1-preview.23...v1.7.1)
+
+## [v1.7.1-preview.23](https://github.com/nanoframework/System.Net/tree/v1.7.1-preview.23) (2021-12-02)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.7.1-preview.21...v1.7.1-preview.23)
 
 **Documentation and other chores:**
 
