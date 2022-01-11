@@ -55,19 +55,15 @@ jobs:
     vmImage: 'windows-2019'
 
   variables:
-    DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+    DOTNET_NOLOGO: true
 
   steps:
 
   - checkout: none
 
-  - template: azure-pipelines-templates/install-nuget.yml@templates
-
-  # update dependencies
-  - task: UpdatenFDependencies@1
-    displayName: Update dependent class libs
-    inputs:
-      gitHubToken: $(GitHubToken)
+  # update dependents
+  - template: azure-pipelines-templates/update-dependents.yml@templates  
+    parameters:
       repositoriesToUpdate: |
         System.Net.Http
         System.Net.WebSockets
