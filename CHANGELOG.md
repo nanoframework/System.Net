@@ -2,7 +2,15 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/System.Net/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.8.0-preview.3...HEAD)
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.8.0-preview.5...HEAD)
+
+**Implemented enhancements:**
+
+- Improvements in get/set socket options [\#223](https://github.com/nanoframework/System.Net/pull/223)
+
+## [v1.8.0-preview.5](https://github.com/nanoframework/System.Net/tree/v1.8.0-preview.5) (2022-01-05)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.8.0-preview.3...v1.8.0-preview.5)
 
 **Implemented enhancements:**
 
