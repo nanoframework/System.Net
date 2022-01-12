@@ -27,6 +27,7 @@
     <RunSettingsFilePath>$(MSBuildProjectDirectory)\nano.runsettings</RunSettingsFilePath>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="SocketOptionsTests.cs" />
     <Compile Include="SocketPair.cs" />
     <Compile Include="SocketExceptionsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
