@@ -92,7 +92,11 @@ namespace nanoFramework.Networking
                     }
                     else
                     {
-                        networkInterface.EnableDhcp();
+                        if (!networkInterface.IsDhcpEnabled)
+                        {
+                            networkInterface.EnableDhcp();
+                        }
+
                         networkInterface.EnableAutomaticDns();
                     }
                 }
