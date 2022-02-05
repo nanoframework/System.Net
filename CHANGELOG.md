@@ -2,7 +2,15 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/System.Net/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.8.0-preview.21...HEAD)
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.8.0-preview.23...HEAD)
+
+**Documentation and other chores:**
+
+- Only Enable DHCP if required [\#232](https://github.com/nanoframework/System.Net/pull/232)
+
+## [v1.8.0-preview.23](https://github.com/nanoframework/System.Net/tree/v1.8.0-preview.23) (2022-02-04)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.8.0-preview.21...v1.8.0-preview.23)
 
 **Documentation and other chores:**
 
