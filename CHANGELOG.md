@@ -2,9 +2,17 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/System.Net/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.8.0-preview.23...HEAD)
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.8.0-preview.26...HEAD)
 
 **Documentation and other chores:**
+
+- Update 4 NuGet dependencies [\#234](https://github.com/nanoframework/System.Net/pull/234)
+
+## [v1.8.0-preview.26](https://github.com/nanoframework/System.Net/tree/v1.8.0-preview.26) (2022-02-05)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.8.0-preview.23...v1.8.0-preview.26)
+
+**Fixed bugs:**
 
 - Only Enable DHCP if required [\#232](https://github.com/nanoframework/System.Net/pull/232)
 
