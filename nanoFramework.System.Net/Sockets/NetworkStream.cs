@@ -440,6 +440,12 @@ namespace System.Net.Sockets
 
             if (bytesSent != count) throw new IOException();
         }
+
+        /// <inheritdoc/>
+        public override int Read(SpanByte buffer)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 
