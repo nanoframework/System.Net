@@ -1,6 +1,6 @@
 # Changelog
 
-## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/System.Net/tree/HEAD)
+## [v1.7.1-preview.23](https://github.com/nanoframework/System.Net/tree/v1.7.1-preview.23) (2021-12-02)
 
 [Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.8.1-preview.3...HEAD)
 
