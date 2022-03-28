@@ -869,6 +869,8 @@ namespace System.Net.Sockets
         /// <para><see cref="Socket"/> options determine the behavior of the current <see cref="Socket"/>. For an option with a Boolean data type, specify a nonzero value to enable the option, and a 
         /// zero value to disable the option. For an option with an integer data type, specify the appropriate value. <see cref="Socket"/> options are grouped by level of protocol support.
         /// </para>
+        /// For <see cref="SocketOptionName.Linger"/> option the <paramref name="optionValue"/> it's the number of seconds that the socket will linger before closing the connection.
+        /// To disable socket linger call <see cref="SetSocketOption(SocketOptionLevel,SocketOptionName,bool)"/> with <see cref="SocketOptionName.DontLinger"/> and setting it to <see langword="true"/>. 
         /// </remarks>
         public void SetSocketOption(SocketOptionLevel optionLevel, SocketOptionName optionName, int optionValue)
         {
@@ -931,32 +933,33 @@ namespace System.Net.Sockets
         /// <param name="optionLevel">One of the <see cref="SocketOptionLevel"/> values.</param>
         /// <param name="optionName">One of the <see cref="SocketOptionName"/> values.</param>
         /// <returns>
-        /// An object that represents the value of the option. When the optionName parameter is set to <see cref="SocketOptionName.Linger"/> the return value is an instance of the LingerOption
-        /// class. When optionName is set to <see cref="SocketOptionName.AddMembership"/> or <see cref="SocketOptionName.DropMembership"/>, the return value is an instance of the MulticastOption class. When optionName is 
-        /// any other value, the return value is an integer.
+        /// <para>/// An object that represents the value of the option.</para>
+        /// <para>
+        /// When the <paramref name="optionName"/> parameter is set to <see cref="SocketOptionName.Linger"/> the return value is an <see cref="int"/> with the value in seconds that the socket will linger after close.
+        /// To check if linger is enabled for the socket the <see cref="SocketOptionName.DontLinger"/> option should be queried.
+        /// </para>
+        /// <para>
+        /// When optionName is set to <see cref="SocketOptionName.ExclusiveAddressUse"/>, <see cref="SocketOptionName.DontLinger"/>, <see cref="SocketOptionName.AcceptConnection"/>, <see cref="SocketOptionName.Broadcast"/> or <see cref="SocketOptionName.KeepAlive"/>, the return value is <see cref="bool"/>.
+        /// </para>
+        /// <para>
+        /// When optionName is any other value, the return value is an integer.
+        /// </para>
         /// </returns>
-        /// <remarks>
-        /// <see cref="Socket"/> options determine the behavior of the current <see cref="Socket"/>. Use this overload to get the <see cref="SocketOptionName.Linger"/>, <see cref="SocketOptionName.AddMembership"/>, and <see cref="SocketOptionName.DropMembership"/> options. 
-        /// For the <see cref="SocketOptionName.Linger"/> option, use <see cref="Socket"/> for the optionLevel parameter. For <see cref="SocketOptionName.AddMembership"/> and <see cref="SocketOptionName.DropMembership"/>, use <see cref="SocketOptionLevel.IP"/>. If you want to set the value of any of 
-        /// the options listed above, use the <see cref="SetSocketOption(SocketOptionLevel, SocketOptionName, Int32)"/> method.
-        /// </remarks>
+        /// <exception cref="NotSupportedException">When using an <see cref="SocketOptionName"/> that can't be retrieved.</exception>
         public object GetSocketOption(SocketOptionLevel optionLevel, SocketOptionName optionName)
         {
-            if (optionName == SocketOptionName.DontLinger ||
-                optionName == SocketOptionName.AddMembership ||
-                optionName == SocketOptionName.DropMembership)
+            if (optionName is SocketOptionName.AddMembership
+                or SocketOptionName.DropMembership)
             {
                 //special case linger?
                 throw new NotSupportedException();
             }
 
             // socket options that don't require any request to the native end
-            if(optionLevel == SocketOptionLevel.Socket)
+            if (optionLevel == SocketOptionLevel.Socket
+                && optionName == SocketOptionName.Type)
             {
-                if(optionName == SocketOptionName.Type)
-                {
-                    return _socketType;
-                }
+                return _socketType;
             }
 
             // reached here: have to make a request to the lower level to get it
@@ -965,6 +968,24 @@ namespace System.Net.Sockets
 
             GetSocketOption(optionLevel, optionName, val);
 
+            // process specific options
+            if (optionName is
+                SocketOptionName.ExclusiveAddressUse or
+                SocketOptionName.DontLinger)
+            {
+                // these are boolean AND negated
+                return val[0] == 0;
+            }
+            else if (optionName is 
+                SocketOptionName.AcceptConnection or 
+                SocketOptionName.Broadcast or 
+                SocketOptionName.KeepAlive)
+            {
+                // these are boolean 
+                return val[0] == 1;
+            }
+
+            // all the others are integers
             int iVal = (val[0] << 0) | (val[1] << 8) | (val[2] << 16) | (val[3] << 24);
 
             return iVal;

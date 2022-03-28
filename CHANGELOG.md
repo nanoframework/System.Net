@@ -2,6 +2,234 @@
 
 ## [v1.7.1-preview.23](https://github.com/nanoframework/System.Net/tree/v1.7.1-preview.23) (2021-12-02)
 
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.8.1-preview.3...HEAD)
+
+**Documentation and other chores:**
+
+- Update 1 NuGet dependencies [\#252](https://github.com/nanoframework/System.Net/pull/252)
+
+## [v1.8.1-preview.3](https://github.com/nanoframework/System.Net/tree/v1.8.1-preview.3) (2022-03-28)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.8.0-preview.50...v1.8.1-preview.3)
+
+**Documentation and other chores:**
+
+- Update 1 NuGet dependencies [\#251](https://github.com/nanoframework/System.Net/pull/251)
+- Update 3 NuGet dependencies [\#250](https://github.com/nanoframework/System.Net/pull/250)
+
+## [v1.8.0-preview.50](https://github.com/nanoframework/System.Net/tree/v1.8.0-preview.50) (2022-03-28)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.8.0-preview.48...v1.8.0-preview.50)
+
+**Documentation and other chores:**
+
+- Update 3 NuGet dependencies [\#249](https://github.com/nanoframework/System.Net/pull/249)
+
+## [v1.8.0-preview.48](https://github.com/nanoframework/System.Net/tree/v1.8.0-preview.48) (2022-03-28)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.8.0-preview.46...v1.8.0-preview.48)
+
+**Documentation and other chores:**
+
+- Update 1 NuGet dependencies [\#248](https://github.com/nanoframework/System.Net/pull/248)
+- Update 5 NuGet dependencies [\#247](https://github.com/nanoframework/System.Net/pull/247)
+
+## [v1.8.0-preview.46](https://github.com/nanoframework/System.Net/tree/v1.8.0-preview.46) (2022-03-28)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.8.0-preview.43...v1.8.0-preview.46)
+
+**Documentation and other chores:**
+
+- Update 5 NuGet dependencies [\#246](https://github.com/nanoframework/System.Net/pull/246)
+- Update 1 NuGet dependencies [\#245](https://github.com/nanoframework/System.Net/pull/245)
+
+## [v1.8.0-preview.43](https://github.com/nanoframework/System.Net/tree/v1.8.0-preview.43) (2022-03-17)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.8.0-preview.41...v1.8.0-preview.43)
+
+**Documentation and other chores:**
+
+- Update 1 NuGet dependencies [\#244](https://github.com/nanoframework/System.Net/pull/244)
+- Update 4 NuGet dependencies [\#243](https://github.com/nanoframework/System.Net/pull/243)
+
+## [v1.8.0-preview.41](https://github.com/nanoframework/System.Net/tree/v1.8.0-preview.41) (2022-03-17)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.8.0-preview.39...v1.8.0-preview.41)
+
+**Documentation and other chores:**
+
+- Update 4 NuGet dependencies [\#242](https://github.com/nanoframework/System.Net/pull/242)
+
+## [v1.8.0-preview.39](https://github.com/nanoframework/System.Net/tree/v1.8.0-preview.39) (2022-03-14)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.8.0-preview.37...v1.8.0-preview.39)
+
+**Documentation and other chores:**
+
+- Update 1 NuGet dependencies [\#241](https://github.com/nanoframework/System.Net/pull/241)
+
+## [v1.8.0-preview.37](https://github.com/nanoframework/System.Net/tree/v1.8.0-preview.37) (2022-03-14)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.8.0-preview.35...v1.8.0-preview.37)
+
+**Documentation and other chores:**
+
+- Update 1 NuGet dependencies [\#240](https://github.com/nanoframework/System.Net/pull/240)
+
+## [v1.8.0-preview.35](https://github.com/nanoframework/System.Net/tree/v1.8.0-preview.35) (2022-03-14)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.8.0-preview.32...v1.8.0-preview.35)
+
+**Documentation and other chores:**
+
+- Update 1 NuGet dependencies [\#239](https://github.com/nanoframework/System.Net/pull/239)
+- Update 1 NuGet dependencies [\#238](https://github.com/nanoframework/System.Net/pull/238)
+
+## [v1.8.0-preview.32](https://github.com/nanoframework/System.Net/tree/v1.8.0-preview.32) (2022-03-14)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.8.0-preview.29...v1.8.0-preview.32)
+
+**Documentation and other chores:**
+
+- Update 4 NuGet dependencies [\#236](https://github.com/nanoframework/System.Net/pull/236)
+- Update 1 NuGet dependencies [\#235](https://github.com/nanoframework/System.Net/pull/235)
+
+## [v1.8.0-preview.29](https://github.com/nanoframework/System.Net/tree/v1.8.0-preview.29) (2022-02-17)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.8.0-preview.26...v1.8.0-preview.29)
+
+**Documentation and other chores:**
+
+- Update 4 NuGet dependencies [\#234](https://github.com/nanoframework/System.Net/pull/234)
+
+## [v1.8.0-preview.26](https://github.com/nanoframework/System.Net/tree/v1.8.0-preview.26) (2022-02-05)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.8.0-preview.23...v1.8.0-preview.26)
+
+**Fixed bugs:**
+
+- Only Enable DHCP if required [\#232](https://github.com/nanoframework/System.Net/pull/232)
+
+## [v1.8.0-preview.23](https://github.com/nanoframework/System.Net/tree/v1.8.0-preview.23) (2022-02-04)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.8.0-preview.21...v1.8.0-preview.23)
+
+**Documentation and other chores:**
+
+- Update 2 NuGet dependencies [\#231](https://github.com/nanoframework/System.Net/pull/231)
+
+## [v1.8.0-preview.21](https://github.com/nanoframework/System.Net/tree/v1.8.0-preview.21) (2022-02-04)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.8.0-preview.19...v1.8.0-preview.21)
+
+**Documentation and other chores:**
+
+- Update 1 NuGet dependencies [\#230](https://github.com/nanoframework/System.Net/pull/230)
+
+## [v1.8.0-preview.19](https://github.com/nanoframework/System.Net/tree/v1.8.0-preview.19) (2022-01-28)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.8.0-preview.17...v1.8.0-preview.19)
+
+**Documentation and other chores:**
+
+- Update 2 NuGet dependencies [\#229](https://github.com/nanoframework/System.Net/pull/229)
+
+## [v1.8.0-preview.17](https://github.com/nanoframework/System.Net/tree/v1.8.0-preview.17) (2022-01-28)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.8.0-preview.15...v1.8.0-preview.17)
+
+**Documentation and other chores:**
+
+- Update 5 NuGet dependencies [\#228](https://github.com/nanoframework/System.Net/pull/228)
+
+## [v1.8.0-preview.15](https://github.com/nanoframework/System.Net/tree/v1.8.0-preview.15) (2022-01-21)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.8.0-preview.13...v1.8.0-preview.15)
+
+**Documentation and other chores:**
+
+- Update 2 NuGet dependencies [\#227](https://github.com/nanoframework/System.Net/pull/227)
+
+## [v1.8.0-preview.13](https://github.com/nanoframework/System.Net/tree/v1.8.0-preview.13) (2022-01-21)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.8.0-preview.11...v1.8.0-preview.13)
+
+**Documentation and other chores:**
+
+- Update 1 NuGet dependencies [\#226](https://github.com/nanoframework/System.Net/pull/226)
+
+## [v1.8.0-preview.11](https://github.com/nanoframework/System.Net/tree/v1.8.0-preview.11) (2022-01-21)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.8.0-preview.9...v1.8.0-preview.11)
+
+**Documentation and other chores:**
+
+- Update 3 NuGet dependencies [\#225](https://github.com/nanoframework/System.Net/pull/225)
+
+## [v1.8.0-preview.9](https://github.com/nanoframework/System.Net/tree/v1.8.0-preview.9) (2022-01-12)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.8.0-preview.5...v1.8.0-preview.9)
+
+**Implemented enhancements:**
+
+- Improvements in get/set socket options [\#223](https://github.com/nanoframework/System.Net/pull/223)
+
+## [v1.8.0-preview.5](https://github.com/nanoframework/System.Net/tree/v1.8.0-preview.5) (2022-01-05)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.8.0-preview.3...v1.8.0-preview.5)
+
+**Implemented enhancements:**
+
+- NetworkReady event is now instanciated on constructor [\#222](https://github.com/nanoframework/System.Net/pull/222)
+
+## [v1.8.0-preview.3](https://github.com/nanoframework/System.Net/tree/v1.8.0-preview.3) (2022-01-04)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.7.2-preview.7...v1.8.0-preview.3)
+
+**Implemented enhancements:**
+
+- Various fixes and improvements [\#221](https://github.com/nanoframework/System.Net/pull/221)
+- Add NetworkHelper class [\#216](https://github.com/nanoframework/System.Net/pull/216)
+
+**Documentation and other chores:**
+
+- Add Unit Tests [\#220](https://github.com/nanoframework/System.Net/pull/220)
+
+## [v1.7.2-preview.7](https://github.com/nanoframework/System.Net/tree/v1.7.2-preview.7) (2022-01-03)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.7.2-preview.6...v1.7.2-preview.7)
+
+**Documentation and other chores:**
+
+- Revert \#217 [\#219](https://github.com/nanoframework/System.Net/pull/219)
+
+## [v1.7.2-preview.6](https://github.com/nanoframework/System.Net/tree/v1.7.2-preview.6) (2022-01-03)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.7.2-preview.5...v1.7.2-preview.6)
+
+**Documentation and other chores:**
+
+- Bumps nanoFramework.System.Text from 1.1.2 to 1.1.3-preview.4 [\#218](https://github.com/nanoframework/System.Net/pull/218)
+
+## [v1.7.2-preview.5](https://github.com/nanoframework/System.Net/tree/v1.7.2-preview.5) (2021-12-30)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.7.2-preview.4...v1.7.2-preview.5)
+
+## [v1.7.2-preview.4](https://github.com/nanoframework/System.Net/tree/v1.7.2-preview.4) (2021-12-28)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.7.1...v1.7.2-preview.4)
+
+**Documentation and other chores:**
+
+- Bumps nanoFramework.Runtime.Events from 1.9.2 to 1.10.0-preview.1 [\#215](https://github.com/nanoframework/System.Net/pull/215)
+- Parameter description misplacement [\#214](https://github.com/nanoframework/System.Net/pull/214)
+
+## [v1.7.1](https://github.com/nanoframework/System.Net/tree/v1.7.1) (2021-12-02)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.7.1-preview.23...v1.7.1)
+
+## [v1.7.1-preview.23](https://github.com/nanoframework/System.Net/tree/v1.7.1-preview.23) (2021-12-02)
+
 [Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.7.1-preview.21...v1.7.1-preview.23)
 
 **Documentation and other chores:**
