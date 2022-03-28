@@ -1,8 +1,8 @@
 # Changelog
 
-## [v1.7.1-preview.23](https://github.com/nanoframework/System.Net/tree/v1.7.1-preview.23) (2021-12-02)
+## [v1.8.1-preview.5](https://github.com/nanoframework/System.Net/tree/v1.8.1-preview.5) (2022-03-28)
 
-[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.8.1-preview.3...HEAD)
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.8.1-preview.3...v1.8.1-preview.5)
 
 **Documentation and other chores:**
 
