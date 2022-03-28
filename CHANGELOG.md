@@ -2,7 +2,24 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/System.Net/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.8.0-preview.46...HEAD)
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.8.0-preview.50...HEAD)
+
+**Documentation and other chores:**
+
+- Update 1 NuGet dependencies [\#251](https://github.com/nanoframework/System.Net/pull/251)
+- Update 3 NuGet dependencies [\#250](https://github.com/nanoframework/System.Net/pull/250)
+
+## [v1.8.0-preview.50](https://github.com/nanoframework/System.Net/tree/v1.8.0-preview.50) (2022-03-28)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.8.0-preview.48...v1.8.0-preview.50)
+
+**Documentation and other chores:**
+
+- Update 3 NuGet dependencies [\#249](https://github.com/nanoframework/System.Net/pull/249)
+
+## [v1.8.0-preview.48](https://github.com/nanoframework/System.Net/tree/v1.8.0-preview.48) (2022-03-28)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.8.0-preview.46...v1.8.0-preview.48)
 
 **Documentation and other chores:**
 
