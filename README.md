@@ -10,8 +10,7 @@
 
 | Component | Build Status | NuGet Package |
 |:-|---|---|
-| System.Net | [![Build Status](https://dev.azure.com/nanoframework/nanoFramework.System.Net/_apis/build/status/System.Net?repoName=nanoframework%2FSystem.Net&branchName=main)](https://dev.azure.com/nanoframework/nanoFramework.System.Net/_build/latest?definitionId=20&repoName=nanoframework%2FSystem.Net&branchName=main) | [![NuGet](https://img.shields.io/nuget/v/nanoFramework.System.Net.svg?label=NuGet&style=flat&logo=nuget)](https://www.nuget.org/packages/nanoFramework.System.Net/) |
-| System.Net (preview) | [![Build Status](https://dev.azure.com/nanoframework/nanoFramework.System.Net/_apis/build/status/System.Net?repoName=nanoframework%2FSystem.Net&branchName=develop)](https://dev.azure.com/nanoframework/nanoFramework.System.Net/_build/latest?definitionId=20&repoName=nanoframework%2FSystem.Net&branchName=develop) | [![NuGet](https://img.shields.io/nuget/vpre/nanoFramework.System.Net.svg?label=NuGet&style=flat&logo=nuget)](https://www.nuget.org/packages/nanoFramework.System.Net/) |
+| System.Net | [![Build Status](https://dev.azure.com/nanoframework/System.Net/_apis/build/status/System.Net?repoName=nanoframework%2FSystem.Net&branchName=main)](https://dev.azure.com/nanoframework/System.Net/_build/latest?definitionId=20&repoName=nanoframework%2FSystem.Net&branchName=main) | [![NuGet](https://img.shields.io/nuget/v/nanoFramework.System.Net.svg?label=NuGet&style=flat&logo=nuget)](https://www.nuget.org/packages/nanoFramework.System.Net/) |
 
 ## Feedback and documentation
 

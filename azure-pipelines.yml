@@ -103,6 +103,8 @@ jobs:
         System.Net.Http
         System.Net.WebSockets
         System.Device.WiFi
+        System.Net.Sockets.TcpClient
+        System.Net.Sockets.UdpClient
         nanoFramework.m2mqtt
         nanoFramework.Azure.Devices
 
