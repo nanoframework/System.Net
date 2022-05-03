@@ -1,8 +1,8 @@
 # Changelog
 
-## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/System.Net/tree/HEAD)
+## [v1.8.2](https://github.com/nanoframework/System.Net/tree/v1.8.2) (2022-05-03)
 
-[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.8.1...HEAD)
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.8.1...v1.8.2)
 
 **Implemented enhancements:**
 
