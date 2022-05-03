@@ -85,19 +85,27 @@ namespace nanoFramework.Networking
                         {
                             networkInterface.EnableStaticIPv4Dns(ipConfiguration.IPDns);
                         }
-                        else
-                        {
-                            networkInterface.EnableAutomaticDns();
-                        }
                     }
                     else
                     {
-                        if (!networkInterface.IsDhcpEnabled)
+                        if (networkInterface.IsDhcpEnabled)
                         {
                             networkInterface.EnableDhcp();
                         }
+                        else
+                        {
+                            // setup static IPv4 with network config
+                            networkInterface.EnableStaticIPv4(
+                            networkInterface.IPv4Address,
+                            networkInterface.IPv4SubnetMask,
+                            networkInterface.IPv4GatewayAddress);
 
-                        networkInterface.EnableAutomaticDns();
+                            // check if static DNS is to be configured
+                            if (networkInterface.IPv4DnsAddresses.Length > 0)
+                            {
+                                networkInterface.EnableStaticIPv4Dns(networkInterface.IPv4DnsAddresses);
+                            }
+                        }
                     }
                 }
             }
