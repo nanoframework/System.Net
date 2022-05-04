@@ -307,6 +307,7 @@ namespace System.Net.NetworkInformation
         /// <summary>
         /// Enables a network interface to obtain a DNS server address automatically.
         /// </summary>
+        [Obsolete("This method will be removed in a future version. Using automatic DNS it's part of DHCP configuration and can't be used as an individual operation.")]
         public void EnableAutomaticDns()
         {
             try
