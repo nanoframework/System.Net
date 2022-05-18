@@ -4,7 +4,7 @@
 // See LICENSE file in the project root for full license information.
 //
 
-namespace System.Security.Cryptography.X509Certificates 
+namespace System.Security.Cryptography.X509Certificates
 {
     using System;
     using System.Runtime.CompilerServices;
@@ -61,7 +61,7 @@ namespace System.Security.Cryptography.X509Certificates
         /// ASN.1 DER is the only certificate format supported by this class. 
         /// </remarks>
         public X509Certificate(byte[] certificate)
-            : this(certificate, "")
+            : this(certificate, null)
         {
         }
 
@@ -76,7 +76,7 @@ namespace System.Security.Cryptography.X509Certificates
         public X509Certificate(byte[] certificate, string password)
         {
             _certificate = certificate;
-            _password    = password;
+            _password = password;
 
             ParseCertificate(certificate, password, ref _issuer, ref _subject, ref _effectiveDate, ref _expirationDate);
         }
@@ -100,8 +100,6 @@ namespace System.Security.Cryptography.X509Certificates
             _certificate = new byte[tempCertificate.Length + 1];
             Array.Copy(tempCertificate, _certificate, tempCertificate.Length);
             _certificate[_certificate.Length - 1] = 0;
-
-            _password = "";
 
             ParseCertificate(_certificate, _password, ref _issuer, ref _subject, ref _effectiveDate, ref _expirationDate);
         }
