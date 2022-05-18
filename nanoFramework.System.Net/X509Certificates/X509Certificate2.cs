@@ -15,7 +15,7 @@ namespace System.Security.Cryptography.X509Certificates
     public class X509Certificate2 : X509Certificate
     {
 #pragma warning disable S3459 // Unassigned members should be removed
-        // these fields are required and set in native code
+        // field required to be accessible by native code
         private readonly byte[] _privateKey;
 #pragma warning restore S3459 // Unassigned members should be removed
 
@@ -25,6 +25,7 @@ namespace System.Security.Cryptography.X509Certificates
         public X509Certificate2()
             : base()
         {
+
         }
 
         /// <summary>
@@ -75,14 +76,19 @@ namespace System.Security.Cryptography.X509Certificates
         /// <summary>
         /// Initializes a new instance of the <see cref="X509Certificate2"/> class using a string with the content of an X.509 public certificate, the private key and a password used to access the certificate.
         /// </summary>
-        /// <param name="certificate">A string containing a X.509 certificate.</param>
+        /// <param name="rawData">A string containing a X.509 certificate.</param>
         /// <param name="key">A string containing a PEM private key.</param>
-        /// <param name="password">The password required to access the X.509 certificate data.</param>
+        /// <param name="password">The password required to access the X.509 certificate data. Set to <see langword="null"/> if the <paramref name="rawData"/> or <paramref name="key"/> are not encrypted and do not require a password.</param>
         /// <remarks>
         /// This methods is exclusive of nanoFramework. There is no equivalent in .NET framework.
         /// </remarks>
-        public X509Certificate2(string certificate, string key, string password)
-            : base(certificate, password)
+        public X509Certificate2(
+            string rawData,
+            string key,
+            string password)
+            : base(
+                  rawData,
+                  password)
         {
             var tempKey = Encoding.UTF8.GetBytes(key);
 
@@ -104,12 +110,17 @@ namespace System.Security.Cryptography.X509Certificates
         /// </summary>
         /// <param name="rawData">A byte array containing data from an X.509 certificate.</param>
         /// <param name="key">A string containing a PEM private key.</param>
-        /// <param name="password">The password required to access the X.509 certificate data.</param>
+        /// <param name="password">The password required to access the X.509 certificate data. Set to <see langword="null"/> if the <paramref name="rawData"/> or <paramref name="key"/> are not encrypted and do not require a password.</param>
         /// <remarks>
         /// This methods is exclusive of nanoFramework. There is no equivalent in .NET framework.
         /// </remarks>
-        public X509Certificate2(byte[] rawData, string key, string password)
-            : base(rawData, password)
+        public X509Certificate2(
+            byte[] rawData,
+            string key,
+            string password)
+            : base(
+                  rawData,
+                  password)
         {
             var tempKey = Encoding.UTF8.GetBytes(key);
 
@@ -131,12 +142,17 @@ namespace System.Security.Cryptography.X509Certificates
         /// </summary>
         /// <param name="rawData">A byte array containing data from an X.509 certificate.</param>
         /// <param name="key">A byte array containing a PEM private key.</param>
-        /// <param name="password">The password required to access the X.509 certificate data.</param>
+        /// <param name="password">The password required to access the X.509 certificate data. <see langword="null"/> if the <paramref name="rawData"/> or <paramref name="key"/> are not encrypted.</param>
         /// <remarks>
         /// This methods is exclusive of nanoFramework. There is no equivalent in .NET framework.
         /// </remarks>
-        public X509Certificate2(byte[] rawData, byte[] key, string password)
-            : base(rawData, password)
+        public X509Certificate2(
+            byte[] rawData,
+            byte[] key,
+            string password)
+            : base(
+                  rawData,
+                  password)
         {
             _privateKey = key;
 
