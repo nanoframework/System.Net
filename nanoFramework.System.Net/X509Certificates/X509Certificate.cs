@@ -14,12 +14,11 @@ namespace System.Security.Cryptography.X509Certificates
     /// Provides methods that help you use X.509 v.3 certificates.
     /// </summary>
     /// <remarks>
-    /// ASN.1 DER is the only certificate format supported by this class.
+    /// Supported formats: DER and PEM.
     /// </remarks>
     public class X509Certificate
     {
         private readonly byte[] _certificate;
-        private readonly string _password;
 
         /// <summary>
         /// Contains the certificate issuer.
@@ -58,27 +57,18 @@ namespace System.Security.Cryptography.X509Certificates
         /// </summary>
         /// <param name="certificate">A byte array containing data from an X.509 certificate.</param>
         /// <remarks>
-        /// ASN.1 DER is the only certificate format supported by this class. 
+        /// DER and PEM encoding are the supported formats. 
         /// </remarks>
         public X509Certificate(byte[] certificate)
-            : this(certificate, null)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="X509Certificate"/> class using a byte array and a password.
-        /// </summary>
-        /// <param name="certificate">A byte array containing data from an X.509 certificate.</param>
-        /// <param name="password">The password required to access the X.509 certificate data.</param>
-        /// <remarks>
-        /// ASN.1 DER is the only certificate format supported by this class. 
-        /// </remarks>
-        public X509Certificate(byte[] certificate, string password)
         {
             _certificate = certificate;
-            _password = password;
 
-            ParseCertificate(certificate, password, ref _issuer, ref _subject, ref _effectiveDate, ref _expirationDate);
+            ParseCertificate(
+                certificate,
+                ref _issuer,
+                ref _subject,
+                ref _effectiveDate,
+                ref _expirationDate);
         }
 
         /// <summary>
@@ -86,8 +76,8 @@ namespace System.Security.Cryptography.X509Certificates
         /// </summary>
         /// <param name="certificate">A string containing a X.509 certificate.</param>
         /// <remarks>
-        /// ASN.1 DER is the only certificate format supported by this class. 
-        /// This methods is exclusive of nanoFramework. The equivalent .NET constructor accepts a file name as the parameter.
+        /// Supported formats: DER and PEM.
+        /// This methods is exclusive of .NET nanoFramework. The equivalent .NET constructor accepts a file name as the parameter.
         /// </remarks>
         public X509Certificate(string certificate)
         {
@@ -101,33 +91,12 @@ namespace System.Security.Cryptography.X509Certificates
             Array.Copy(tempCertificate, _certificate, tempCertificate.Length);
             _certificate[_certificate.Length - 1] = 0;
 
-            ParseCertificate(_certificate, _password, ref _issuer, ref _subject, ref _effectiveDate, ref _expirationDate);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="X509Certificate"/> class defined from a string with the content of an X.509v3 certificate.
-        /// </summary>
-        /// <param name="certificate">A string containing a X.509 certificate.</param>
-        /// <param name="password">The password required to access the X.509 certificate data.</param>
-        /// <remarks>
-        /// ASN.1 DER is the only certificate format supported by this class. 
-        /// This methods is exclusive of nanoFramework. The equivalent .NET constructor accepts a file name as the parameter.
-        /// </remarks>
-        public X509Certificate(string certificate, string password)
-        {
-            _password = password;
-
-            var tempCertificate = Encoding.UTF8.GetBytes(certificate);
-
-            //////////////////////////////////////////////
-            // because this is parsing from a string    //
-            // we need to keep the terminator           //
-            //////////////////////////////////////////////
-            _certificate = new byte[tempCertificate.Length + 1];
-            Array.Copy(tempCertificate, _certificate, tempCertificate.Length);
-            _certificate[_certificate.Length - 1] = 0;
-
-            ParseCertificate(_certificate, _password, ref _issuer, ref _subject, ref _effectiveDate, ref _expirationDate);
+            ParseCertificate(
+                _certificate,
+                ref _issuer,
+                ref _subject,
+                ref _effectiveDate,
+                ref _expirationDate);
         }
 
         /// <summary>
@@ -186,7 +155,12 @@ namespace System.Security.Cryptography.X509Certificates
         }
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        internal static extern void ParseCertificate(byte[] cert, string password, ref string issuer, ref string subject, ref DateTime effectiveDate, ref DateTime expirationDate);
+        internal static extern void ParseCertificate(
+            byte[] cert,
+            ref string issuer,
+            ref string subject,
+            ref DateTime effectiveDate,
+            ref DateTime expirationDate);
     }
 }
 
