@@ -59,14 +59,14 @@ namespace System.Net.NetworkInformation
     /// </summary>
     /// <param name="sender">Specifies the object that sent the network address changed event. </param>
     /// <param name="e">Contains the network address changed event arguments. </param>
-    public delegate void NetworkAvailabilityChangedEventHandler(object sender, NetworkAvailabilityEventArgs e);
+    public delegate void NetworkAddressChangedEventHandler(object sender, EventArgs e);
 
     /// <summary>
     /// Indicates a change in the availability of the network.
     /// </summary>
     /// <param name="sender">Specifies the object that sent the network availability changed event. </param>
     /// <param name="e">Contains the network availability changed event arguments. </param>
-    public delegate void NetworkAddressChangedEventHandler(object sender, EventArgs e);
+    public delegate void NetworkAvailabilityChangedEventHandler(object sender, NetworkAvailabilityEventArgs e);
 
     /// <summary>
     /// Indicates a change in the connected clients to Access Point.
