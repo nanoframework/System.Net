@@ -2,7 +2,16 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/System.Net/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.9.0.1...HEAD)
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.9.0.5...HEAD)
+
+**Documentation and other chores:**
+
+- Update 1 NuGet dependencies [\#264](https://github.com/nanoframework/System.Net/pull/264)
+- Fix Intellisense comments for Network Change events [\#263](https://github.com/nanoframework/System.Net/pull/263)
+
+## [v1.9.0.5](https://github.com/nanoframework/System.Net/tree/v1.9.0.5) (2022-06-08)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.9.0.1...v1.9.0.5)
 
 **Documentation and other chores:**
 
