@@ -15,3 +15,4 @@ jobs:
     uses: nanoframework/nf-tools/.github/workflows/check-packages-updated.yml@main
     with:
       solutionsToCheck: 'nanoFramework.System.Net.sln'
+
