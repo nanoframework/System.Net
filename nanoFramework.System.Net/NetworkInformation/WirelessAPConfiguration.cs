@@ -148,6 +148,14 @@ namespace System.Net.NetworkInformation
 #pragma warning restore S3928 // Parameter names used into ArgumentException constructors should match an existing one 
             }
 
+            // At least one MaxConnection is required
+            if (_apMaxConnections < 1)
+            {
+#pragma warning disable S3928 // OK to not include a meaningful message
+                throw new ArgumentOutOfRangeException();
+#pragma warning restore S3928 // Parameter names used into ArgumentException constructors should match an existing one 
+            }
+
             // If not using an open Auth then check password length
             if ( (Authentication != AuthenticationType.Open && Authentication != AuthenticationType.None)  &&
                  ( (_apPassword.Length <  MinApPasswordLength) || (_apPassword.Length >= MaxApPasswordLength) ) )
