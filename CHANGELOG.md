@@ -2,7 +2,25 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/System.Net/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.10.49...HEAD)
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.10.52...HEAD)
+
+**Fixed bugs:**
+
+- WirelessAPConfiguration.MaxConnections is now validated [\#307](https://github.com/nanoframework/System.Net/pull/307)
+
+**Documentation and other chores:**
+
+- Update 1 NuGet dependencies [\#306](https://github.com/nanoframework/System.Net/pull/306)
+- Update 2 NuGet dependencies [\#305](https://github.com/nanoframework/System.Net/pull/305)
+- Update 1 NuGet dependencies [\#304](https://github.com/nanoframework/System.Net/pull/304)
+- Update 1 NuGet dependencies [\#303](https://github.com/nanoframework/System.Net/pull/303)
+- Update 1 NuGet dependencies [\#302](https://github.com/nanoframework/System.Net/pull/302)
+- Update 1 NuGet dependencies [\#300](https://github.com/nanoframework/System.Net/pull/300)
+- Update 1 NuGet dependencies [\#299](https://github.com/nanoframework/System.Net/pull/299)
+
+## [v1.10.52](https://github.com/nanoframework/System.Net/tree/v1.10.52) (2022-12-28)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.10.49...v1.10.52)
 
 **Documentation and other chores:**
 
