@@ -121,12 +121,12 @@ namespace System.Net.NetworkInformation
         /// <remarks>
         /// Checks the length of SSID is 32 or less.
         /// Password length is between 8 and 64 if not an open Authentication.
-        /// Max connections is greater than zero
+        /// Max connections has to be greater than zero.
         /// </remarks>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if <see cref="MaxConnections"/> is less than one</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if <see cref="Password"/> is less than 8 character or more than 64 characters and not open <see cref="Authentication"/></exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if <see cref="Ssid"/> is longer than <see cref="MaxApSsidLength"/></exception>
-        /// <exception cref="ArgumentNullException">Thrown if <see cref="Ssid"/> is null</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <see cref="MaxConnections"/> is less than one.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <see cref="Password"/> is less than 8 character or more than 64 characters and not open <see cref="Authentication"/>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <see cref="Ssid"/> is longer than <see cref="MaxApSsidLength"/><./exception>
+        /// <exception cref="ArgumentNullException">If <see cref="Ssid"/> is <see langword="null"/>.</exception>
         public void SaveConfiguration()
         {
             // Before we update validate whether settings conform to right characteristics.
@@ -138,10 +138,10 @@ namespace System.Net.NetworkInformation
         /// <summary>
         /// Validates the wireless Soft AP configuration information 
         /// </summary>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if <see cref="MaxConnections"/> is less than one</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if <see cref="Password"/> is less than 8 character or more than 64 characters and not open <see cref="Authentication"/></exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if <see cref="Ssid"/> is longer than <see cref="MaxApSsidLength"/></exception>
-        /// <exception cref="ArgumentNullException">Thrown if <see cref="Ssid"/> is null</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <see cref="MaxConnections"/> is less than one.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <see cref="Password"/> is less than 8 character or more than 64 characters and not open <see cref="Authentication"/>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <see cref="Ssid"/> is longer than <see cref="MaxApSsidLength"/><./exception>
+        /// <exception cref="ArgumentNullException">If <see cref="Ssid"/> is <see langword="null"/>.</exception>
         private void ValidateConfiguration()
         {
             // SSID can't be null
