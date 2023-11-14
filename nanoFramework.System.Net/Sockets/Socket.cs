@@ -61,7 +61,7 @@ namespace System.Net.Sockets
         /// The addressFamily parameter specifies the addressing scheme that the <see cref="Socket"/> class uses, the socketType parameter specifies the type of the <see cref="Socket"/> class, 
         /// and the protocolType parameter specifies the protocol used by <see cref="Socket"/>. The three parameters are not independent. Some address families restrict which 
         /// protocols can be used with them, and often the <see cref="Socket"/> type is implicit in the protocol. If the combination of address family, <see cref="Socket"/> type, and protocol type
-        /// esults in an invalid Socket, this constructor throws a SocketException.
+        /// results in an invalid Socket, this constructor throws a SocketException.
         /// </remarks>
         public Socket(AddressFamily addressFamily, SocketType socketType, ProtocolType protocolType)
         {
@@ -1101,7 +1101,7 @@ namespace System.Net.Sockets
         }
 
         /// <summary>
-        /// Deconstructor
+        /// De constructor
         /// </summary>
         ~Socket()
         {

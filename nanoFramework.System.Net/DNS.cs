@@ -41,8 +41,14 @@ namespace System.Net
                 if (family == AddressFamily.InterNetwork)
                 {
                     uint ipAddr = (uint)((address[7] << 24) | (address[6] << 16) | (address[5] << 8) | (address[4]));
-
                     ipAddresses[i] = new IPAddress(ipAddr);
+                }
+                else if (family == AddressFamily.InterNetworkV6)
+                {
+                    byte[] ipv6addr = new byte[16];
+                    Array.Copy(address, 4, ipv6addr, 0, 16);
+                    
+                    ipAddresses[i] = new IPAddress(ipv6addr);
                 }
                 else
                 {
