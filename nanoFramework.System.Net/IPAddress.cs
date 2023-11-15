@@ -4,6 +4,7 @@
 // See LICENSE file in the project root for full license information.
 //
 
+using System.Collections;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Runtime.CompilerServices;
@@ -19,12 +20,38 @@ namespace System.Net
         /// <summary>
         /// Provides an IP address that indicates that the server must listen for client activity on all network interfaces. This field is read-only.
         /// </summary>
-        public static readonly IPAddress Any = new(0x0000000000000000);
+        /// <remarks>
+        /// The <see cref="Socket.Bind"/> method uses the <see cref="Any"/> field to indicate that a <see cref="Socket"/> instance must listen for client activity on all network interfaces.
+        /// 
+        /// The <see cref="Any"/> field is equivalent to 0.0.0.0 in dotted-quad notation.
+        /// </remarks>
+        public static readonly IPAddress Any = new(new byte[] { 0, 0, 0, 0 });
 
         /// <summary>
         /// Provides the IP loopback address. This field is read-only.
         /// </summary>
-        public static readonly IPAddress Loopback = new(0x000000000100007F);
+        /// <remarks>
+        /// The <see cref="Loopback"/> field is equivalent to 127.0.0.1 in dotted-quad notation.
+        /// </remarks>
+        public static readonly IPAddress Loopback = new(new byte[] { 127, 0, 0, 1 });
+
+        /// <summary>
+        /// Provides the IP broadcast address. This field is read-only.
+        /// </summary>
+        /// <remarks>
+        /// The <see cref="Broadcast"/> field is equivalent to 255.255.255.255 in dotted-quad notation.
+        /// </remarks>
+        public static readonly IPAddress Broadcast = new(new byte[] { 255, 255, 255, 255 });
+
+        /// <summary>
+        /// Provides an IP address that indicates that no network interface should be used. This field is read-only.
+        /// </summary>
+        /// <remarks>
+        /// The <see cref="Socket.Bind"/> uses the <see cref="None"/> field to indicate that a <see cref="Socket"/> must not listen for client activity.
+        ///
+        /// The <see cref="None"/> field is equivalent to 255.255.255.255 in dotted-quad notation.
+        /// </remarks>
+        public static readonly IPAddress None = Broadcast;
 
         internal readonly long Address;
 
@@ -38,6 +65,11 @@ namespace System.Net
         internal const int IPv6AddressBytes = 16;
 
         internal const int NumberOfLabels = IPv6AddressBytes / 2;
+
+        /// <summary>
+        /// A lazily initialized cache of the <see cref="GetHashCode"/> value.
+        /// </summary>
+        private int _hashCode;
 
         /// <summary>
         /// Gets the address family of the IP address.
@@ -123,17 +155,44 @@ namespace System.Net
         }
 
         /// <summary>
+        /// Tests whether two <see cref="IPAddress"/> objects are the same.
+        /// </summary>
+        public static bool operator ==(IPAddress left, IPAddress right) => left is not null && left.Equals(right);
+            
+        /// <summary>
+        /// Tests whether two <see cref='Rectangle'/> objects differ in location or size.
+        /// </summary>
+        public static bool operator !=(IPAddress left, IPAddress right) => !(left == right);
+
+        /// <summary>
         /// Compares two IP addresses.
         /// </summary>
         /// <param name="obj">An <see cref="IPAddress"/> instance to compare to the current instance.</param>
         /// <returns></returns>
         public override bool Equals(object obj)
         {
-            IPAddress addr = obj as IPAddress;
+            return obj is IPAddress other && Equals(other);
+        }
 
-            if (obj == null) return false;
+        /// <summary>
+        /// Compares two IP addresses.
+        /// </summary>
+        /// <param name="other">An <see cref="IPAddress"/> instance to compare to the current instance.</param>
+        /// <returns></returns>
+        public bool Equals(IPAddress other)
+        {
+            if (other is null)
+            {
+                return false;
+            }
 
-            return this.Address == addr.Address;
+            // Compare families before address representations
+            if (AddressFamily != other.AddressFamily)
+            {
+                return false;
+            }
+
+            return Address == other.Address;
         }
 
         /// <summary>
@@ -142,7 +201,7 @@ namespace System.Net
         /// <returns>A Byte array.</returns>
         public byte[] GetAddressBytes()
         {
-            return new byte[]
+            return new[]
             {
                 (byte)(Address),
                 (byte)(Address >> 8),
@@ -207,18 +266,21 @@ namespace System.Net
         /// <inheritdoc/>
         public override int GetHashCode()
         {
-            // For IPv6 addresses, we cannot simply return the integer
-            // representation as the hashcode. Instead, we calculate
-            // the hashcode from the string representation of the address.
-            if (_family == AddressFamily.InterNetworkV6)
+            if (_hashCode == 0)
             {
-                return ToString().GetHashCode();
-            }
-            else
-            {
+                // For IPv6 addresses, we cannot simply return the integer
+                // representation as the hashcode. Instead, we calculate
+                // the hashcode from the string representation of the address.
+                if (_family == AddressFamily.InterNetworkV6)
+                {
+                    _hashCode = ToString().GetHashCode();
+                }
+
                 // For IPv4 addresses, we can simply use the integer representation.
-                return unchecked((int)Address);
+                _hashCode = unchecked((int)Address);
             }
+
+            return _hashCode;
         }
 
         // For security, we need to be able to take an IPAddress and make a copy that's immutable and not derived.
@@ -236,11 +298,7 @@ namespace System.Net
             throw new NotSupportedException();
         }
 
-        #region native methods
-
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal static extern string IPv4ToString(uint ipv4Address);
-
-        #endregion
     }
 }
