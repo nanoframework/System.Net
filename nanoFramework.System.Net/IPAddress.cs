@@ -196,9 +196,9 @@ namespace System.Net
         }
 
         /// <summary>
-        /// Provides a copy of the <see cref="IPAddress"/> as an array of bytes.
+        /// Provides a copy of the <see cref="IPAddress"/> as an array of bytes in network order.
         /// </summary>
-        /// <returns>A Byte array.</returns>
+        /// <returns>A <see langword="byte"/> array.</returns>
         public byte[] GetAddressBytes()
         {
             return new[]
