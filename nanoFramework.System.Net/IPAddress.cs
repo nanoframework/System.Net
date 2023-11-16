@@ -168,6 +168,7 @@ namespace System.Net
         /// Compares two IP addresses.
         /// </summary>
         /// <param name="comparand">An <see cref="IPAddress"/> instance to compare to the current instance.</param>
+        /// <returns><see langword="true"/> if the two addresses are equal; otherwise, <see langword="false"/>.</returns>
         public override bool Equals(object comparand)
         {
             return comparand is IPAddress other && Equals(other);
