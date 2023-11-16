@@ -177,22 +177,22 @@ namespace System.Net
         /// <summary>
         /// Compares two IP addresses.
         /// </summary>
-        /// <param name="other">An <see cref="IPAddress"/> instance to compare to the current instance.</param>
-        /// <returns></returns>
-        public bool Equals(IPAddress other)
+        /// <param name="comparand">An <see cref="IPAddress"/> instance to compare to the current instance.</param>
+        /// <returns><see langword="true"/> if the two addresses are equal; otherwise, <see langword="false"/>.</returns>
+        public bool Equals(IPAddress comparand)
         {
-            if (other is null)
+            if (comparand is null)
             {
                 return false;
             }
 
             // Compare families before address representations
-            if (AddressFamily != other.AddressFamily)
+            if (AddressFamily != comparand.AddressFamily)
             {
                 return false;
             }
 
-            return Address == other.Address;
+            return Address == comparand.Address;
         }
 
         /// <summary>
