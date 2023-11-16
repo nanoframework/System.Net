@@ -305,18 +305,18 @@ namespace NFUnitTestIPAddress
         [TestMethod]
         public void Equality_Tests()
         {
-            var privateAddress = new IPAddress(new byte[] { 192, 168, 0, 1 });
-            var publicAddress = new IPAddress(new byte[] { 1, 1, 1, 1 });
+            var privateAddress = IPAddress.Parse("192.168.0.1");
+            var publicAddress = IPAddress.Parse("1.1.1.1");
 
             // Equal
-            Assert.IsTrue(privateAddress.Equals(new IPAddress(new byte[]{192, 168, 0 , 1})), "192.168.0.1 equals 192.168.0.1");
-            Assert.IsTrue(publicAddress.Equals(new IPAddress(new byte[] { 1, 1, 1, 1 })), "1.1.1.1 equals 1.1.1.1");
+            Assert.AreEqual(privateAddress, IPAddress.Parse("192.168.0.1"));
+            Assert.AreEqual(publicAddress, IPAddress.Parse("1.1.1.1"));
             Assert.IsTrue(privateAddress == new IPAddress(new byte[] { 192, 168, 0, 1 }), "192.168.0.1 == 192.168.0.1");
             Assert.IsTrue(publicAddress == new IPAddress(new byte[] { 1, 1, 1, 1 }), "1.1.1.1 == 1.1.1.1");
 
             // Not Equal
-            Assert.IsFalse(privateAddress.Equals(new IPAddress(new byte[] { 192, 168, 0, 2 })), "192.168.0.1 not equals 192.168.0.2");
-            Assert.IsFalse(publicAddress.Equals(new IPAddress(new byte[] { 1, 1, 1, 2 })), "1.1.1.1 not equals 1.1.1.2");
+            Assert.AreNotEqual(privateAddress, IPAddress.Parse("1.1.1.1"));
+            Assert.AreNotEqual(publicAddress, IPAddress.Parse("192.168.0.1"));
             Assert.IsTrue(privateAddress != new IPAddress(new byte[] { 192, 168, 0, 2 }), "192.168.0.1 == 192.168.0.2");
             Assert.IsTrue(publicAddress != new IPAddress(new byte[] { 1, 1, 1, 2 }), "1.1.1.1 == 1.1.1.2");
         }
