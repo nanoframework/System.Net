@@ -4,7 +4,6 @@
 // See LICENSE file in the project root for full license information.
 //
 
-using System.Collections;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Runtime.CompilerServices;
@@ -158,7 +157,7 @@ namespace System.Net
         /// Tests whether two <see cref="IPAddress"/> objects are the same.
         /// </summary>
         public static bool operator ==(IPAddress left, IPAddress right) => left is not null && left.Equals(right);
-            
+
         /// <summary>
         /// Tests whether two <see cref='Rectangle'/> objects differ in location or size.
         /// </summary>
