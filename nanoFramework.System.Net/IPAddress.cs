@@ -66,11 +66,6 @@ namespace System.Net
         internal const int NumberOfLabels = IPv6AddressBytes / 2;
 
         /// <summary>
-        /// A lazily initialized cache of the <see cref="GetHashCode"/> value.
-        /// </summary>
-        private int _hashCode;
-
-        /// <summary>
         /// Gets the address family of the IP address.
         /// </summary>
         /// <value>Returns <see cref="AddressFamily.InterNetwork"/> for IPv4 or <see cref="AddressFamily.InterNetworkV6"/> for IPv6.</value>
@@ -271,21 +266,16 @@ namespace System.Net
         /// <inheritdoc/>
         public override int GetHashCode()
         {
-            if (_hashCode == 0)
+            // For IPv6 addresses, we cannot simply return the integer
+            // representation as the hashcode. Instead, we calculate
+            // the hashcode from the string representation of the address.
+            if (_family == AddressFamily.InterNetworkV6)
             {
-                // For IPv6 addresses, we cannot simply return the integer
-                // representation as the hashcode. Instead, we calculate
-                // the hashcode from the string representation of the address.
-                if (_family == AddressFamily.InterNetworkV6)
-                {
-                    _hashCode = ToString().GetHashCode();
-                }
-
-                // For IPv4 addresses, we can simply use the integer representation.
-                _hashCode = unchecked((int)Address);
+                return ToString().GetHashCode();
             }
 
-            return _hashCode;
+            // For IPv4 addresses, we can simply use the integer representation.
+            return unchecked((int)Address);
         }
 
         // For security, we need to be able to take an IPAddress and make a copy that's immutable and not derived.
