@@ -167,11 +167,10 @@ namespace System.Net
         /// <summary>
         /// Compares two IP addresses.
         /// </summary>
-        /// <param name="obj">An <see cref="IPAddress"/> instance to compare to the current instance.</param>
-        /// <returns></returns>
-        public override bool Equals(object obj)
+        /// <param name="comparand">An <see cref="IPAddress"/> instance to compare to the current instance.</param>
+        public override bool Equals(object comparand)
         {
-            return obj is IPAddress other && Equals(other);
+            return comparand is IPAddress other && Equals(other);
         }
 
         /// <summary>
