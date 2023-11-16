@@ -154,14 +154,20 @@ namespace System.Net
         }
 
         /// <summary>
-        /// Tests whether two <see cref="IPAddress"/> objects are the same.
+        /// Indicates whether two <see cref="IPAddress"/> objects are equal.
         /// </summary>
-        public static bool operator ==(IPAddress left, IPAddress right) => left is not null && left.Equals(right);
+        /// <param name="a">The <see cref="IPAddress"/> to compare with <paramref name="b"/>.</param>
+        /// <param name="b">The <see cref="IPAddress"/> to compare with <paramref name="a"/>.</param>
+        /// <returns><see langword="true"/> if <paramref name="b"/> is equal to <paramref name="a"/>; otherwise, <see langword="false"/>.</returns>   
+        public static bool operator ==(IPAddress a, IPAddress b) => a is not null && a.Equals(b);
 
         /// <summary>
-        /// Tests whether two <see cref='Rectangle'/> objects differ in location or size.
+        /// Indicates whether two <see cref="IPAddress"/> objects are not equal.
         /// </summary>
-        public static bool operator !=(IPAddress left, IPAddress right) => !(left == right);
+        /// <param name="a">The <see cref="IPAddress"/> to compare with <paramref name="b"/>.</param>
+        /// <param name="b">The <see cref="IPAddress"/> to compare with <paramref name="a"/>.</param>
+        /// <returns><see langword="true"/> if <paramref name="b"/> is not equal to <paramref name="a"/>; otherwise, <see langword="false"/>.</returns>   
+        public static bool operator !=(IPAddress a, IPAddress b) => !(a == b);
 
         /// <summary>
         /// Compares two IP addresses.
