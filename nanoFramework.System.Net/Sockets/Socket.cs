@@ -1100,9 +1100,6 @@ namespace System.Net.Sockets
             GC.SuppressFinalize(this);
         }
 
-        /// <summary>
-        /// De constructor
-        /// </summary>
         ~Socket()
         {
             Dispose(false);
