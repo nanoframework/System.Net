@@ -125,7 +125,7 @@ namespace System.Net.NetworkInformation
         /// </remarks>
         /// <exception cref="ArgumentOutOfRangeException">If <see cref="MaxConnections"/> is less than one.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If <see cref="Password"/> is less than 8 character or more than 64 characters and not open <see cref="Authentication"/>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">If <see cref="Ssid"/> is longer than <see cref="MaxApSsidLength"/><./exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <see cref="Ssid"/> is longer than <see cref="MaxApSsidLength"/></exception>
         /// <exception cref="ArgumentNullException">If <see cref="Ssid"/> is <see langword="null"/>.</exception>
         public void SaveConfiguration()
         {
@@ -140,7 +140,7 @@ namespace System.Net.NetworkInformation
         /// </summary>
         /// <exception cref="ArgumentOutOfRangeException">If <see cref="MaxConnections"/> is less than one.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If <see cref="Password"/> is less than 8 character or more than 64 characters and not open <see cref="Authentication"/>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">If <see cref="Ssid"/> is longer than <see cref="MaxApSsidLength"/><./exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <see cref="Ssid"/> is longer than <see cref="MaxApSsidLength"/></exception>
         /// <exception cref="ArgumentNullException">If <see cref="Ssid"/> is <see langword="null"/>.</exception>
         private void ValidateConfiguration()
         {
