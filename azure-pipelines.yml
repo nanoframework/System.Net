@@ -46,11 +46,17 @@ jobs:
     vmImage: 'windows-latest'
 
   variables:
-    DOTNET_NOLOGO: true
-    solution: 'nanoFramework.System.Net.sln'
-    buildPlatform: 'Any CPU'
-    buildConfiguration: 'Release'
-    nugetPackageName: 'nanoFramework.System.Net'
+    - group: sign-client-credentials
+    - name: DOTNET_NOLOGO
+      value: true  
+    - name: buildPlatform
+      value: 'Any CPU'  
+    - name: buildConfiguration
+      value: 'Release'
+    - name: solution
+      value: 'nanoFramework.System.Net.sln'
+    - name: nugetPackageName
+      value: 'nanoFramework.System.Net'   
 
   steps:
 

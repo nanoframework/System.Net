@@ -1,8 +1,16 @@
 # Changelog
 
-## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/System.Net/tree/HEAD)
+## [v1.10.66](https://github.com/nanoframework/System.Net/tree/v1.10.66) (2024-01-16)
 
-[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.10.62...HEAD)
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.10.64...v1.10.66)
+
+**Implemented enhancements:**
+
+- Update sockets to support IPV6 [\#309](https://github.com/nanoframework/System.Net/pull/309)
+
+## [v1.10.64](https://github.com/nanoframework/System.Net/tree/v1.10.64) (2023-11-09)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.10.62...v1.10.64)
 
 **Documentation and other chores:**
 

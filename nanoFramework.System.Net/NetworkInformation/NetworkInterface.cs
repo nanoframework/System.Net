@@ -126,9 +126,9 @@ namespace System.Net.NetworkInformation
         {
             try
             {
-                _ipv4Address = (uint)IPAddressFromString(ipv4Address);
-                _ipv4NetMask = (uint)IPAddressFromString(ipv4SubnetMask);
-                _ipv4GatewayAddress = (uint)IPAddressFromString(ipv4GatewayAddress);
+                _ipv4Address = (uint)IPV4AddressFromString(ipv4Address);
+                _ipv4NetMask = (uint)IPV4AddressFromString(ipv4SubnetMask);
+                _ipv4GatewayAddress = (uint)IPV4AddressFromString(ipv4GatewayAddress);
                 _startupAddressMode = AddressMode.Static;
 
                 UpdateConfiguration((int)UpdateOperation.Dhcp);
@@ -153,9 +153,9 @@ namespace System.Net.NetworkInformation
 
                 // FIXME
                 // need to test this
-                //_ipv6Address = IPAddressFromString(ipv6Address);
-                //_ipv6NetMask = IPAddressFromString(ipv6subnetMask);
-                //_ipv6GatewayAddress = IPAddressFromString(ipv6gatewayAddress);
+                //_ipv6Address = IPV4AddressFromString(ipv6Address);
+                //_ipv6NetMask = IPV4AddressFromString(ipv6subnetMask);
+                //_ipv6GatewayAddress = IPV4AddressFromString(ipv6gatewayAddress);
 
                 //_startupAddressMode = AddressMode.Static;
 
@@ -182,15 +182,15 @@ namespace System.Net.NetworkInformation
             {
                 throw new NotImplementedException();
 
-                _ipv4Address = (uint)IPAddressFromString(ipv4Address);
-                _ipv4NetMask = (uint)IPAddressFromString(ipv4subnetMask);
-                _ipv4GatewayAddress = (uint)IPAddressFromString(ipv4gatewayAddress);
+                _ipv4Address = (uint)IPV4AddressFromString(ipv4Address);
+                _ipv4NetMask = (uint)IPV4AddressFromString(ipv4subnetMask);
+                _ipv4GatewayAddress = (uint)IPV4AddressFromString(ipv4gatewayAddress);
 
                 // FIXME
                 // need to test this
-                //_ipv6Address = IPAddressFromString(ipv6Address);
-                //_ipv6NetMask = IPAddressFromString(ipv6subnetMask);
-                //_ipv6GatewayAddress = IPAddressFromString(ipv6gatewayAddress);
+                //_ipv6Address = IPV4AddressFromString(ipv6Address);
+                //_ipv6NetMask = IPV4AddressFromString(ipv6subnetMask);
+                //_ipv6GatewayAddress = IPV4AddressFromString(ipv6gatewayAddress);
 
                 _startupAddressMode = AddressMode.Static;
 
@@ -234,7 +234,7 @@ namespace System.Net.NetworkInformation
             int iAddress = 0;
             for (int i = 0; i < dnsAddresses.Length; i++)
             {
-                uint address = (uint)IPAddressFromString(dnsAddresses[i]);
+                uint address = (uint)IPV4AddressFromString(dnsAddresses[i]);
 
                 addresses[iAddress] = address;
 
@@ -281,7 +281,7 @@ namespace System.Net.NetworkInformation
             //int iAddress = 0;
             //for (int i = 0; i < dnsAddresses.Length; i++)
             //{
-            //    uint address = IPAddressFromString(dnsAddresses[i]);
+            //    uint address = IPV4AddressFromString(dnsAddresses[i]);
 
             //    addresses[iAddress] = address;
 
@@ -470,10 +470,10 @@ namespace System.Net.NetworkInformation
         #region native methods
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern static int GetNetworkInterfaceCount();
+        private static extern int GetNetworkInterfaceCount();
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern static NetworkInterface GetNetworkInterface(uint interfaceIndex);
+        private static extern NetworkInterface GetNetworkInterface(uint interfaceIndex);
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         private extern void InitializeNetworkInterfaceSettings();
@@ -482,8 +482,10 @@ namespace System.Net.NetworkInformation
         private extern void UpdateConfiguration(int updateType);
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        internal static extern long IPAddressFromString(string ipAddress);
+        internal static extern long IPV4AddressFromString(string ipAddress);
 
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern ushort[] IPV6AddressFromString(string ipAddress);
         #endregion
     }
 }
