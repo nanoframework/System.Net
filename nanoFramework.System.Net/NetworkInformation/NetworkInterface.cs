@@ -470,10 +470,10 @@ namespace System.Net.NetworkInformation
         #region native methods
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        private static extern int GetNetworkInterfaceCount();
+        private extern static int GetNetworkInterfaceCount();
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        private static extern NetworkInterface GetNetworkInterface(uint interfaceIndex);
+        private extern static NetworkInterface GetNetworkInterface(uint interfaceIndex);
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         private extern void InitializeNetworkInterfaceSettings();
