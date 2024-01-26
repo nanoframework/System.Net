@@ -24,12 +24,38 @@ namespace System.Net
         /// <summary>
         /// Provides an IP address that indicates that the server must listen for client activity on all network interfaces. This field is read-only.
         /// </summary>
-        public static readonly IPAddress Any = new(0x0000000000000000);
+        /// <remarks>
+        /// The <see cref="Socket.Bind"/> method uses the <see cref="Any"/> field to indicate that a <see cref="Socket"/> instance must listen for client activity on all network interfaces.
+        /// 
+        /// The <see cref="Any"/> field is equivalent to 0.0.0.0 in dotted-quad notation.
+        /// </remarks>
+        public static readonly IPAddress Any = new(new byte[] { 0, 0, 0, 0 });
 
         /// <summary>
         /// Provides the IP loopback address. This field is read-only.
         /// </summary>
-        public static readonly IPAddress Loopback = new(0x000000000100007F);
+        /// <remarks>
+        /// The <see cref="Loopback"/> field is equivalent to 127.0.0.1 in dotted-quad notation.
+        /// </remarks>
+        public static readonly IPAddress Loopback = new(new byte[] { 127, 0, 0, 1 });
+
+        /// <summary>
+        /// Provides the IP broadcast address. This field is read-only.
+        /// </summary>
+        /// <remarks>
+        /// The <see cref="Broadcast"/> field is equivalent to 255.255.255.255 in dotted-quad notation.
+        /// </remarks>
+        public static readonly IPAddress Broadcast = new(new byte[] { 255, 255, 255, 255 });
+
+        /// <summary>
+        /// Provides an IP address that indicates that no network interface should be used. This field is read-only.
+        /// </summary>
+        /// <remarks>
+        /// The <see cref="Socket.Bind"/> uses the <see cref="None"/> field to indicate that a <see cref="Socket"/> must not listen for client activity.
+        ///
+        /// The <see cref="None"/> field is equivalent to 255.255.255.255 in dotted-quad notation.
+        /// </remarks>
+        public static readonly IPAddress None = Broadcast;
 
         internal readonly long Address;
 
@@ -137,6 +163,22 @@ namespace System.Net
         }
 
         /// <summary>
+        /// Indicates whether two <see cref="IPAddress"/> objects are equal.
+        /// </summary>
+        /// <param name="a">The <see cref="IPAddress"/> to compare with <paramref name="b"/>.</param>
+        /// <param name="b">The <see cref="IPAddress"/> to compare with <paramref name="a"/>.</param>
+        /// <returns><see langword="true"/> if <paramref name="b"/> is equal to <paramref name="a"/>; otherwise, <see langword="false"/>.</returns>   
+        public static bool operator ==(IPAddress a, IPAddress b) => a is not null && a.Equals(b);
+
+        /// <summary>
+        /// Indicates whether two <see cref="IPAddress"/> objects are not equal.
+        /// </summary>
+        /// <param name="a">The <see cref="IPAddress"/> to compare with <paramref name="b"/>.</param>
+        /// <param name="b">The <see cref="IPAddress"/> to compare with <paramref name="a"/>.</param>
+        /// <returns><see langword="true"/> if <paramref name="b"/> is not equal to <paramref name="a"/>; otherwise, <see langword="false"/>.</returns>   
+        public static bool operator !=(IPAddress a, IPAddress b) => !(a == b);
+
+        /// <summary>
         /// Initializes a new instance of a IPV6 <see cref="IPAddress"/> class with the address specified as a Byte array.
         /// </summary>
         /// <param name="address">The byte array value of the IP address.</param>
@@ -173,16 +215,33 @@ namespace System.Net
         /// <summary>
         /// Compares two IP addresses.
         /// </summary>
-        /// <param name="obj">An <see cref="IPAddress"/> instance to compare to the current instance.</param>
-        /// <returns></returns>
-        public override bool Equals(object obj)
+        /// <param name="other">An <see cref="IPAddress"/> instance to compare to the current instance.</param>
+        /// <returns><see langword="true"/> if the two addresses are equal; otherwise, <see langword="false"/>.</returns>
+        public override bool Equals(object other)
         {
-            IPAddress addr = obj as IPAddress;
+            return other is IPAddress ipAddress && Equals(ipAddress);
+        }
 
-            if (obj == null) return false;
+        /// <summary>
+        /// Compares two IP addresses.
+        /// </summary>
+        /// <param name="other">An <see cref="IPAddress"/> instance to compare to the current instance.</param>
+        /// <returns><see langword="true"/> if the two addresses are equal; otherwise, <see langword="false"/>.</returns>
+        public bool Equals(IPAddress other)
+        {
+            if (other is null)
+            {
+                return false;
+            }
+
+            // Compare families before address representations
+            if (AddressFamily != other.AddressFamily)
+            {
+                return false;
+            }
 
             // Compare family before address
-            if (_family != addr.AddressFamily)
+            if (_family != other.AddressFamily)
             {
                 return false;
             }
@@ -190,28 +249,25 @@ namespace System.Net
             if (_family == AddressFamily.InterNetworkV6)
             {
                 // For IPv6 addresses, compare the full 128bit address
-                for (int i = 0; i < NumberOfLabels; i++)
+                for (var i = 0; i < NumberOfLabels; i++)
                 {
-                    if (addr._numbers[i] != this._numbers[i])
+                    if (other._numbers[i] != _numbers[i])
                         return false;
                 }
 
                 // Also scope must match
-                if (addr._scopeid == this._scopeid)
-                    return true;
-
-                return false;
+                return other._scopeid == _scopeid;
             }
             else
             {
-                return this.Address == addr.Address;
+                return Address == other.Address;
             }
         }
 
         /// <summary>
-        /// Provides a copy of the <see cref="IPAddress"/> as an array of bytes.
+        /// Provides a copy of the <see cref="IPAddress"/> as an array of bytes in network order.
         /// </summary>
-        /// <returns>A Byte array.</returns>
+        /// <returns>A <see langword="byte"/> array.</returns>
         public byte[] GetAddressBytes()
         {
             byte[] bytes;
@@ -223,8 +279,8 @@ namespace System.Net
                 int j = 0;
                 for (int i = 0; i < NumberOfLabels; i++)
                 {
-                    bytes[j++] = (byte)((this._numbers[i] >> 8) & 0xFF);
-                    bytes[j++] = (byte)((this._numbers[i]) & 0xFF);
+                    bytes[j++] = (byte)((_numbers[i] >> 8) & 0xFF);
+                    bytes[j++] = (byte)((_numbers[i]) & 0xFF);
                 }
                 return bytes;
             }
@@ -341,11 +397,9 @@ namespace System.Net
             {
                 return ToString().GetHashCode();
             }
-            else
-            {
-                // For IPv4 addresses, we can simply use the integer representation.
-                return unchecked((int)Address);
-            }
+
+            // For IPv4 addresses, we can simply use the integer representation.
+            return unchecked((int)Address);
         }
 
         // For security, we need to be able to take an IPAddress and make a copy that's immutable and not derived.
@@ -410,7 +464,7 @@ namespace System.Net
                 return this;
             }
 
-            ushort[] labels = new ushort[IPAddress.NumberOfLabels];
+            ushort[] labels = new ushort[NumberOfLabels];
             labels[5] = 0xFFFF;
             labels[6] = (ushort)(((Address & 0x0000FF00) >> 8) | ((Address & 0x000000FF) << 8));
             labels[7] = (ushort)(((Address & 0xFF000000) >> 24) | ((Address & 0x00FF0000) >> 8));
