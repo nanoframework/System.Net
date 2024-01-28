@@ -168,7 +168,15 @@ namespace System.Net
         /// <param name="a">The <see cref="IPAddress"/> to compare with <paramref name="b"/>.</param>
         /// <param name="b">The <see cref="IPAddress"/> to compare with <paramref name="a"/>.</param>
         /// <returns><see langword="true"/> if <paramref name="b"/> is equal to <paramref name="a"/>; otherwise, <see langword="false"/>.</returns>   
-        public static bool operator ==(IPAddress a, IPAddress b) => a is not null && a.Equals(b);
+        public static bool operator ==(IPAddress a, IPAddress b)
+        {
+            if (a is null && b is null)
+            {
+                return true;
+            }
+
+            return a is not null && a.Equals(b);
+        }
 
         /// <summary>
         /// Indicates whether two <see cref="IPAddress"/> objects are not equal.

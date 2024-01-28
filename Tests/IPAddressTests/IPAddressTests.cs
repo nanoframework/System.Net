@@ -19,7 +19,7 @@ namespace NFUnitTestIPAddress
         public void Setup()
         {
             // Comment next line to run the tests on a real hardware
-            Assert.SkipTest("Skipping tests using nanoCLR Win32 in a pipeline");
+            //Assert.SkipTest("Skipping tests using nanoCLR Win32 in a pipeline");
         }
 
         [TestMethod]
@@ -307,18 +307,26 @@ namespace NFUnitTestIPAddress
         {
             var privateAddress = IPAddress.Parse("192.168.0.1");
             var publicAddress = IPAddress.Parse("1.1.1.1");
+            IPAddress defaultAddress = default;
+            IPAddress nullAddress = null;
+
+            // Is
+            Assert.IsTrue(nullAddress is null, "nullAddress is null");
 
             // Equal
             Assert.AreEqual(privateAddress, IPAddress.Parse("192.168.0.1"));
             Assert.AreEqual(publicAddress, IPAddress.Parse("1.1.1.1"));
             Assert.IsTrue(privateAddress == new IPAddress(new byte[] { 192, 168, 0, 1 }), "192.168.0.1 == 192.168.0.1");
             Assert.IsTrue(publicAddress == new IPAddress(new byte[] { 1, 1, 1, 1 }), "1.1.1.1 == 1.1.1.1");
+            Assert.IsTrue(defaultAddress == default, "default == default");
+            Assert.IsTrue(nullAddress == null, "nullAddress == null");
 
             // Not Equal
             Assert.AreNotEqual(privateAddress, IPAddress.Parse("1.1.1.1"));
             Assert.AreNotEqual(publicAddress, IPAddress.Parse("192.168.0.1"));
             Assert.IsTrue(privateAddress != new IPAddress(new byte[] { 192, 168, 0, 2 }), "192.168.0.1 == 192.168.0.2");
             Assert.IsTrue(publicAddress != new IPAddress(new byte[] { 1, 1, 1, 2 }), "1.1.1.1 == 1.1.1.2");
+            Assert.IsTrue((IPAddress) null != privateAddress, "(IPAddress) null != privateAddress");
         }
     }
 }
