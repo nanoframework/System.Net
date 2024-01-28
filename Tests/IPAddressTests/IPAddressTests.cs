@@ -19,7 +19,7 @@ namespace NFUnitTestIPAddress
         public void Setup()
         {
             // Comment next line to run the tests on a real hardware
-            //Assert.SkipTest("Skipping tests using nanoCLR Win32 in a pipeline");
+            Assert.SkipTest("Skipping tests using nanoCLR Win32 in a pipeline");
         }
 
         [TestMethod]
