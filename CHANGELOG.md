@@ -2,7 +2,15 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/System.Net/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.10.68...HEAD)
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.10.70...HEAD)
+
+**Fixed bugs:**
+
+- Fixing null checks in equality operators [\#311](https://github.com/nanoframework/System.Net/pull/311)
+
+## [v1.10.70](https://github.com/nanoframework/System.Net/tree/v1.10.70) (2024-01-26)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.10.68...v1.10.70)
 
 **Implemented enhancements:**
 
