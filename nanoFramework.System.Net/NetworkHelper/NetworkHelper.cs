@@ -36,7 +36,7 @@ namespace nanoFramework.Networking
         /// Event signaling that networking it's ready.
         /// </summary>
         /// <remarks>
-        /// The conditions for this are setup in the call to <see cref="SetupNetworkHelper"/>. 
+        /// The conditions for this are setup in the call to <see cref="SetupNetworkHelper(bool)"/>. 
         /// It will be a composition of network connected, IpAddress available and valid system <see cref="DateTime"/>.</remarks>
         public static ManualResetEvent NetworkReady => _networkReady;
 
