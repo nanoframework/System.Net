@@ -10,36 +10,51 @@ using System.Security.Cryptography.X509Certificates;
 namespace System.Net.Security
 {
     /// <summary>
-    /// Defines the possible versions of Secure Sockets Layer (SSL).
+    /// Defines the possible versions of <see cref="SslProtocols"/>. This enumeration supports a bitwise combination of its member values.
     /// </summary>
     /// <remarks>
-    /// Note: Following the recommendation of the .NET documentation, nanoFramework implementation does not have SSL3 nor Default because those are deprecated and unsecure.
+    /// <para>
+    /// During the handshake, the client sends a list of SSL versions and the server chooses the best matching version from that list.
+    /// </para>
+    /// <para>
+    /// Note: Following the full .NET implementation, .NET nanoFramework does not have any of the SSL nor Default because those are deprecated and unsecure.
+    /// </para>
     /// </remarks>
-    [FlagsAttribute]
+    [Flags]
     public enum SslProtocols
     {
         /// <summary>
-        /// Allows the operating system to choose the best protocol to use, and to block protocols that are not secure. Unless your app has a specific reason not to, you should use this field.
+        /// Allows the operating system to choose the best protocol to use, and to block protocols that are not secure. Unless your app has a specific reason not to, you should use this value.
         /// </summary>
         None = 0x00,
 
         /// <summary>
-        /// Specifies the TLS 1.0 security protocol.
-        /// The TLS protocol is defined in IETF RFC 2246.
+        /// Specifies the TLS 1.0 security protocol. TLS 1.0 is provided for backward compatibility only. The TLS protocol is defined in IETF RFC 2246. This member is obsolete and will be removed in a future version.
         /// </summary>
-        Tls = 0x10,
+        /// <remarks>
+        /// If the underlying platform does not support TLS 1.0, the connection attempt will use the minimum version supported instead.
+        /// </remarks>
+        [Obsolete("This value is obsolete and unsecured and will be removed in a future version.")]
+        Tls = 192,
 
         /// <summary>
-        /// Specifies the TLS 1.1 security protocol.
-        /// The TLS protocol is defined in IETF RFC 4346.
+        /// Specifies the TLS 1.1 security protocol. The TLS protocol is defined in IETF RFC 4346. This member is obsolete and will be removed in a future version.
         /// </summary>
-        Tls11 = 0x20,
+        /// <remarks>
+        /// If the underlying platform does not support TLS 1.1, the connection attempt will use the minimum version supported instead.
+        /// </remarks>
+        [Obsolete("This value is obsolete and unsecured and will be removed in a future version.")]
+        Tls11 = 768,
 
         /// <summary>
-        /// Specifies the TLS 1.2 security protocol.
-        /// The TLS protocol is defined in IETF RFC 5246.
+        /// Specifies the TLS 1.2 security protocol. The TLS protocol is defined in IETF RFC 5246.
         /// </summary>
-        Tls12 = 0x40,
+        Tls12 = 3072,
+
+        /// <summary>
+        /// Specifies the TLS 1.3 security protocol. The TLS protocol is defined in IETF RFC 8446.
+        /// </summary>
+        Tls13 = 12288,
     }
 
     /// <summary>

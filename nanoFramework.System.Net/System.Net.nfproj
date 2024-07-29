@@ -49,9 +49,6 @@
     <NFMDP_PE_ExcludeClassByName Include="PhyProtocols">
       <InProject>false</InProject>
     </NFMDP_PE_ExcludeClassByName>
-    <NFMDP_PE_ExcludeClassByName Include="SslProtocols">
-      <InProject>false</InProject>
-    </NFMDP_PE_ExcludeClassByName>
     <NFMDP_PE_ExcludeClassByName Include="SslVerification">
       <InProject>false</InProject>
     </NFMDP_PE_ExcludeClassByName>
