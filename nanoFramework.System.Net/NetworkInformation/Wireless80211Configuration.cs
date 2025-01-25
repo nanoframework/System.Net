@@ -116,8 +116,8 @@ namespace System.Net.NetworkInformation
             }
 
             // check password and SSID length
-            if ((_password.Length    >= MaxPasswordLength) || 
-                (_ssid.Length        >= MaxSsidLength))
+            if ((_password.Length    > MaxPasswordLength) || 
+                (_ssid.Length        > MaxSsidLength))
             {
 #pragma warning disable S3928 // OK to not include a meaningful message
                 throw new ArgumentOutOfRangeException();
