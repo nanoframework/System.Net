@@ -121,7 +121,12 @@ namespace System.Net.NetworkInformation
         /// <remarks>
         /// Checks the length of SSID is 32 or less.
         /// Password length is between 8 and 64 if not an open Authentication.
+        /// Max connections has to be greater than zero.
         /// </remarks>
+        /// <exception cref="ArgumentOutOfRangeException">If <see cref="MaxConnections"/> is less than one.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <see cref="Password"/> is less than 8 character or more than 64 characters and not open <see cref="Authentication"/>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <see cref="Ssid"/> is longer than <see cref="MaxApSsidLength"/></exception>
+        /// <exception cref="ArgumentNullException">If <see cref="Ssid"/> is <see langword="null"/>.</exception>
         public void SaveConfiguration()
         {
             // Before we update validate whether settings conform to right characteristics.
@@ -130,6 +135,13 @@ namespace System.Net.NetworkInformation
             UpdateConfiguration();
         }
 
+        /// <summary>
+        /// Validates the wireless Soft AP configuration information 
+        /// </summary>
+        /// <exception cref="ArgumentOutOfRangeException">If <see cref="MaxConnections"/> is less than one.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <see cref="Password"/> is less than 8 character or more than 64 characters and not open <see cref="Authentication"/>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <see cref="Ssid"/> is longer than <see cref="MaxApSsidLength"/></exception>
+        /// <exception cref="ArgumentNullException">If <see cref="Ssid"/> is <see langword="null"/>.</exception>
         private void ValidateConfiguration()
         {
             // SSID can't be null
@@ -142,6 +154,14 @@ namespace System.Net.NetworkInformation
 
             // Check SSID length
             if (_apSsid.Length >= MaxApSsidLength)
+            {
+#pragma warning disable S3928 // OK to not include a meaningful message
+                throw new ArgumentOutOfRangeException();
+#pragma warning restore S3928 // Parameter names used into ArgumentException constructors should match an existing one 
+            }
+
+            // At least one MaxConnection is required
+            if (_apMaxConnections < 1)
             {
 #pragma warning disable S3928 // OK to not include a meaningful message
                 throw new ArgumentOutOfRangeException();

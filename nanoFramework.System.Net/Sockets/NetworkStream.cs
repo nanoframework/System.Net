@@ -124,7 +124,7 @@ namespace System.Net.Sockets
         /// <value>true if data can be read from the stream; otherwise, false. The default value is true.</value>
         /// <remarks>
         /// If CanRead is true, <see cref="NetworkStream"/> allows calls to the <see cref="Read"/> method. Provide the appropriate FileAccess enumerated value in the constructor to set 
-        /// the readability and writability of the <see cref="NetworkStream"/>. The CanRead property is set when the <see cref="NetworkStream"/> is initialized.
+        /// the readability and write-ability of the <see cref="NetworkStream"/>. The CanRead property is set when the <see cref="NetworkStream"/> is initialized.
         /// </remarks>
         public override bool CanRead { get { return true; } }
 

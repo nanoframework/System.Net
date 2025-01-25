@@ -2,7 +2,172 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/System.Net/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.10.14...HEAD)
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.10.77...HEAD)
+
+**Documentation and other chores:**
+
+- Update 1 NuGet dependencies [\#315](https://github.com/nanoframework/System.Net/pull/315)
+
+## [v1.10.77](https://github.com/nanoframework/System.Net/tree/v1.10.77) (2024-04-08)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.10.75...v1.10.77)
+
+**Documentation and other chores:**
+
+- Update 2 NuGet dependencies [\#314](https://github.com/nanoframework/System.Net/pull/314)
+
+## [v1.10.75](https://github.com/nanoframework/System.Net/tree/v1.10.75) (2024-04-03)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.10.72...v1.10.75)
+
+**Documentation and other chores:**
+
+- Update 1 NuGet dependencies [\#313](https://github.com/nanoframework/System.Net/pull/313)
+- Update 1 NuGet dependencies [\#312](https://github.com/nanoframework/System.Net/pull/312)
+
+## [v1.10.72](https://github.com/nanoframework/System.Net/tree/v1.10.72) (2024-01-29)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.10.70...v1.10.72)
+
+**Fixed bugs:**
+
+- Fixing null checks in equality operators [\#311](https://github.com/nanoframework/System.Net/pull/311)
+
+## [v1.10.70](https://github.com/nanoframework/System.Net/tree/v1.10.70) (2024-01-26)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.10.68...v1.10.70)
+
+**Implemented enhancements:**
+
+- Added `==` and `!=` operator overloads to `IpAddress`  [\#310](https://github.com/nanoframework/System.Net/pull/310)
+
+## [v1.10.68](https://github.com/nanoframework/System.Net/tree/v1.10.68) (2024-01-18)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.10.66...v1.10.68)
+
+## [v1.10.66](https://github.com/nanoframework/System.Net/tree/v1.10.66) (2024-01-16)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.10.64...v1.10.66)
+
+**Implemented enhancements:**
+
+- Update sockets to support IPV6 [\#309](https://github.com/nanoframework/System.Net/pull/309)
+
+## [v1.10.64](https://github.com/nanoframework/System.Net/tree/v1.10.64) (2023-11-09)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.10.62...v1.10.64)
+
+**Documentation and other chores:**
+
+- Update 6 NuGet dependencies [\#308](https://github.com/nanoframework/System.Net/pull/308)
+
+## [v1.10.62](https://github.com/nanoframework/System.Net/tree/v1.10.62) (2023-10-10)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.10.52...v1.10.62)
+
+**Fixed bugs:**
+
+- WirelessAPConfiguration.MaxConnections is now validated [\#307](https://github.com/nanoframework/System.Net/pull/307)
+
+**Documentation and other chores:**
+
+- Update 1 NuGet dependencies [\#306](https://github.com/nanoframework/System.Net/pull/306)
+- Update 2 NuGet dependencies [\#305](https://github.com/nanoframework/System.Net/pull/305)
+- Update 1 NuGet dependencies [\#304](https://github.com/nanoframework/System.Net/pull/304)
+- Update 1 NuGet dependencies [\#303](https://github.com/nanoframework/System.Net/pull/303)
+- Update 1 NuGet dependencies [\#302](https://github.com/nanoframework/System.Net/pull/302)
+- Update 1 NuGet dependencies [\#300](https://github.com/nanoframework/System.Net/pull/300)
+- Update 1 NuGet dependencies [\#299](https://github.com/nanoframework/System.Net/pull/299)
+
+## [v1.10.52](https://github.com/nanoframework/System.Net/tree/v1.10.52) (2022-12-28)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.10.49...v1.10.52)
+
+**Documentation and other chores:**
+
+- Update 1 NuGet dependencies [\#298](https://github.com/nanoframework/System.Net/pull/298)
+
+## [v1.10.49](https://github.com/nanoframework/System.Net/tree/v1.10.49) (2022-12-28)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.10.46...v1.10.49)
+
+**Documentation and other chores:**
+
+- Update 2 NuGet dependencies [\#297](https://github.com/nanoframework/System.Net/pull/297)
+
+## [v1.10.46](https://github.com/nanoframework/System.Net/tree/v1.10.46) (2022-12-27)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.10.38...v1.10.46)
+
+**Documentation and other chores:**
+
+- Update 4 NuGet dependencies [\#296](https://github.com/nanoframework/System.Net/pull/296)
+- Update 1 NuGet dependencies [\#293](https://github.com/nanoframework/System.Net/pull/293)
+- Update 1 NuGet dependencies [\#292](https://github.com/nanoframework/System.Net/pull/292)
+- Update 1 NuGet dependencies [\#291](https://github.com/nanoframework/System.Net/pull/291)
+- Update 1 NuGet dependencies [\#290](https://github.com/nanoframework/System.Net/pull/290)
+- Update 1 NuGet dependencies [\#289](https://github.com/nanoframework/System.Net/pull/289)
+
+## [v1.10.38](https://github.com/nanoframework/System.Net/tree/v1.10.38) (2022-10-26)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.10.36...v1.10.38)
+
+**Documentation and other chores:**
+
+- Update 1 NuGet dependencies [\#287](https://github.com/nanoframework/System.Net/pull/287)
+
+## [v1.10.36](https://github.com/nanoframework/System.Net/tree/v1.10.36) (2022-10-26)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.10.34...v1.10.36)
+
+**Documentation and other chores:**
+
+- Update 1 NuGet dependencies [\#286](https://github.com/nanoframework/System.Net/pull/286)
+
+## [v1.10.34](https://github.com/nanoframework/System.Net/tree/v1.10.34) (2022-10-25)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.10.32...v1.10.34)
+
+**Documentation and other chores:**
+
+- Update 1 NuGet dependencies [\#285](https://github.com/nanoframework/System.Net/pull/285)
+
+## [v1.10.32](https://github.com/nanoframework/System.Net/tree/v1.10.32) (2022-10-25)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.10.30...v1.10.32)
+
+**Documentation and other chores:**
+
+- Update 2 NuGet dependencies [\#284](https://github.com/nanoframework/System.Net/pull/284)
+
+## [v1.10.30](https://github.com/nanoframework/System.Net/tree/v1.10.30) (2022-10-24)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.10.27...v1.10.30)
+
+**Documentation and other chores:**
+
+- Update 1 NuGet dependencies [\#282](https://github.com/nanoframework/System.Net/pull/282)
+- Update 1 NuGet dependencies [\#281](https://github.com/nanoframework/System.Net/pull/281)
+
+## [v1.10.27](https://github.com/nanoframework/System.Net/tree/v1.10.27) (2022-10-23)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.10.24...v1.10.27)
+
+**Documentation and other chores:**
+
+- Update 1 NuGet dependencies [\#280](https://github.com/nanoframework/System.Net/pull/280)
+
+## [v1.10.24](https://github.com/nanoframework/System.Net/tree/v1.10.24) (2022-10-08)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.10.21...v1.10.24)
+
+**Documentation and other chores:**
+
+- Update 1 NuGet dependencies [\#279](https://github.com/nanoframework/System.Net/pull/279)
+
+## [v1.10.21](https://github.com/nanoframework/System.Net/tree/v1.10.21) (2022-09-22)
+
+[Full Changelog](https://github.com/nanoframework/System.Net/compare/v1.10.14...v1.10.21)
 
 **Documentation and other chores:**
 
