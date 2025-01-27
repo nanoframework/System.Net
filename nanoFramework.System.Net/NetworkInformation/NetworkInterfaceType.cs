@@ -15,7 +15,9 @@ namespace System.Net.NetworkInformation
     public enum NetworkInterfaceType
     {
         /////////////////////////////////////////////////////////////////////////////////////////////
-        // NEED TO KEEP THESE IN SYNC WITH native 'NetworkInterfaceType' enum in nanoHAL_Network.h //
+        // NEED TO KEEP THESE IN SYNC WITH:                                                        //
+        // native 'NetworkInterfaceType' enum in nanoHAL_Network.h                                 //
+        // debugger lib: NetworkInterfaceType.cs                                                   //
         /////////////////////////////////////////////////////////////////////////////////////////////
 
         /// <summary>
