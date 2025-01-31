@@ -19,6 +19,10 @@ trigger:
       - config/*
       - .github/*
 
+  tags:
+    include:
+      - v*
+
 # PR always trigger build
 pr:
   autoCancel: true
@@ -30,7 +34,13 @@ resources:
       type: github
       name: nanoframework/nf-tools
       endpoint: nanoframework
-     
+
+variables:
+  - name: DOTNET_NOLOGO
+    value: true  
+  - name: nugetPackageName
+    value: 'nanoFramework.System.Net'   
+      
 jobs:
 
 ##############################
@@ -46,16 +56,12 @@ jobs:
 
   variables:
     - group: sign-client-credentials
-    - name: DOTNET_NOLOGO
-      value: true  
     - name: buildPlatform
       value: 'Any CPU'  
     - name: buildConfiguration
       value: 'Release'
     - name: solution
       value: 'nanoFramework.System.Net.sln'
-    - name: nugetPackageName
-      value: 'nanoFramework.System.Net'   
 
   steps:
 
@@ -72,12 +78,10 @@ jobs:
   condition: >-
     or(
       and(
-        succeeded(),
-        startsWith(variables['Build.SourceBranch'], 'refs/heads/main'),
+        startsWith(variables['Build.SourceBranch'], 'refs/tags/v'),
         eq(variables['StartReleaseCandidate'], 'false')
       ),
       and(
-        succeeded(),
         contains(variables['getCommitMessage.COMMIT_MESSAGE'], '***UPDATE_DEPENDENTS***'),
         eq(variables['StartReleaseCandidate'], 'false')
       ),
@@ -90,9 +94,6 @@ jobs:
   pool:
     vmImage: 'windows-latest'
 
-  variables:
-    DOTNET_NOLOGO: true
-
   steps:
 
   - checkout: none
@@ -100,10 +101,7 @@ jobs:
   # update dependents
   - template: azure-pipelines-templates/update-dependents.yml@templates  
     parameters:
-      ${{ if eq(variables['UPDATE_DEPENDENTS'], 'true') }}:
-        waitBeforeUpdate: false
-      ${{ else }}:
-        waitBeforeUpdate: true
+      packageName: '$(nugetPackageName)'
       repositoriesToUpdate: |
         System.Net.Http
         System.Net.WebSockets
