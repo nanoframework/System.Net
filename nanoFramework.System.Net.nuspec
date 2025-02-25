@@ -20,10 +20,10 @@ This package requires a target with System.Net v$nativeVersion$ (checksum $check
     <tags>nanoFramework C# csharp netmf netnf networking</tags>
     <dependencies>
       <dependency id="nanoFramework.CoreLibrary" version="1.17.1" />
-      <dependency id="nanoFramework.Runtime.Events" version="1.11.29" />
-      <dependency id="nanoFramework.System.Text" version="1.3.16" />
+      <dependency id="nanoFramework.Runtime.Events" version="1.11.30" />
+      <dependency id="nanoFramework.System.Text" version="1.3.29" />
       <dependency id="nanoFramework.System.Threading" version="1.1.46" />
-      <dependency id="nanoFramework.System.IO.Streams" version="1.1.86" />
+      <dependency id="nanoFramework.System.IO.Streams" version="1.1.88" />
     </dependencies>
   </metadata>
   <files>
