@@ -110,6 +110,7 @@ jobs:
         System.Net.Sockets.UdpClient
         nanoFramework.m2mqtt
         nanoFramework.Azure.Devices
+        nanoFramework.Networking.Thread
         amqpnetlite
 
 ##################################
