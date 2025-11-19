@@ -209,11 +209,8 @@ namespace System.Net.NetworkInformation
         {
             try
             {
-                if (_startupAddressMode != AddressMode.DHCP)
-                {
-                    _startupAddressMode = AddressMode.DHCP;
-                    UpdateConfiguration((int)UpdateOperation.Dhcp);
-                }
+                _startupAddressMode = AddressMode.DHCP;
+                UpdateConfiguration((int)UpdateOperation.Dhcp);
             }
             finally
             {
