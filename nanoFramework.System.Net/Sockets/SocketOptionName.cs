@@ -9,7 +9,7 @@ namespace System.Net.Sockets
     using System;
 
     /// <summary>
-    /// Defines socket option names for the <see cref='System.Net.Sockets.Socket'/> class.
+    /// Defines socket option names for the <see cref='Socket'/> class.
     /// </summary>
     /// <remarks>
     /// The SocketOptionName enumeration defines the name of each Socket configuration option. 
@@ -118,9 +118,9 @@ namespace System.Net.Sockets
         /// Get socket type.
         /// </summary>
         Type = 0x1008,           // get socket type
- 
+
         /// <summary>
-        /// Maximum queue length that can be specified by <see cref='System.Net.Sockets.Socket.Listen'/>.
+        /// Maximum queue length that can be specified by <see cref='Socket.Listen'/>.
         /// </summary>
         MaxConnections = 0x7fffffff,       // Maximum queue length specifiable by listen.
 

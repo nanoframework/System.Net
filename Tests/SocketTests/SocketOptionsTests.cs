@@ -29,17 +29,17 @@ namespace NFUnitTestSocketTests
                 socketType,
                 ProtocolType.Tcp);
 
-            Assert.Throws(typeof(NotSupportedException), () =>
+            Assert.ThrowsException(typeof(NotSupportedException), () =>
             {
                 testSocket.GetSocketOption(SocketOptionLevel.Socket, SocketOptionName.AddMembership);
             }, "Getting SocketOptionName.AddMembership should have thrown an exception");
 
-            Assert.Throws(typeof(NotSupportedException), () =>
+            Assert.ThrowsException(typeof(NotSupportedException), () =>
             {
                 testSocket.GetSocketOption(SocketOptionLevel.Socket, SocketOptionName.DropMembership);
             }, "Getting SocketOptionName.DropMembership should have thrown an exception");
 
-            Assert.True((SocketType)testSocket.GetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Type) == socketType, "Getting SocketOptionName.Type returned a different type.");
+            Assert.IsTrue((SocketType)testSocket.GetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Type) == socketType, "Getting SocketOptionName.Type returned a different type.");
 
             testSocket?.Close();
         }

@@ -7,7 +7,7 @@
 namespace System.Net.Sockets
 {
     /// <summary>
-    /// Specifies the type of protocol that an instance of the <see cref='System.Net.Sockets.Socket'/>
+    /// Specifies the type of protocol that an instance of the <see cref='Socket'/>
     /// </summary>
     public enum ProtocolFamily
     {

@@ -29,7 +29,7 @@ namespace NetworkHelperTests
 
             DisplayLastError(success);
             
-            Assert.True(success);
+            Assert.IsTrue(success);
 
             // need to reset this internal flag to allow calling the NetworkHelper again
             NetworkHelper.ResetInstance();
@@ -45,7 +45,7 @@ namespace NetworkHelperTests
                 new[] { "192.168.1.1" }), true);
 
             // wait 10 seconds to connect to the network
-            Assert.True(NetworkHelper.NetworkReady.WaitOne(10000, true));
+            Assert.IsTrue(NetworkHelper.NetworkReady.WaitOne(10000, true));
 
             // need to reset this internal flag to allow calling the NetworkHelper again
             NetworkHelper.ResetInstance();
@@ -62,7 +62,7 @@ namespace NetworkHelperTests
 
             DisplayLastError(success);
 
-            Assert.True(success);
+            Assert.IsTrue(success);
 
             // need to reset this internal flag to allow calling the NetworkHelper again
             NetworkHelper.ResetInstance();
@@ -74,7 +74,7 @@ namespace NetworkHelperTests
             NetworkHelper.SetupNetworkHelper(true);
 
             // wait 10 seconds to connect to the network and get an IP address
-            Assert.True(NetworkHelper.NetworkReady.WaitOne(10000, true));
+            Assert.IsTrue(NetworkHelper.NetworkReady.WaitOne(10000, true));
 
             // need to reset this internal flag to allow calling the NetworkHelper again
             NetworkHelper.ResetInstance();
@@ -83,7 +83,7 @@ namespace NetworkHelperTests
         [TestMethod]
         public void TestSingleUsage()
         {
-            Assert.Throws(typeof(InvalidOperationException), () =>
+            Assert.ThrowsException(typeof(InvalidOperationException), () =>
             {
                 // call once, it's OK
                 NetworkHelper.SetupNetworkHelper();

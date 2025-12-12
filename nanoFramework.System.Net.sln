@@ -6,7 +6,7 @@ Project("{11A8DD76-328B-46DF-9F39-F559912D0360}") = "System.Net", "nanoFramework
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{720DB1CD-932C-40AF-9B48-B7BEDB153EE9}"
 	ProjectSection(SolutionItems) = preProject
-		nanoFramework.System.Net.DELIVERABLES.nuspec = nanoFramework.System.Net.DELIVERABLES.nuspec
+		.runsettings = .runsettings
 		nanoFramework.System.Net.nuspec = nanoFramework.System.Net.nuspec
 		NuGet.Config = NuGet.Config
 		version.json = version.json

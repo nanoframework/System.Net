@@ -105,7 +105,7 @@ namespace System.Net
         /// </remarks>
         public IPAddress(long newAddress)
         {
-            if (newAddress < 0 || newAddress > 0x00000000FFFFFFFF)
+            if (newAddress is < 0 or > 0x00000000FFFFFFFF)
             {
 #pragma warning disable S3928 // Parameter names used into ArgumentException constructors should match an existing one 
                 throw new ArgumentOutOfRangeException();
@@ -260,7 +260,9 @@ namespace System.Net
                 for (var i = 0; i < NumberOfLabels; i++)
                 {
                     if (other._numbers[i] != _numbers[i])
+                    {
                         return false;
+                    }
                 }
 
                 // Also scope must match

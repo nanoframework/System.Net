@@ -7,7 +7,7 @@
 namespace System.Net.Sockets
 {
     /// <summary>
-    /// Specifies the type of socket an instance of the <see cref='System.Net.Sockets.Socket'/> class represents.
+    /// Specifies the type of socket an instance of the <see cref='Socket'/> class represents.
     /// </summary>
     /// <remarks>
     /// Before a <see cref="Socket"/> can send and receive data, it must first be created using an <see cref="AddressFamily"/>, a SocketType, 

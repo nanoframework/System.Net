@@ -138,7 +138,10 @@ namespace System.Net.Security
 
         internal void Authenticate(bool isServer, string targetHost, X509Certificate certificate, X509Certificate ca, SslProtocols enabledSslProtocols)
         {
-            if (-1 != _sslContext) throw new InvalidOperationException();
+            if (-1 != _sslContext)
+            {
+                throw new InvalidOperationException();
+            }
 
             _isServer = isServer;
 
@@ -191,8 +194,15 @@ namespace System.Net.Security
         {
             get
             {
-                if (_disposed == true) throw new ObjectDisposedException();
-                if (_socket == null) throw new IOException();
+                if (_disposed == true)
+                {
+                    throw new ObjectDisposedException();
+                }
+
+                if (_socket == null)
+                {
+                    throw new IOException();
+                }
 
                 return SslNative.DataAvailable(_socket);
             }
@@ -205,8 +215,15 @@ namespace System.Net.Security
         {
             get
             {
-                if (_disposed == true) throw new ObjectDisposedException();
-                if (_socket == null) throw new IOException();
+                if (_disposed == true)
+                {
+                    throw new ObjectDisposedException();
+                }
+
+                if (_socket == null)
+                {
+                    throw new IOException();
+                }
 
                 return (SslNative.DataAvailable(_socket) > 0);
             }
@@ -227,7 +244,7 @@ namespace System.Net.Security
         /// Releases the unmanaged resources used by the SslStream and optionally releases the managed resources. 
         /// </summary>
         /// <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
-        [MethodImplAttribute(MethodImplOptions.Synchronized)]
+        [MethodImpl(MethodImplOptions.Synchronized)]
         protected override void Dispose(bool disposing)
         {
             if (!_disposed)

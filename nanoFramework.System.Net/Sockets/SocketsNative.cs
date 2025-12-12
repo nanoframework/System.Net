@@ -22,7 +22,25 @@ namespace System.Net.Sockets
         public static extern int send(object socket, byte[] buf, int offset, int count, int flags, int timeout_ms);
 
         [MethodImpl(MethodImplOptions.InternalCall)]
+        public static extern int Send(
+            object socket,
+            ReadOnlySpan<byte> buf,
+            int offset,
+            int count,
+            int flags,
+            int timeout_ms);
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
         public static extern int recv(object socket, byte[] buf, int offset, int count, int flags, int timeout_ms);
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        public static extern int Recv(
+            object socket,
+            Span<byte> buf,
+            int offset,
+            int count,
+            int flags,
+            int timeout_ms);
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         public static extern int close(object socket);
@@ -44,7 +62,27 @@ namespace System.Net.Sockets
         public static extern int sendto(object socket, byte[] buf, int offset, int count, int flags, int timeout_ms, EndPoint endPoint);
 
         [MethodImpl(MethodImplOptions.InternalCall)]
+        public static extern int SendTo(
+            object socket,
+            ReadOnlySpan<byte> buf,
+            int offset,
+            int count,
+            int flags,
+            int timeout_ms,
+            EndPoint endPoint);
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
         public static extern int recvfrom(object socket, byte[] buf, int offset, int count, int flags, int timeout_ms, ref EndPoint endPoint);
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        public static extern int RecvFrom(
+            object socket,
+            Span<byte> buf,
+            int offset,
+            int count,
+            int flags,
+            int timeout_ms,
+            ref EndPoint endPoint);
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         public static extern void getpeername(object socket, out EndPoint endPoint);

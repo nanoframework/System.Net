@@ -7,7 +7,7 @@
 namespace System.Net.Sockets
 {
     /// <summary>
-    ///  Specifies the address families that an instance of the <see cref='System.Net.Sockets.Socket'/>
+    ///  Specifies the address families that an instance of the <see cref='Socket'/>
     /// </summary>
     /// <remarks>
     /// An AddressFamily member specifies the addressing scheme that a <see cref="Socket"/> will use to resolve an address. For example, 

@@ -11,7 +11,7 @@ namespace System.Net.Sockets
     //
 
     /// <summary>
-    /// Defines socket option levels for the <see cref='System.Net.Sockets.Socket'/> class.
+    /// Defines socket option levels for the <see cref='Sockets.Socket'/> class.
     /// </summary>
     public enum SocketOptionLevel
     {

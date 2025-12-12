@@ -79,7 +79,7 @@ namespace System.Net.Sockets
         /// Gets the amount of data that has been received from the network and is available to be read.
         /// </summary>
         /// <value>
-        /// An integer error code that is associated with this exception.
+        /// The number of bytes of data received from the network and available to be read.
         /// </value>
         /// <remarks>
         /// <para>
@@ -116,10 +116,7 @@ namespace System.Net.Sockets
                 throw new ObjectDisposedException();
             }
 
-            if (m_localEndPoint == null)
-            {
-                m_localEndPoint = new IPEndPoint(IPAddress.Any, 0);
-            }
+            m_localEndPoint ??= new IPEndPoint(IPAddress.Any, 0);
 
             EndPoint endPoint = null;
 
@@ -156,13 +153,7 @@ namespace System.Net.Sockets
         /// to the Connect or <see cref="Accept"/> method. For connectionless protocols, the first I/O operation would be any of the send or receive calls.
         /// </para>
         /// </remarks>
-        public EndPoint LocalEndPoint
-        {
-            get
-            {
-                return GetEndPoint(true);
-            }
-        }
+        public EndPoint LocalEndPoint => GetEndPoint(true);
 
         /// <summary>
         /// Gets the remote endpoint.
@@ -183,22 +174,16 @@ namespace System.Net.Sockets
         /// to the Windows Sockets version 2 API error code documentation in the MSDN library for a detailed description of the error.
         /// </para>
         /// </remarks>
-        public EndPoint RemoteEndPoint
-        {
-            get
-            {
-                return GetEndPoint(false);
-            }
-        }
+        public EndPoint RemoteEndPoint => GetEndPoint(false);
 
         /// <summary>
-        /// Gets or sets a value that specifies the amount of time after which a synchronous <see cref="Receive(Byte[])"/> call will time out.
+        /// Gets or sets a value that specifies the amount of time after which a synchronous <see cref="Receive(byte[])"/> call will time out.
         /// </summary>
         /// <value>
         /// The time-out value, in milliseconds. The default value is 0, which indicates an infinite time-out period. Specifying -1 also indicates an infinite time-out period.
         /// </value>
         /// <remarks>
-        /// This option applies to synchronous <see cref="Receive(Byte[])"/> calls only. If the time-out period is exceeded, the <see cref="Receive(Byte[])"/> method will throw a <see cref="SocketException"/>.
+        /// This option applies to synchronous <see cref="Receive(byte[])"/> calls only. If the time-out period is exceeded, the <see cref="Receive(byte[])"/> method will throw a <see cref="SocketException"/>.
         /// </remarks>
         public int ReceiveTimeout
         {
@@ -209,7 +194,10 @@ namespace System.Net.Sockets
 
             set
             {
-                if (value < Timeout.Infinite) throw new ArgumentOutOfRangeException();
+                if (value < Timeout.Infinite)
+                {
+                    throw new ArgumentOutOfRangeException();
+                }
 
                 // desktop implementation treats 0 as infinite
                 m_recvTimeout = ((value == 0) ? Timeout.Infinite : value);
@@ -217,14 +205,14 @@ namespace System.Net.Sockets
         }
 
         /// <summary>
-        /// Gets or sets a value that specifies the amount of time after which a synchronous <see cref="Send(Byte[])"/> call will time out.
+        /// Gets or sets a value that specifies the amount of time after which a synchronous <see cref="Send(byte[])"/> call will time out.
         /// </summary>
         /// <value>
         /// The time-out value, in milliseconds. If you set the property with a value between 1 and 499, 
         /// the value will be changed to 500. The default value is 0, which indicates an infinite time-out period. Specifying -1 also indicates an infinite time-out period.
         /// </value>
         /// <remarks>
-        /// This option applies to synchronous <see cref="Send(Byte[])"/> calls only. If the time-out period is exceeded, the <see cref="Send(Byte[])"/> method will throw a <see cref="SocketException"/>.
+        /// This option applies to synchronous <see cref="Send(byte[])"/> calls only. If the time-out period is exceeded, the <see cref="Send(byte[])"/> method will throw a <see cref="SocketException"/>.
         /// </remarks>
         public int SendTimeout
         {
@@ -235,7 +223,10 @@ namespace System.Net.Sockets
 
             set
             {
-                if (value < Timeout.Infinite) throw new ArgumentOutOfRangeException();
+                if (value < Timeout.Infinite)
+                {
+                    throw new ArgumentOutOfRangeException();
+                }
 
                 // desktop implementation treats 0 as infinite
                 m_sendTimeout = ((value == 0) ? Timeout.Infinite : value);
@@ -251,13 +242,7 @@ namespace System.Net.Sockets
         /// <remarks>
         /// <see cref="SocketType"/> is read-only and is set when the <see cref="Socket"/> is created.
         /// </remarks>
-        public SocketType SocketType
-        {
-            get
-            {
-                return _socketType;
-            }
-        }
+        public SocketType SocketType => _socketType;
 
         /// <summary>
         /// Associates a <see cref="Socket"/> with a local endpoint.
@@ -317,7 +302,7 @@ namespace System.Net.Sockets
         /// <para>
         /// If you are using a connection-oriented protocol such as TCP, the Connect method synchronously establishes a network connection between <see cref="LocalEndPoint"/>
         /// and the specified remote endpoint. If you are using a connectionless protocol, Connect establishes a default remote host. After you call Connect, you can 
-        /// send data to the remote device with the <see cref="Send(Byte[])"/> method, or receive data from the remote device with the <see cref="Receive(Byte[])"/> method.
+        /// send data to the remote device with the <see cref="Send(byte[])"/> method, or receive data from the remote device with the <see cref="Receive(byte[])"/> method.
         /// </para>
         /// <para>
         /// If you are using a connectionless protocol such as UDP, you do not have to call Connect before sending and receiving data. You can use <see cref="SendTo(byte[], EndPoint)"/> and 
@@ -379,10 +364,7 @@ namespace System.Net.Sockets
         /// The Close method closes the remote host connection and releases all managed and unmanaged resources associated with the Socket. 
         /// Upon closing, the Connected property is set to false.
         /// </remarks>
-        public void Close()
-        {
-            ((IDisposable)this).Dispose();
-        }
+        public void Close() => ((IDisposable)this).Dispose();
 
         /// <summary>
         /// Places a <see cref="Socket"/> in a listening state.
@@ -459,17 +441,17 @@ namespace System.Net.Sockets
         /// <param name="buffer">An array of type Byte that contains the data to be sent</param>
         /// <returns>The number of bytes sent to the <see cref="Socket"/>.</returns>
         /// <remarks>
-        /// <para><see cref="Send(Byte[])"/> synchronously sends data to the remote host specified in the <see cref="Connect"/> or <see cref="Accept"/> method and returns the number of bytes successfully sent. <see cref="Send(Byte[])"/> 
+        /// <para><see cref="Send(byte[])"/> synchronously sends data to the remote host specified in the <see cref="Connect"/> or <see cref="Accept"/> method and returns the number of bytes successfully sent. <see cref="Send(byte[])"/> 
         /// can be used for both connection-oriented and connectionless protocols.</para>
         /// <para>This overload requires a buffer that contains the data you want to send. The <see cref="SocketFlags"/> value defaults to 0, the buffer offset defaults to 0, and the number of bytes to send defaults to the size of the buffer.</para>
-        /// <para>If you are using a connectionless protocol, you must call <see cref="Connect"/> before calling this method, or <see cref="o:Send"/> will throw a <see cref="SocketException"/>. If you are using a connection-oriented protocol, you must either 
+        /// <para>If you are using a connectionless protocol, you must call <see cref="Connect"/> before calling this method, or <see cref="Send(byte[])"/> will throw a <see cref="SocketException"/>. If you are using a connection-oriented protocol, you must either 
         /// use <see cref="Connect"/> to establish a remote host connection, or use <see cref="Accept"/> to accept an incoming connection.</para>
         /// <para>If you are using a connectionless protocol and plan to send data to several different hosts, you should use the <see cref="SendTo(byte[], EndPoint)"/> method. If you do not use the 
         /// SendTo method, you will have to call Connect before each call to Send. You can use SendTo even after you have established a default remote host with 
         /// Connect. You can also change the default remote host prior to calling Send by making another call to Connect.</para>
         /// <para>
-        /// If you are using a connection-oriented protocol, <see cref="o:SendTo()"/> will block until all of the bytes in the buffer are sent, unless a time-out was set by using 
-        /// <see cref="SendTimeout"/>. If the time-out value was exceeded, the <see cref="o:SendTo()"/> call will throw a <see cref="SocketException"/>. In nonblocking mode, Send may complete 
+        /// If you are using a connection-oriented protocol, <see cref="SendTo(byte[], EndPoint)"/> will block until all of the bytes in the buffer are sent, unless a time-out was set by using 
+        /// <see cref="SendTimeout"/>. If the time-out value was exceeded, the <see cref="SendTo(byte[], EndPoint)"/> call will throw a <see cref="SocketException"/>. In nonblocking mode, Send may complete 
         /// successfully even if it sends less than the number of bytes in the buffer. It is your application's responsibility to keep track of the number of bytes sent and 
         /// to retry the operation until the application sends the bytes in the buffer. There is also no guarantee that the data you send will appear on the network 
         /// immediately. To increase network efficiency, the underlying system may delay transmission until a significant amount of outgoing data is collected. A 
@@ -485,13 +467,33 @@ namespace System.Net.Sockets
         /// send will block unless the socket has been placed in nonblocking mode.
         /// </note>
         /// </remarks>
-        /// <seealso cref="o:Send"/>
-        /// <seealso cref="Socket"/>
-        /// <seealso cref="Sockets"/>
-        public int Send(byte[] buffer)
-        {
-            return Send(buffer, 0, buffer != null ? buffer.Length : 0, SocketFlags.None);
-        }
+        public int Send(byte[] buffer) => Send(buffer, 0, buffer != null ? buffer.Length : 0, SocketFlags.None);
+
+        /// <summary>
+        /// Sends data to a connected <see cref="Socket"/>.
+        /// </summary>
+        /// <param name="buffer">A span of bytes that contains the data to be sent.</param>
+        /// <returns>The number of bytes sent to the <see cref="Socket"/>.</returns>
+        /// <exception cref="ObjectDisposedException">The <see cref="Socket"/> has been closed.</exception>
+        /// <exception cref="SocketException">An error occurred when attempting to access the socket.</exception>
+        /// <remarks>
+        /// <para>
+        /// <see cref="Send(ReadOnlySpan{byte})"/> synchronously sends data to the remote host specified in the <see cref="Connect"/> or <see cref="Accept"/> method and returns the number of bytes successfully sent. Send can be used for both connection-oriented and connectionless protocols.
+        /// </para>
+        /// <para>
+        /// This overload requires a buffer that contains the data you want to send. The <see cref="SocketFlags"/> value defaults to 0, the buffer offset defaults to 0, and the number of bytes to send defaults to the size of the buffer.
+        /// </para>
+        /// <para>
+        /// If you're using a connectionless protocol, you must call <see cref="Connect"/> before calling this method, or Send will throw a <see cref="SocketException"/>. If you're using a connection-oriented protocol, you must either use <see cref="Connect"/> to establish a remote host connection, or use <see cref="Accept"/> to accept an incoming connection.
+        /// </para>
+        /// <para>
+        /// If you're using a connectionless protocol and plan to send data to several different hosts, you should use the <see cref="SendTo(ReadOnlySpan{byte}, EndPoint)"/> method. If you don't use the <see cref="SendTo(ReadOnlySpan{byte}, EndPoint)"/> method, you'll have to call <see cref="Connect"/> before each call to <see cref="Send(ReadOnlySpan{byte})"/>. You can use <see cref="SendTo(ReadOnlySpan{byte}, EndPoint)"/> even after you have established a default remote host with <see cref="Connect"/>. You can also change the default remote host before calling <see cref="Send(ReadOnlySpan{byte})"/> by making another call to <see cref="Connect"/>.
+        /// </para>
+        /// <para>
+        /// If you're using a connection-oriented protocol, <see cref="Send(ReadOnlySpan{byte})"/> will block until all of the bytes in the buffer are sent, unless a time-out was set by using <see cref="SendTimeout"/>. If the time-out value was exceeded, the <see cref="Send(ReadOnlySpan{byte})"/> call will throw a <see cref="SocketException"/>. In nonblocking mode, <see cref="Send(ReadOnlySpan{byte})"/> may complete successfully even if it sends less than the number of bytes in the buffer. It is your application's responsibility to keep track of the number of bytes sent and to retry the operation until the application sends the bytes in the buffer. There's also no guarantee that the data you send will appear on the network immediately. To increase network efficiency, the underlying system may delay transmission until a significant amount of outgoing data is collected. A successful completion of the <see cref="Send(ReadOnlySpan{byte})"/> method means that the underlying system has had room to buffer your data for a network send.
+        /// </para>
+        /// </remarks>
+        public int Send(ReadOnlySpan<byte> buffer) => Send(buffer, SocketFlags.None);
 
         /// <summary>
         /// Sends data to a connected <see cref="Socket"/> using the specified <see cref="SocketFlags"/>.
@@ -500,15 +502,15 @@ namespace System.Net.Sockets
         /// <param name="socketFlags"></param>
         /// <returns>The number of bytes sent to the <see cref="Socket"/>.</returns>
         /// <remarks>
-        /// <para><see cref="o:Send()"/> synchronously sends data to the remote host specified in the <see cref="Connect"/> or <see cref="Accept"/> method and returns the number of bytes successfully sent. <see cref="o:Send()"/> 
+        /// <para><see cref="Send(byte[], SocketFlags)"/> synchronously sends data to the remote host specified in the <see cref="Connect"/> or <see cref="Accept"/> method and returns the number of bytes successfully sent. <see cref="Send(byte[], SocketFlags)"/> 
         /// can be used for both connection-oriented and connectionless protocols.</para>
-        /// <para>his overload requires a buffer that contains the data you want to send and a bitwise combination of SocketFlags. 
+        /// <para>This overload requires a buffer that contains the data you want to send and a bitwise combination of SocketFlags. 
         /// The buffer offset defaults to 0, and the number of bytes to send defaults to the size of the buffer. If you specify the 
         /// DontRoute flag as the socketflags parameter value, the data you are sending will not be routed.
         /// </para>
         /// <note type="important">
         /// You must ensure that the size of your buffer does not exceed the maximum packet size of the underlying service provider. 
-        /// If it does, the datagram will not be sent and <see cref="o:Send"/> will throw a <see cref="SocketException"/>. If you receive a 
+        /// If it does, the datagram will not be sent and <see cref="Send(byte[], SocketFlags)"/> will throw a <see cref="SocketException"/>. If you receive a 
         /// <see cref="SocketException"/>, use the <see cref="SocketException.ErrorCode"/> property to obtain the specific error code. After you have obtained this code, refer to the Windows Sockets version 2 API error code documentation in the MSDN library for a detailed description of the error.
         /// </note>
         /// <note type="important">
@@ -517,12 +519,55 @@ namespace System.Net.Sockets
         /// send will block unless the socket has been placed in nonblocking mode.
         /// </note>
         /// </remarks>
-        /// <seealso cref="o:Send"/>
-        /// <seealso cref="Socket"/>
-        /// <seealso cref="Sockets"/>
-        public int Send(byte[] buffer, SocketFlags socketFlags)
+        public int Send(
+            byte[] buffer,
+            SocketFlags socketFlags) => Send(buffer, 0, buffer != null ? buffer.Length : 0, socketFlags);
+
+        /// <summary>
+        /// Sends data to a connected <see cref="Socket"/> using the specified <see cref="SocketFlags"/>.
+        /// </summary>
+        /// <param name="buffer">A span of bytes that contains the data to be sent.</param>
+        /// <param name="socketFlags">A bitwise combination of the enumeration values that specifies send and receive behaviors.</param>
+        /// <returns>The number of bytes sent to the <see cref="Socket"/>.</returns>
+        /// <exception cref="ObjectDisposedException">The <see cref="Socket"/> has been closed.</exception>
+        /// <exception cref="SocketException">An error occurred when attempting to access the socket.</exception>
+        /// <remarks>
+        /// <para>
+        /// <see cref="Send(ReadOnlySpan{byte})"/> synchronously sends data to the remote host specified in the <see cref="Connect"/> or <see cref="Accept"/> method and returns the number of bytes successfully sent. Send(ReadOnlySpan{byte}) can be used for both connection-oriented and connectionless protocols.
+        /// </para>
+        /// <para>
+        /// This overload requires a buffer that contains the data you want to send. The <see cref="SocketFlags"/> value defaults to 0, the buffer offset defaults to 0, and the number of bytes to send defaults to the size of the buffer.
+        /// </para>
+        /// <para>
+        /// If you're using a connectionless protocol, you must call <see cref="Connect"/> before calling this method, or Send will throw a <see cref="SocketException"/>. If you're using a connection-oriented protocol, you must either use <see cref="Connect"/> to establish a remote host connection, or use <see cref="Accept"/> to accept an incoming connection.
+        /// </para>
+        /// <para>
+        /// If you're using a connectionless protocol and plan to send data to several different hosts, you should use the <see cref="SendTo(ReadOnlySpan{byte}, EndPoint)"/> method. If you don't use the <see cref="SendTo(ReadOnlySpan{byte}, EndPoint)"/> method, you'll have to call <see cref="Connect"/> before each call to <see cref="Send(ReadOnlySpan{byte})"/>. You can use <see cref="SendTo(ReadOnlySpan{byte}, EndPoint)"/> even after you have established a default remote host with <see cref="Connect"/>. You can also change the default remote host before calling <see cref="Send(ReadOnlySpan{byte})"/> by making another call to <see cref="Connect"/>.
+        /// </para>
+        /// <para>
+        /// If you're using a connection-oriented protocol, <see cref="Send(ReadOnlySpan{byte})"/> will block until all of the bytes in the buffer are sent, unless a time-out was set by using <see cref="SendTimeout"/>. If the time-out value was exceeded, the <see cref="Send(ReadOnlySpan{byte})"/> call will throw a <see cref="SocketException"/>. In nonblocking mode, <see cref="Send(ReadOnlySpan{byte})"/> may complete successfully even if it sends less than the number of bytes in the buffer. It is your application's responsibility to keep track of the number of bytes sent and to retry the operation until the application sends the bytes in the buffer. There's also no guarantee that the data you send will appear on the network immediately. To increase network efficiency, the underlying system may delay transmission until a significant amount of outgoing data is collected. A successful completion of the <see cref="Send(ReadOnlySpan{byte})"/> method means that the underlying system has had room to buffer your data for a network send.
+        /// </para>
+        /// <para>
+        /// This method differs from the full .NET version in that it does not have an out parameter for the socket error code.
+        /// </para>
+        /// </remarks>
+        /// <exception cref="ObjectDisposedException"></exception>
+        public int Send(
+            ReadOnlySpan<byte> buffer,
+            SocketFlags socketFlags)
         {
-            return Send(buffer, 0, buffer != null ? buffer.Length : 0, socketFlags);
+            if (m_Handle == -1)
+            {
+                throw new ObjectDisposedException();
+            }
+
+            return NativeSocket.Send(
+                this,
+                buffer,
+                0,
+                buffer.Length,
+                (int)socketFlags,
+                m_sendTimeout);
         }
 
         /// <summary>
@@ -533,13 +578,13 @@ namespace System.Net.Sockets
         /// <param name="socketFlags"></param>
         /// <returns>The number of bytes sent to the <see cref="Socket"/>.</returns>
         /// <remarks>
-        /// <para><see cref="o:Send()"/> synchronously sends data to the remote host specified in the <see cref="Connect"/> or <see cref="Accept"/> method and returns the number of bytes successfully sent. <see cref="o:Send()"/> 
+        /// <para><see cref="Send(byte[], int, SocketFlags)"/> synchronously sends data to the remote host specified in the <see cref="Connect"/> or <see cref="Accept"/> method and returns the number of bytes successfully sent. <see cref="Send(byte[], int, SocketFlags)"/> 
         /// can be used for both connection-oriented and connectionless protocols.</para>
         /// <para>This overload requires a buffer that contains the data you want to send, the number of bytes you want to send, 
         /// and a bitwise combination of any <see cref="SocketFlags"/>. If you specify the <see cref="SocketFlags.DontRoute"/> flag as the socketflags parameter, the data you are sending will not be routed.</para>
         /// <note type="important">
         /// You must ensure that the size of your buffer does not exceed the maximum packet size of the underlying service provider. 
-        /// If it does, the datagram will not be sent and <see cref="o:Send"/> will throw a <see cref="SocketException"/>. If you receive a 
+        /// If it does, the datagram will not be sent and <see cref="Send(byte[], int, SocketFlags)"/> will throw a <see cref="SocketException"/>. If you receive a 
         /// <see cref="SocketException"/>, use the <see cref="SocketException.ErrorCode"/> property to obtain the specific error code. After you have obtained this code, refer to the Windows Sockets version 2 API error code documentation in the MSDN library for a detailed description of the error.
         /// </note>
         /// <note type="important">
@@ -548,13 +593,10 @@ namespace System.Net.Sockets
         /// send will block unless the socket has been placed in nonblocking mode.
         /// </note>
         /// </remarks>
-        /// <seealso cref="o:Send"/>
-        /// <seealso cref="Socket"/>
-        /// <seealso cref="Sockets"/>
-        public int Send(byte[] buffer, int size, SocketFlags socketFlags)
-        {
-            return Send(buffer, 0, size, socketFlags);
-        }
+        public int Send(
+            byte[] buffer,
+            int size,
+            SocketFlags socketFlags) => Send(buffer, 0, size, socketFlags);
 
         /// <summary>
         /// Sends the specified number of bytes of data to a connected <see cref="Socket"/>, starting at the specified offset, and using the specified <see cref="SocketFlags"/>.
@@ -565,7 +607,7 @@ namespace System.Net.Sockets
         /// <param name="socketFlags"></param>
         /// <returns>The number of bytes sent to the <see cref="Socket"/>.</returns>
         /// <remarks>
-        /// <para><see cref="o:Send()"/> synchronously sends data to the remote host specified in the <see cref="Connect"/> or <see cref="Accept"/> method and returns the number of bytes successfully sent. <see cref="o:Send()"/> 
+        /// <para><see cref="Send(byte[], int, int, SocketFlags)"/> synchronously sends data to the remote host specified in the <see cref="Connect"/> or <see cref="Accept"/> method and returns the number of bytes successfully sent. <see cref="Send(byte[], int, int, SocketFlags)"/> 
         /// can be used for both connection-oriented and connectionless protocols.</para>
         /// <para>In this overload, if you specify the <see cref="SocketFlags.DontRoute"/> flag as the socketflags parameter, the data you are sending will not be routed.</para>
         /// <note type="important">
@@ -574,29 +616,42 @@ namespace System.Net.Sockets
         /// send will block unless the socket has been placed in nonblocking mode.
         /// </note>
         /// </remarks>
-        /// <seealso cref="o:Send"/>
-        /// <seealso cref="Socket"/>
-        /// <seealso cref="Sockets"/>
-        public int Send(byte[] buffer, int offset, int size, SocketFlags socketFlags)
+        public int Send(
+            byte[] buffer,
+            int offset,
+            int size,
+            SocketFlags socketFlags)
         {
             if (m_Handle == -1)
             {
                 throw new ObjectDisposedException();
             }
 
-            return NativeSocket.send(this, buffer, offset, size, (int)socketFlags, m_sendTimeout);
+            return NativeSocket.send(this,
+                                     buffer,
+                                     offset,
+                                     size,
+                                     (int)socketFlags,
+                                     m_sendTimeout);
         }
+
+
 
         /// <summary>
         /// Sends data to the specified endpoint.
         /// </summary>
         /// <param name="buffer">An array of type Byte that contains the data to be sent.</param>
-        /// <param name="offset">The <see cref="EndPoint"/> that represents the destination for the data.</param>
+        /// <param name="offset">The zero-based position in the buffer at which to begin sending data.</param>
         /// <param name="size">The number of bytes to send.</param>
         /// <param name="socketFlags">A bitwise combination of the <see cref="SocketFlags"/> values.</param>
         /// <param name="remoteEP">The <see cref="EndPoint"/> that represents the destination location for the data.</param>
         /// <returns>The number of bytes sent.</returns>
-        public int SendTo(byte[] buffer, int offset, int size, SocketFlags socketFlags, EndPoint remoteEP)
+        public int SendTo(
+            byte[] buffer,
+            int offset,
+            int size,
+            SocketFlags socketFlags,
+            EndPoint remoteEP)
         {
             if (m_Handle == -1)
             {
@@ -605,13 +660,16 @@ namespace System.Net.Sockets
 
             EndPoint endPointSnapshot = remoteEP;
 
-            int bytesTransferred = NativeSocket.sendto(this, buffer, offset, size, (int)socketFlags, m_sendTimeout, endPointSnapshot);
+            int bytesTransferred = NativeSocket.sendto(this,
+                                                       buffer,
+                                                       offset,
+                                                       size,
+                                                       (int)socketFlags,
+                                                       m_sendTimeout,
+                                                       endPointSnapshot);
 
-            if (_rightEndPoint == null)
-            {
-                // save a copy of the EndPoint
-                _rightEndPoint = endPointSnapshot;
-            }
+            // save a copy of the EndPoint
+            _rightEndPoint ??= endPointSnapshot;
 
             return bytesTransferred;
         }
@@ -624,10 +682,11 @@ namespace System.Net.Sockets
         /// <param name="socketFlags">A bitwise combination of the <see cref="SocketFlags"/> values.</param>
         /// <param name="remoteEP">The <see cref="EndPoint"/> that represents the destination location for the data.</param>
         /// <returns>The number of bytes sent.</returns>
-        public int SendTo(byte[] buffer, int size, SocketFlags socketFlags, EndPoint remoteEP)
-        {
-            return SendTo(buffer, 0, size, socketFlags, remoteEP);
-        }
+        public int SendTo(
+            byte[] buffer,
+            int size,
+            SocketFlags socketFlags,
+            EndPoint remoteEP) => SendTo(buffer, 0, size, socketFlags, remoteEP);
 
         /// <summary>
         /// Sends data to a specific endpoint using the specified <see cref="SocketFlags"/>.
@@ -641,24 +700,87 @@ namespace System.Net.Sockets
         /// In this overload, the buffer offset defaults to 0, and the number of bytes to send defaults to the size of the buffer. If you specify the <see cref="SocketFlags.DontRoute"/> flag as the socketflags parameter, the data you are sending will not be routed.
         /// </para>
         /// </remarks>
-        public int SendTo(byte[] buffer, SocketFlags socketFlags, EndPoint remoteEP)
+        public int SendTo(
+            byte[] buffer,
+            SocketFlags socketFlags,
+            EndPoint remoteEP) => SendTo(buffer, 0, buffer != null ? buffer.Length : 0, socketFlags, remoteEP);
+
+        /// <summary>
+        /// Sends data to the specified endpoint using the specified <see cref="SocketFlags"/>.
+        /// </summary>
+        /// <param name="buffer">A span of bytes that contains the data to be sent.</param>
+        /// <param name="socketFlags">A bitwise combination of the <see cref="SocketFlags"/> values.</param>
+        /// <param name="remoteEP">The <see cref="EndPoint"/> that represents the destination for the data.</param>
+        /// <returns>The number of bytes sent.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="remoteEP"/> is <see langword="null"/>.</exception>
+        /// <exception cref="SocketException">An error occurred when attempting to access the socket.</exception>
+        /// <exception cref="ObjectDisposedException">The <see cref="Socket"/> has been closed.</exception>
+        public int SendTo(
+            ReadOnlySpan<byte> buffer,
+            SocketFlags socketFlags,
+            EndPoint remoteEP)
         {
-            return SendTo(buffer, 0, buffer != null ? buffer.Length : 0, socketFlags, remoteEP);
+            if (m_Handle == -1)
+            {
+                throw new ObjectDisposedException();
+            }
+
+            EndPoint endPointSnapshot = remoteEP;
+
+            int bytesTransferred = NativeSocket.SendTo(
+                this,
+                buffer,
+                0,
+                buffer.Length,
+                (int)socketFlags,
+                m_sendTimeout,
+                endPointSnapshot);
+
+            // save a copy of the EndPoint
+            _rightEndPoint ??= endPointSnapshot;
+
+            return bytesTransferred;
         }
 
         /// <summary>
         /// Sends data to the specified endpoint.
         /// </summary>
-        /// <param name="buffer">n array of type Byte that contains the data to be sent.</param>
+        /// <param name="buffer">An array of type Byte that contains the data to be sent.</param>
         /// <param name="remoteEP">The <see cref="EndPoint"/> that represents the destination location for the data.</param>
         /// <returns>The number of bytes sent.</returns>
         /// <remarks>
-        /// In this overload, the buffer offset defaults to 0, the number of bytes to send defaults to the size of the buffer parameter, and the SocketFlags value defaults to 0.
+        /// <para>
+        /// In this overload, the buffer offset defaults to 0, the number of bytes to send defaults to the size of the <paramref name="buffer"/> parameter, and the <see cref="SocketFlags"/> value defaults to 0.
+        /// </para>
+        /// <para>
+        /// If you are using a connectionless protocol, you do not need to establish a default remote host with the <see cref="Connect"/> method prior to calling <see cref="SendTo(ReadOnlySpan{byte}, EndPoint)"/>. You only need to do this if you intend to call the <see cref="Send(byte[])"/> method. If you do call the <see cref="Connect"/> method prior to calling <see cref="SendTo(byte[], EndPoint)"/>, the <paramref name="remoteEP"/> parameter will override the specified default remote host for that send operation only. You are also not required to call the <see cref="Bind"/> method, because the underlying service provider will assign the most appropriate local network address and port number. If you need to identify the assigned local network address and port number, you can use the <see cref="LocalEndPoint"/> property after the <see cref="SendTo(byte[], EndPoint)"/> method successfully completes.
+        /// </para>
+        /// <para>
+        /// Although intended for connectionless protocols, <see cref="SendTo(byte[], EndPoint)"/> also works with connection-oriented protocols. If you are using a connection-oriented protocol, you must first establish a remote host connection by calling the <see cref="Connect"/> method or accept an incoming connection request using the <see cref="Accept"/> method. If you do not establish or accept a remote host connection, <see cref="SendTo(byte[], EndPoint)"/> will throw a <see cref="SocketException"/>. You can also establish a default remote host for a connectionless protocol prior to calling the <see cref="SendTo(byte[], EndPoint)"/> method. In either of these cases, <see cref="SendTo(byte[], EndPoint)"/> will ignore the <paramref name="remoteEP"/> parameter and only send data to the connected or default remote host.
+        /// </para>
+        /// <para>
+        /// Blocking sockets will block until the all of the bytes in the buffer are sent. Since a nonblocking Socket completes immediately, it might not send all of the bytes in the buffer. It is your application's responsibility to keep track of the number of bytes sent and to retry the operation until the application sends all of the bytes in the buffer. There is also no guarantee that the data you send will appear on the network immediately. To increase network efficiency, the underlying system may delay transmission until a significant amount of outgoing data is collected. A successful completion of the SendTo method means that the underlying system has had room to buffer your data for a network send.
+        /// </para>
+        /// <para>
+        /// If you are using a connectionless protocol in blocking mode, <see cref="SendTo(byte[], EndPoint)"/> will block until the datagram is sent. If you want to send data to a broadcast address, you must first call the <see cref="SetSocketOption(SocketOptionLevel, SocketOptionName, int)"/> method and set the socket option to <see cref="SocketOptionName.Broadcast"/>. You must also be sure that the number of bytes sent does not exceed the maximum packet size of the underlying service provider. If it does, the datagram will not be sent and <see cref="SendTo(byte[], EndPoint)"/> will throw a <see cref="SocketException"/>.
+        /// </para>
         /// </remarks>
-        public int SendTo(byte[] buffer, EndPoint remoteEP)
-        {
-            return SendTo(buffer, 0, buffer != null ? buffer.Length : 0, SocketFlags.None, remoteEP);
-        }
+        public int SendTo(
+            byte[] buffer,
+            EndPoint remoteEP) => SendTo(buffer, 0, buffer != null ? buffer.Length : 0, SocketFlags.None, remoteEP);
+
+        /// <summary>
+        /// Sends data to the specified endpoint.
+        /// </summary>
+        /// <param name="buffer">A span of bytes that contains the data to be sent.</param>
+        /// <param name="remoteEP">The <see cref="EndPoint"/> that represents the destination for the data.</param>
+        /// <returns>The number of bytes sent.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="remoteEP"/> is <see langword="null"/>.</exception>
+        /// <exception cref="SocketException">An error occurred when attempting to access the socket.</exception>
+        /// <exception cref="ObjectDisposedException">The <see cref="Socket"/> has been closed.</exception>
+        public int SendTo(
+            ReadOnlySpan<byte> buffer,
+            EndPoint remoteEP) => SendTo(buffer, SocketFlags.None, remoteEP);
 
         /// <summary>
         /// Receives data from a bound <see cref="Socket"/> into a receive buffer.
@@ -676,19 +798,16 @@ namespace System.Net.Sockets
         /// </para>
         /// <para>
         /// If no data is available for reading, the <see cref="Receive(byte[])"/> method will block until data is available, unless a time-out value was set by using <see cref="ReceiveTimeout"/>. If 
-        /// the time-out value was exceeded, the <see cref="Receive(Byte[])"/> call will throw a <see cref="SocketException"/>. If you are in non-blocking mode, and there is no data available in the
-        /// in the protocol stack buffer, the <see cref="Receive(Byte[])"/> method will complete immediately and throw a <see cref="SocketException"/>. You can use the <see cref="Available"/> property to 
+        /// the time-out value was exceeded, the <see cref="Receive(byte[])"/> call will throw a <see cref="SocketException"/>. If you are in non-blocking mode, and there is no data available in the
+        /// in the protocol stack buffer, the <see cref="Receive(byte[])"/> method will complete immediately and throw a <see cref="SocketException"/>. You can use the <see cref="Available"/> property to 
         /// determine if data is available for reading. When <see cref="Available"/> is non-zero, retry the receive operation.
         /// </para>
-        /// <para>If you are using a connectionless <see cref="Socket"/>, <see cref="Receive(Byte[])"/> will read the first queued datagram from the destination address you specify in the Connect method. If 
+        /// <para>If you are using a connectionless <see cref="Socket"/>, <see cref="Receive(byte[])"/> will read the first queued datagram from the destination address you specify in the Connect method. If 
         /// the datagram you receive is larger than the size of the buffer parameter, buffer gets filled with the first part of the message, the excess data is lost and a 
         /// SocketException is thrown.
         /// </para>
         /// </remarks>
-        public int Receive(byte[] buffer)
-        {
-            return Receive(buffer, 0, buffer != null ? buffer.Length : 0, SocketFlags.None);
-        }
+        public int Receive(byte[] buffer) => Receive(buffer, 0, buffer != null ? buffer.Length : 0, SocketFlags.None);
 
         /// <summary>
         /// Receives data from a bound <see cref="Socket"/> into a receive buffer, using the specified <see cref="SocketFlags"/>.
@@ -703,9 +822,54 @@ namespace System.Net.Sockets
         /// This overload only requires you to provide a receive buffer and the necessary <see cref="SocketFlags"/>. The buffer offset defaults to 0, and the size defaults to the length of the byte parameter.
         /// </para>
         /// </remarks>
-        public int Receive(byte[] buffer, SocketFlags socketFlags)
+        public int Receive(
+            byte[] buffer,
+            SocketFlags socketFlags) => Receive(buffer, 0, buffer != null ? buffer.Length : 0, socketFlags);
+
+        /// <summary>
+        /// Receives data from a bound <see cref="Socket"/> into a receive buffer, using the specified <see cref="SocketFlags"/>.
+        /// </summary>
+        /// <param name="buffer">A span of bytes that is the storage location for the received data.</param>
+        /// <param name="socketFlags">A bitwise combination of the enumeration values that specifies send and receive behaviors.</param>
+        /// <returns>The total number of bytes received. The method returns zero (0) only if zero bytes were requested or if no more bytes are available because the peer socket performed a graceful shutdown.</returns>
+        /// <exception cref="SocketException">An error occurred when attempting to access the socket.</exception>
+        /// <exception cref="ObjectDisposedException">The <see cref="Socket"/> has been closed.</exception>
+        /// <remarks>
+        /// <para>
+        /// The <see cref="Receive(Span{byte}, SocketFlags)"/> method reads data into the buffer parameter and returns the number of bytes successfully read. You can call <see cref="Receive(Span{byte}, SocketFlags)"/> from both connection-oriented and connectionless sockets.
+        /// </para>
+        /// <para>
+        /// This overload only requires you to provide a receive buffer. The buffer offset defaults to 0, the size defaults to the length of the <paramref name="buffer"/> parameter, and the <see cref="SocketFlags"/> value defaults to <see cref="SocketFlags.None"/>.
+        /// </para>
+        /// <para>
+        /// If you're using a connection-oriented protocol, you must either call <see cref="Connect"/> to establish a remote host connection, or <see cref="Accept"/> to accept an incoming connection prior to calling <see cref="Receive(Span{byte}, SocketFlags)"/>. The Receive method will only read data that arrives from the remote host established in the <see cref="Connect"/> or <see cref="Accept"/> method. If you're using a connectionless protocol, you can also use the <see cref="ReceiveFrom"/> method. <see cref="ReceiveFrom"/> will allow you to receive data arriving from any host.
+        /// </para>
+        /// <para>
+        /// If no data is available for reading, the <see cref="Receive(Span{byte}, SocketFlags)"/> method will block until data is available, unless a time-out value was set by using <see cref="ReceiveTimeout"/>. When the time-out value is exceeded, the <see cref="Receive(Span{byte}, SocketFlags)"/> call will throw a <see cref="SocketException"/>. If you're in non-blocking mode, and there's no data available in the protocol stack buffer, the <see cref="Receive(Span{byte}, SocketFlags)"/> method will complete immediately and throw a <see cref="SocketException"/>. You can use the <see cref="Available"/> property to determine if data is available for reading. When <see cref="Available"/> is non-zero, retry the receive operation.
+        /// </para>
+        /// <para>
+        /// If you're using a connection-oriented <see cref="Socket"/>, the <see cref="Receive(Span{byte}, SocketFlags)"/> method will read as much data as is available, up to the size of the buffer. If the remote host shuts down the <see cref="Socket"/> connection with the Shutdown method, and all available data has been received, the <see cref="Receive(Span{byte}, SocketFlags)"/> method will complete immediately and return zero bytes.
+        /// </para>
+        /// <para>
+        /// If you're using a connectionless Socket, <see cref="Receive(Span{byte}, SocketFlags)"/> will read the first queued datagram from the destination address you specify in the <see cref="Connect"/> method. If the datagram you receive is larger than the size of the buffer parameter, buffer gets filled with the first part of the message, the excess data is lost and a <see cref="SocketException"/> is thrown.
+        /// </para>
+        /// </remarks>
+        public int Receive(
+            Span<byte> buffer,
+            SocketFlags socketFlags)
         {
-            return Receive(buffer, 0, buffer != null ? buffer.Length : 0, socketFlags);
+            if (m_Handle == -1)
+            {
+                throw new ObjectDisposedException();
+            }
+
+            return NativeSocket.Recv(
+                this,
+                buffer,
+                0,
+                buffer.Length,
+                (int)socketFlags,
+                m_recvTimeout);
         }
 
         /// <summary>
@@ -724,10 +888,10 @@ namespace System.Net.Sockets
         /// mode, and there is no data available in the in the protocol stack buffer, The <see cref="Receive(byte[])"/> method will complete immediately and throw a <see cref="SocketException"/>. 
         /// You can use the <see cref="Available"/> property to determine if data is available for reading. When <see cref="Available"/> is non-zero, retry your receive operation.</para>
         /// </remarks>
-        public int Receive(byte[] buffer, int size, SocketFlags socketFlags)
-        {
-            return Receive(buffer, 0, size, socketFlags);
-        }
+        public int Receive(
+            byte[] buffer,
+            int size,
+            SocketFlags socketFlags) => Receive(buffer, 0, size, socketFlags);
 
 
         /// <summary>
@@ -742,20 +906,30 @@ namespace System.Net.Sockets
         /// <para>The <see cref="Receive(byte[])"/> method reads data into the buffer parameter and returns the number of bytes successfully read. You can call <see cref="Receive(byte[])"/> from both connection-
         /// oriented and connectionless sockets.</para>
         /// </remarks>
-        public int Receive(byte[] buffer, int offset, int size, SocketFlags socketFlags)
+        public int Receive(
+            byte[] buffer,
+            int offset,
+            int size,
+            SocketFlags socketFlags)
         {
             if (m_Handle == -1)
             {
                 throw new ObjectDisposedException();
             }
 
-            return NativeSocket.recv(this, buffer, offset, size, (int)socketFlags, m_recvTimeout);
+            return NativeSocket.recv(
+                this,
+                buffer,
+                offset,
+                size,
+                (int)socketFlags,
+                m_recvTimeout);
         }
 
         /// <summary>
         /// Receives the specified number of bytes of data into the specified location of the data buffer, using the specified <see cref="SocketFlags"/>, and stores the endpoint.
         /// </summary>
-        /// <param name="buffer">An array of type <see cref="Byte"/> that is the storage location for received data.</param>
+        /// <param name="buffer">An array of type <see cref="byte"/> that is the storage location for received data.</param>
         /// <param name="offset">The position in the buffer parameter to store the received data.</param>
         /// <param name="size">The number of bytes to receive.</param>
         /// <param name="socketFlags">A bitwise combination of the <see cref="SocketFlags"/> values.</param>
@@ -772,7 +946,12 @@ namespace System.Net.Sockets
         /// 
         /// With connection-oriented sockets, <see cref="ReceiveFrom(byte[], int, int, SocketFlags, ref EndPoint)"/> will read as much data as is available up to the amount of bytes specified by the size parameter. If the remote host shuts down the Socket connection with the Shutdown method, and all available data has been Received, the <see cref="ReceiveFrom(byte[], int, int, SocketFlags, ref EndPoint)"/> method will complete immediately and return zero bytes.
         /// </remarks>
-        public int ReceiveFrom(byte[] buffer, int offset, int size, SocketFlags socketFlags, ref EndPoint remoteEP)
+        public int ReceiveFrom(
+            byte[] buffer,
+            int offset,
+            int size,
+            SocketFlags socketFlags,
+            ref EndPoint remoteEP)
         {
             if (m_Handle == -1)
             {
@@ -790,18 +969,22 @@ namespace System.Net.Sockets
 
             int bytesTransferred = 0;
 
-            bytesTransferred = NativeSocket.recvfrom(this, buffer, offset, size, (int)socketFlags, m_recvTimeout, ref remoteEP);
+            bytesTransferred = NativeSocket.recvfrom(
+                this,
+                buffer,
+                offset,
+                size,
+                (int)socketFlags,
+                m_recvTimeout,
+                ref remoteEP);
 
             if (!remoteEP.Equals(endPointSnapshot))
             {
                 // no need to create a new EndPoint here if it's different from the orignal
                 // because the interpreter has already created a new instance of an IPEndPoint
 
-                if (_rightEndPoint == null)
-                {
-                    // save a copy of the EndPoint
-                    _rightEndPoint = remoteEP;
-                }
+                // save a copy of the EndPoint
+                _rightEndPoint ??= remoteEP;
             }
 
             return bytesTransferred;
@@ -815,10 +998,11 @@ namespace System.Net.Sockets
         /// <param name="socketFlags">A bitwise combination of the <see cref="SocketFlags"/> values.</param>
         /// <param name="remoteEP">An <see cref="EndPoint"/>, passed by reference, that represents the remote server.</param>
         /// <returns>The number of bytes received.</returns>
-        public int ReceiveFrom(byte[] buffer, int size, SocketFlags socketFlags, ref EndPoint remoteEP)
-        {
-            return ReceiveFrom(buffer, 0, size, socketFlags, ref remoteEP);
-        }
+        public int ReceiveFrom(
+            byte[] buffer,
+            int size,
+            SocketFlags socketFlags,
+            ref EndPoint remoteEP) => ReceiveFrom(buffer, 0, size, socketFlags, ref remoteEP);
 
         /// <summary>
         /// Receives a datagram into the data buffer, using the specified <see cref="SocketFlags"/>, and stores the endpoint.
@@ -827,9 +1011,63 @@ namespace System.Net.Sockets
         /// <param name="socketFlags">A bitwise combination of the <see cref="SocketFlags"/> values.</param>
         /// <param name="remoteEP">An <see cref="EndPoint"/>, passed by reference, that represents the remote server.</param>
         /// <returns>The number of bytes received.</returns>
-        public int ReceiveFrom(byte[] buffer, SocketFlags socketFlags, ref EndPoint remoteEP)
+        public int ReceiveFrom(
+            byte[] buffer,
+            SocketFlags socketFlags,
+            ref EndPoint remoteEP) => ReceiveFrom(buffer, 0, buffer != null ? buffer.Length : 0, socketFlags, ref remoteEP);
+
+        /// <summary>
+        /// Receives a datagram into the data buffer, using the specified <see cref="SocketFlags"/>, and stores the endpoint.
+        /// </summary>
+        /// <param name="buffer">A span of bytes that is the storage location for received data.</param>
+        /// <param name="socketFlags">A bitwise combination of the <see cref="SocketFlags"/> values.</param>
+        /// <param name="remoteEP">A reference to an <see cref="EndPoint"/> of the same type as the endpoint of the remote host to be updated on successful receive.</param>
+        /// <returns>The number of bytes received.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="remoteEP"/> is <see langword="null"/>.</exception>"
+        /// <exception cref="ObjectDisposedException">The <see cref="Socket"/> has been closed.</exception>
+        /// <exception cref="SocketException">An error occurred when attempting to access the socket.</exception>
+        public int ReceiveFrom(
+            Span<byte> buffer,
+            SocketFlags socketFlags,
+            ref EndPoint remoteEP)
         {
-            return ReceiveFrom(buffer, 0, buffer != null ? buffer.Length : 0, socketFlags, ref remoteEP);
+            if (m_Handle == -1)
+            {
+                throw new ObjectDisposedException();
+            }
+
+            ArgumentNullException.ThrowIfNull(remoteEP);
+
+            if (_rightEndPoint == null)
+            {
+                // socket must have connection established or previously accepted a connection 
+                throw new SocketException(SocketError.NotConnected);
+            }
+
+            EndPoint endPointSnapshot = remoteEP;
+
+            Snapshot(ref endPointSnapshot);
+
+            int bytesTransferred = 0;
+
+            bytesTransferred = NativeSocket.RecvFrom(
+                this,
+                buffer,
+                0,
+                buffer.Length,
+                (int)socketFlags,
+                m_recvTimeout,
+                ref remoteEP);
+
+            if (!remoteEP.Equals(endPointSnapshot))
+            {
+                // no need to create a new EndPoint here if it's different from the orignal
+                // because the interpreter has already created a new instance of an IPEndPoint
+                // save a copy of the EndPoint
+                _rightEndPoint ??= remoteEP;
+            }
+
+            return bytesTransferred;
         }
 
         /// <summary>
@@ -839,7 +1077,7 @@ namespace System.Net.Sockets
         /// <param name="remoteEP">An <see cref="EndPoint"/>, passed by reference, that represents the remote server.</param>
         /// <returns>The number of bytes received.</returns>
         /// <remarks>
-        /// <para>The <see cref="o:ReceiveFrom"/> method reads data into the buffer parameter, returns the number of bytes successfully read, 
+        /// <para>The <see cref="ReceiveFrom(byte[], ref EndPoint)"/> method reads data into the buffer parameter, returns the number of bytes successfully read, 
         /// and captures the remote host endpoint from which the data was sent. This method is useful if you intend to receive 
         /// connectionless datagrams from an unknown host or multiple hosts.</para>
         /// <para>This overload only requires you to provide a receive buffer, and an EndPoint that represents the remote host.
@@ -847,17 +1085,30 @@ namespace System.Net.Sockets
         /// defaults to None.
         /// </para>
         /// <note type="important">
-        /// Before calling <see cref="o:ReceiveFrom"/>, you must explicitly <see cref="Bind(EndPoint)"/> the <see cref="Socket"/> to a local endpoint using the <see cref="Bind"/> method. If you do not, <see cref="o:ReceiveFrom"/> will 
+        /// Before calling <see cref="ReceiveFrom(byte[], ref EndPoint)"/>, you must explicitly bind the <see cref="Socket"/> to a local endpoint using the <see cref="Bind(EndPoint)"/> method. If you do not, <see cref="ReceiveFrom(byte[], ref EndPoint)"/> will 
         /// throw a <see cref="SocketException"/>.
         /// </note>
         /// <note type="important">
-        /// The <see cref="AddressFamily"/> of the <see cref="EndPoint"/> used in <see cref="o:ReceiveFrom"/> needs to match the <see cref="AddressFamily"/> of the <see cref="EndPoint"/> used in <see cref="o:SendTo"/>.
+        /// The <see cref="AddressFamily"/> of the <see cref="EndPoint"/> used in <see cref="ReceiveFrom(byte[], ref EndPoint)"/> needs to match the <see cref="AddressFamily"/> of the <see cref="EndPoint"/> used in <see cref="SendTo(byte[], EndPoint)"/>.
         /// </note>
         /// </remarks>
-        public int ReceiveFrom(byte[] buffer, ref EndPoint remoteEP)
-        {
-            return ReceiveFrom(buffer, 0, buffer != null ? buffer.Length : 0, SocketFlags.None, ref remoteEP);
-        }
+        public int ReceiveFrom(
+            byte[] buffer,
+            ref EndPoint remoteEP) => ReceiveFrom(buffer, 0, buffer != null ? buffer.Length : 0, SocketFlags.None, ref remoteEP);
+
+        /// <summary>
+        /// Receives a datagram into the data buffer and stores the endpoint.
+        /// </summary>
+        /// <param name="buffer">A span of bytes that is the storage location for received data.</param>
+        /// <param name="remoteEP">A reference to an <see cref="EndPoint"/> of the same type as the endpoint of the remote host to be updated on successful receive.</param>
+        /// <returns>The number of bytes received.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="remoteEP"/> is <see langword="null"/>.</exception>"
+        /// <exception cref="ObjectDisposedException">The <see cref="Socket"/> has been closed.</exception>
+        /// <exception cref="SocketException">An error occurred when attempting to access the socket.</exception>
+        /// <returns></returns>
+        public int ReceiveFrom(
+            Span<byte> buffer,
+            ref EndPoint remoteEP) => ReceiveFrom(buffer, SocketFlags.None, ref remoteEP);
 
         /// <summary>
         /// Sets the specified <see cref="Socket"/> option to the specified integer value.
@@ -872,7 +1123,10 @@ namespace System.Net.Sockets
         /// For <see cref="SocketOptionName.Linger"/> option the <paramref name="optionValue"/> it's the number of seconds that the socket will linger before closing the connection.
         /// To disable socket linger call <see cref="SetSocketOption(SocketOptionLevel,SocketOptionName,bool)"/> with <see cref="SocketOptionName.DontLinger"/> and setting it to <see langword="true"/>. 
         /// </remarks>
-        public void SetSocketOption(SocketOptionLevel optionLevel, SocketOptionName optionName, int optionValue)
+        public void SetSocketOption(
+            SocketOptionLevel optionLevel,
+            SocketOptionName optionName,
+            int optionValue)
         {
             if (m_Handle == -1)
             {
@@ -886,12 +1140,17 @@ namespace System.Net.Sockets
                 case SocketOptionName.SendTimeout:
                     m_sendTimeout = optionValue;
                     break;
+
                 case SocketOptionName.ReceiveTimeout:
                     m_recvTimeout = optionValue;
                     break;
             }
 
-            NativeSocket.setsockopt(this, (int)optionLevel, (int)optionName, val);
+            NativeSocket.setsockopt(
+                this,
+                (int)optionLevel,
+                (int)optionName,
+                val);
         }
 
         /// <summary>
@@ -902,10 +1161,10 @@ namespace System.Net.Sockets
         /// <param name="optionValue">The value of the option, represented as a Boolean.</param>
         /// <remarks>
         /// </remarks>
-        public void SetSocketOption(SocketOptionLevel optionLevel, SocketOptionName optionName, bool optionValue)
-        {
-            SetSocketOption(optionLevel, optionName, (optionValue ? 1 : 0));
-        }
+        public void SetSocketOption(
+            SocketOptionLevel optionLevel,
+            SocketOptionName optionName,
+            bool optionValue) => SetSocketOption(optionLevel, optionName, (optionValue ? 1 : 0));
 
         /// <summary>
         /// Sets the specified <see cref="Socket"/> option to the specified value, represented as a byte array.
@@ -917,14 +1176,21 @@ namespace System.Net.Sockets
         /// <para><see cref="Socket"/> options determine the behavior of the current <see cref="Socket"/>. Use this overload to set those <see cref="Socket"/> options that require a byte array as an option value.
         /// </para>
         /// </remarks>
-        public void SetSocketOption(SocketOptionLevel optionLevel, SocketOptionName optionName, byte[] optionValue)
+        public void SetSocketOption(
+            SocketOptionLevel optionLevel,
+            SocketOptionName optionName,
+            byte[] optionValue)
         {
             if (m_Handle == -1)
             {
                 throw new ObjectDisposedException();
             }
 
-            NativeSocket.setsockopt(this, (int)optionLevel, (int)optionName, optionValue);
+            NativeSocket.setsockopt(
+                this,
+                (int)optionLevel,
+                (int)optionName,
+                optionValue);
         }
 
         /// <summary>
@@ -946,7 +1212,9 @@ namespace System.Net.Sockets
         /// </para>
         /// </returns>
         /// <exception cref="NotSupportedException">When using an <see cref="SocketOptionName"/> that can't be retrieved.</exception>
-        public object GetSocketOption(SocketOptionLevel optionLevel, SocketOptionName optionName)
+        public object GetSocketOption(
+            SocketOptionLevel optionLevel,
+            SocketOptionName optionName)
         {
             if (optionName is SocketOptionName.AddMembership
                 or SocketOptionName.DropMembership)
@@ -976,9 +1244,9 @@ namespace System.Net.Sockets
                 // these are boolean AND negated
                 return val[0] == 0;
             }
-            else if (optionName is 
-                SocketOptionName.AcceptConnection or 
-                SocketOptionName.Broadcast or 
+            else if (optionName is
+                SocketOptionName.AcceptConnection or
+                SocketOptionName.Broadcast or
                 SocketOptionName.KeepAlive)
             {
                 // these are boolean 
@@ -996,7 +1264,7 @@ namespace System.Net.Sockets
         /// </summary>
         /// <param name="optionLevel">One of the <see cref="SocketOptionLevel"/> values.</param>
         /// <param name="optionName">One of the <see cref="SocketOptionName"/> values.</param>
-        /// <param name="val">An array of type <see cref="Byte"/> that is to receive the option setting.</param>
+        /// <param name="val">An array of type <see cref="byte"/> that is to receive the option setting.</param>
         /// <remarks>
         /// <para>
         /// <see cref="Socket"/> options determine the behavior of the current <see cref="Socket"/>. Upon successful completion of this method, the array specified by the val parameter contains the value of the specified <see cref="Socket"/> option.
@@ -1008,14 +1276,21 @@ namespace System.Net.Sockets
         /// Use this overload for any sockets that are represented by Boolean values or integers.
         /// </para>
         /// </remarks>
-        public void GetSocketOption(SocketOptionLevel optionLevel, SocketOptionName optionName, byte[] val)
+        public void GetSocketOption(
+            SocketOptionLevel optionLevel,
+            SocketOptionName optionName,
+            byte[] val)
         {
             if (m_Handle == -1)
             {
                 throw new ObjectDisposedException();
             }
 
-            NativeSocket.getsockopt(this, (int)optionLevel, (int)optionName, val);
+            NativeSocket.getsockopt(
+                this,
+                (int)optionLevel,
+                (int)optionName,
+                val);
         }
 
         /// <summary>
@@ -1061,14 +1336,19 @@ namespace System.Net.Sockets
         /// If you receive a <see cref="SocketException"/>, use the <see cref="SocketException.ErrorCode"/> property to obtain the specific error code. After you have obtained this code, refer to the Windows Sockets version 2 API error code documentation in the MSDN library for a detailed description of the error.
         /// </para>
         /// </remarks>
-        public bool Poll(int microSeconds, SelectMode mode)
+        public bool Poll(
+            int microSeconds,
+            SelectMode mode)
         {
             if (m_Handle == -1)
             {
                 throw new ObjectDisposedException();
             }
 
-            return NativeSocket.poll(this, (int)mode, microSeconds);
+            return NativeSocket.poll(
+                this,
+                (int)mode,
+                microSeconds);
         }
 
         /// <summary>
@@ -1100,6 +1380,9 @@ namespace System.Net.Sockets
             GC.SuppressFinalize(this);
         }
 
+        /// <summary>
+        /// Finalizes the <see cref="Socket"/> instance.
+        /// </summary>
         ~Socket()
         {
             Dispose(false);

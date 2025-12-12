@@ -25,7 +25,8 @@ namespace NFUnitTestSocketTests
         {
             Socket socketClient = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             Socket socketServer = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            Assert.Throws(typeof(SocketException), () =>
+            
+            Assert.ThrowsException(typeof(SocketException), () =>
             {
 
                 socketClient.Bind(new IPEndPoint(IPAddress.Loopback, 10));
@@ -46,7 +47,7 @@ namespace NFUnitTestSocketTests
             }
             catch (SocketException e)
             {
-                Assert.False(e.ErrorCode != (int)SocketError.ProtocolFamilyNotSupported && e.ErrorCode != (int)SocketError.AddressFamilyNotSupported, "Incorrect ErrorCode in SocketException "
+                Assert.IsFalse(e.ErrorCode != (int)SocketError.ProtocolFamilyNotSupported && e.ErrorCode != (int)SocketError.AddressFamilyNotSupported, "Incorrect ErrorCode in SocketException "
                         + e.ErrorCode);
                 return;
             }
@@ -65,7 +66,7 @@ namespace NFUnitTestSocketTests
             }
             catch (SocketException e)
             {
-                Assert.Equal(e.ErrorCode, (int)SocketError.ProtocolNotSupported, "Incorrect ErrorCode in SocketException "
+                Assert.AreEqual((int)SocketError.ProtocolNotSupported, e.ErrorCode, "Incorrect ErrorCode in SocketException "
                         + e.ErrorCode);
                 return;
             }
@@ -77,7 +78,7 @@ namespace NFUnitTestSocketTests
         {
             SocketPair testSockets = new SocketPair(ProtocolType.Tcp, SocketType.Stream);
 
-            Assert.Throws(typeof(SocketException), () =>
+            Assert.ThrowsException(typeof(SocketException), () =>
             {
                 testSockets.Startup(0, 0);
                 testSockets.socketServer.Listen(1);
@@ -93,7 +94,8 @@ namespace NFUnitTestSocketTests
         public void SocketExceptionTest11_AccessDenied()
         {
             SocketPair testSockets = new SocketPair(ProtocolType.Udp, SocketType.Dgram);
-            Assert.Throws(typeof(SocketException), () =>
+           
+            Assert.ThrowsException(typeof(SocketException), () =>
             {
                 int clientPort = SocketTools.nextPort;
                 int serverPort = SocketTools.nextPort;
@@ -113,7 +115,7 @@ namespace NFUnitTestSocketTests
         {
             SocketPair testSockets = new SocketPair(ProtocolType.Tcp, SocketType.Stream);
 
-            Assert.Throws(typeof(SocketException), () =>
+            Assert.ThrowsException(typeof(SocketException), () =>
             {
                 testSockets.Startup(0, 0);
                 Socket socketTemp = new Socket(AddressFamily.InterNetwork,
@@ -130,7 +132,8 @@ namespace NFUnitTestSocketTests
         {
 
             SocketPair testSockets = new SocketPair(ProtocolType.Tcp, SocketType.Stream);
-            Assert.Throws(typeof(SocketException), () =>
+            
+            Assert.ThrowsException(typeof(SocketException), () =>
             {
                 int clientPort = SocketTools.nextPort;
                 int serverPort = SocketTools.nextPort;
@@ -147,7 +150,8 @@ namespace NFUnitTestSocketTests
         public void SocketExceptionTest14_AddressNotAvailable()
         {
             SocketPair testSockets = new SocketPair(ProtocolType.Tcp, SocketType.Stream);
-            Assert.Throws(typeof(SocketException), () =>
+         
+            Assert.ThrowsException(typeof(SocketException), () =>
             {
                 int clientPort = SocketTools.nextPort;
                 int serverPort = SocketTools.nextPort;
@@ -163,7 +167,7 @@ namespace NFUnitTestSocketTests
         [TestMethod]
         public void SocketExceptionTest16_HostNotFound()
         {
-            Assert.Throws(typeof(SocketException), () =>
+            Assert.ThrowsException(typeof(SocketException), () =>
             {
                 IPHostEntry ipHostEntry = Dns.GetHostEntry("fakeHostName");
             });
@@ -172,7 +176,7 @@ namespace NFUnitTestSocketTests
         [TestMethod]
         public void SocketExceptionTest17_SocketError()
         {
-            Assert.Throws(typeof(SocketException), () =>
+            Assert.ThrowsException(typeof(SocketException), () =>
             {
                 SocketPair testSockets = new SocketPair(ProtocolType.Udp, SocketType.Stream);
             });
@@ -183,7 +187,7 @@ namespace NFUnitTestSocketTests
         {
 
             SocketPair testSockets = new SocketPair(ProtocolType.Tcp, SocketType.Stream);
-            Assert.Throws(typeof(SocketException), () =>
+            Assert.ThrowsException(typeof(SocketException), () =>
             {
                 testSockets.socketClient.SetSocketOption(SocketOptionLevel.Socket,
                         SocketOptionName.Linger, new byte[] { (byte)0 });
@@ -197,12 +201,14 @@ namespace NFUnitTestSocketTests
         public void SocketExceptionTest19_ProtocolOption()
         {
             SocketPair testSockets = new SocketPair(ProtocolType.Tcp, SocketType.Stream);
-            Assert.Throws(typeof(SocketException), () =>
+           
+            Assert.ThrowsException(typeof(SocketException), () =>
             {
                 testSockets.Startup(0, 0);
                 testSockets.socketClient.GetSocketOption(SocketOptionLevel.IP,
                     SocketOptionName.Linger);
             });
+
             testSockets.TearDown();
             testSockets = null;
         }
@@ -212,7 +218,8 @@ namespace NFUnitTestSocketTests
         public void SocketExceptionTest20_OperationNotSupported()
         {
             SocketPair testSockets = new SocketPair(ProtocolType.Tcp, SocketType.Stream);
-            Assert.Throws(typeof(SocketException), () =>
+            
+            Assert.ThrowsException(typeof(SocketException), () =>
             {
                 testSockets.Startup(0, 0);
 
@@ -225,9 +232,9 @@ namespace NFUnitTestSocketTests
                     sock.Receive(testSockets.bufReceive, SocketFlags.DontRoute);
                 }
             });
+            
             testSockets.TearDown();
             testSockets = null;
         }
-
     }
 }
