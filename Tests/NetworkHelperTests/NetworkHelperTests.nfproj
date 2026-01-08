@@ -45,11 +45,11 @@
     <Content Include="packages.lock.json" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="mscorlib">
-      <HintPath>..\..\packages\nanoFramework.CoreLibrary.2.0.0-preview.32\lib\netnano1.0\mscorlib.dll</HintPath>
+    <Reference Include="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
+      <HintPath>..\..\packages\nanoFramework.CoreLibrary.2.0.0-preview.33\lib\netnano1.0\mscorlib.dll</HintPath>
     </Reference>
-    <Reference Include="nanoFramework.System.Text">
-      <HintPath>..\..\packages\nanoFramework.System.Text.2.0.0-preview.5\lib\nanoFramework.System.Text.dll</HintPath>
+    <Reference Include="nanoFramework.System.Text, Version=2.0.0.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
+      <HintPath>..\..\packages\nanoFramework.System.Text.2.0.0-preview.6\lib\nanoFramework.System.Text.dll</HintPath>
     </Reference>
     <Reference Include="nanoFramework.TestFramework">
       <HintPath>..\..\packages\nanoFramework.TestFramework.4.0.0-preview.47\lib\nanoFramework.TestFramework.dll</HintPath>
