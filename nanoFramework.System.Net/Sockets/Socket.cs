@@ -166,7 +166,15 @@ namespace System.Net.Sockets
         public EndPoint RemoteEndPoint => GetEndPoint(false);
 
         /// <summary>
-        /// Gets or sets a value that specifies the amount of time after which a synchronous <see cref="Receive(byte[])"/> call will time out.
+        /// Gets a value that indicates whether a <see cref="Socket"/> is connected to a remote host as of the last <see cref="Send"/> or <see cref="Receive"/> operation.
+        /// </summary>
+        /// <value>
+        /// <see langword="true"/> if the <see cref="Socket"/> was connected to a remote resource as of the most recent operation; otherwise, <see langword="false"/>.
+        /// </value>
+        public bool Connected => _rightEndPoint != null && m_Handle != -1;
+
+        /// <summary>
+        /// Gets or sets a value that specifies the amount of time after which a synchronous <see cref="Receive(Byte[])"/> call will time out.
         /// </summary>
         /// <value>
         /// The time-out value, in milliseconds. The default value is 0, which indicates an infinite time-out period. Specifying -1 also indicates an infinite time-out period.
