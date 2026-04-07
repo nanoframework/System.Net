@@ -36,17 +36,6 @@ namespace System.Net.Sockets
         [Diagnostics.DebuggerBrowsable(Diagnostics.DebuggerBrowsableState.Never)]
         private SocketType _socketType = SocketType.Unknown;
 
-        // Our internal state doesn't automatically get updated after a non-blocking connect
-        // completes.  Keep track of whether we're doing a non-blocking connect, and make sure
-        // to poll for the real state until we're done connecting.
-        [Diagnostics.DebuggerBrowsable(Diagnostics.DebuggerBrowsableState.Never)]
-        private bool _nonBlockingConnectInProgress;
-
-        // Keep track of the kind of endpoint used to do a non-blocking connect, so we can set
-        // it to m_RightEndPoint when we discover we're connected.
-        [Diagnostics.DebuggerBrowsable(Diagnostics.DebuggerBrowsableState.Never)]
-        private EndPoint _nonBlockingConnectRightEndPoint;
-
         // _rightEndPoint is null if the socket has not been bound. Otherwise, it is any EndPoint of the correct type (IPEndPoint, etc).
         [Diagnostics.DebuggerBrowsable(Diagnostics.DebuggerBrowsableState.Never)]
         internal EndPoint _rightEndPoint;
@@ -343,18 +332,6 @@ namespace System.Net.Sockets
 
             EndPoint endPointSnapshot = remoteEP;
             Snapshot(ref endPointSnapshot);
-
-            if (m_fBlocking)
-            {
-                // blocking connect
-                _nonBlockingConnectInProgress = false;
-            }
-            else
-            {
-                // non blocking connect
-                _nonBlockingConnectInProgress = true;
-                _nonBlockingConnectRightEndPoint = endPointSnapshot;
-            }
 
             NativeSocket.connect(this, endPointSnapshot, !m_fBlocking);
 
