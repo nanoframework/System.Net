@@ -4,11 +4,14 @@
 // See LICENSE file in the project root for full license information.
 //
 
+using System.Runtime.CompilerServices;
+
 namespace System.Net.Sockets
 {
     /// <summary>
     /// Specifies the mode for polling the status of a socket.
     /// </summary>
+    [ExcludeType]
     public enum SelectMode
     {
         /// <summary>

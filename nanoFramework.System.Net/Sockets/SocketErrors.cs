@@ -4,11 +4,14 @@
 // See LICENSE file in the project root for full license information.
 //
 
+using System.Runtime.CompilerServices;
+
 namespace System.Net.Sockets
 {
     /// <summary>
     /// Defines socket error constants.
     /// </summary>
+    [ExcludeType]
     public enum SocketError : int
     {
         /// <summary>

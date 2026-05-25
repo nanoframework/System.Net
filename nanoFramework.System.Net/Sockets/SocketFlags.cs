@@ -4,6 +4,8 @@
 // See LICENSE file in the project root for full license information.
 //
 
+using System.Runtime.CompilerServices;
+
 namespace System.Net.Sockets
 {
     using System;
@@ -11,6 +13,7 @@ namespace System.Net.Sockets
     /// <summary>
     /// This enumeration has a FlagsAttribute attribute that allows a bitwise combination of its member values.
     /// </summary>
+    [ExcludeType]
     [Flags]
     public enum SocketFlags
     {

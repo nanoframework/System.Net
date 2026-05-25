@@ -4,11 +4,14 @@
 // See LICENSE file in the project root for full license information.
 //
 
+using System.Runtime.CompilerServices;
+
 namespace System.Net.NetworkInformation
 {
     /// <summary>
     /// Options for <see cref="NetworkInformation"/>.
     /// </summary>
+    [ExcludeType]
     internal enum NetworkInformationOptions
     {
         /// <summary>

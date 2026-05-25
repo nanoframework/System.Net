@@ -4,6 +4,8 @@
 // See LICENSE file in the project root for full license information.
 //
 
+using System.Runtime.CompilerServices;
+
 namespace System.Net.Sockets
 {
     /// <summary>
@@ -13,6 +15,7 @@ namespace System.Net.Sockets
     /// An AddressFamily member specifies the addressing scheme that a <see cref="Socket"/> will use to resolve an address. For example, 
     /// InterNetwork indicates that an IP version 4 address is expected when a <see cref="Socket"/> connects to an endpoint.
     /// </remarks>
+    [ExcludeType]
     public enum AddressFamily
     {
         /// <summary>

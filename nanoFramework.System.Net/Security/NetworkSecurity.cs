@@ -60,6 +60,7 @@ namespace System.Net.Security
     /// <summary>
     /// The verification scheme to use for authentication.
     /// </summary>
+    [ExcludeType]
     public enum SslVerification
     {
         /// <summary>

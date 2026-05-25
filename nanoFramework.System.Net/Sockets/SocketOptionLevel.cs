@@ -4,6 +4,8 @@
 // See LICENSE file in the project root for full license information.
 //
 
+using System.Runtime.CompilerServices;
+
 namespace System.Net.Sockets
 {
     //
@@ -13,6 +15,7 @@ namespace System.Net.Sockets
     /// <summary>
     /// Defines socket option levels for the <see cref='Sockets.Socket'/> class.
     /// </summary>
+    [ExcludeType]
     public enum SocketOptionLevel
     {
         /// <summary>
