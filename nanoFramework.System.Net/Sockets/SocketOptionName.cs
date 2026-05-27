@@ -4,6 +4,8 @@
 // See LICENSE file in the project root for full license information.
 //
 
+using System.Runtime.CompilerServices;
+
 namespace System.Net.Sockets
 {
     using System;
@@ -15,6 +17,7 @@ namespace System.Net.Sockets
     /// The SocketOptionName enumeration defines the name of each Socket configuration option. 
     /// Sockets can be configured with the <see cref="Socket.SetSocketOption(SocketOptionLevel, SocketOptionName, Boolean)"/> method.
     /// </remarks>
+    [ExcludeType]
     public enum SocketOptionName
     {
 

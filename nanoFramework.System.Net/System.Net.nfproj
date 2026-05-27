@@ -35,50 +35,6 @@
     <NF_GenerateSkeletonProjectName>sys_net_native</NF_GenerateSkeletonProjectName>
     <Name>System.Net</Name>
   </PropertyGroup>
-  <ItemGroup>
-    <NFMDP_PE_ExcludeClassByName Include="ThisAssembly">
-      <InProject>false</InProject>
-    </NFMDP_PE_ExcludeClassByName>
-    <NFMDP_PE_ExcludeClassByName Include="IPConfiguration">
-      <InProject>false</InProject>
-    </NFMDP_PE_ExcludeClassByName>
-    <NFMDP_PE_ExcludeClassByName Include="NetworkInformationOptions">
-      <InProject>false</InProject>
-    </NFMDP_PE_ExcludeClassByName>
-    <NFMDP_PE_ExcludeClassByName Include="PhyProtocols">
-      <InProject>false</InProject>
-    </NFMDP_PE_ExcludeClassByName>
-    <NFMDP_PE_ExcludeClassByName Include="SslVerification">
-      <InProject>false</InProject>
-    </NFMDP_PE_ExcludeClassByName>
-    <NFMDP_PE_ExcludeClassByName Include="AddressFamily">
-      <InProject>false</InProject>
-    </NFMDP_PE_ExcludeClassByName>
-    <NFMDP_PE_ExcludeClassByName Include="ProtocolFamily">
-      <InProject>false</InProject>
-    </NFMDP_PE_ExcludeClassByName>
-    <NFMDP_PE_ExcludeClassByName Include="ProtocolType">
-      <InProject>false</InProject>
-    </NFMDP_PE_ExcludeClassByName>
-    <NFMDP_PE_ExcludeClassByName Include="SelectMode">
-      <InProject>false</InProject>
-    </NFMDP_PE_ExcludeClassByName>
-    <NFMDP_PE_ExcludeClassByName Include="SocketError">
-      <InProject>false</InProject>
-    </NFMDP_PE_ExcludeClassByName>
-    <NFMDP_PE_ExcludeClassByName Include="SocketFlags">
-      <InProject>false</InProject>
-    </NFMDP_PE_ExcludeClassByName>
-    <NFMDP_PE_ExcludeClassByName Include="SocketOptionLevel">
-      <InProject>false</InProject>
-    </NFMDP_PE_ExcludeClassByName>
-    <NFMDP_PE_ExcludeClassByName Include="SocketOptionName">
-      <InProject>false</InProject>
-    </NFMDP_PE_ExcludeClassByName>
-    <NFMDP_PE_ExcludeClassByName Include="SocketType">
-      <InProject>false</InProject>
-    </NFMDP_PE_ExcludeClassByName>
-  </ItemGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
     <Compile Include="DNS.cs" />

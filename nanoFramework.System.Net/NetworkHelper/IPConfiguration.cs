@@ -1,11 +1,14 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Runtime.CompilerServices;
+
 namespace nanoFramework.Networking
 {
     /// <summary>
     /// IP configuration to be used for static IP address configuration.
     /// </summary>
+    [ExcludeType]
     public class IPConfiguration
     {
         /// <summary>

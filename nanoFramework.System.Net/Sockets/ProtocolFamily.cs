@@ -4,11 +4,14 @@
 // See LICENSE file in the project root for full license information.
 //
 
+using System.Runtime.CompilerServices;
+
 namespace System.Net.Sockets
 {
     /// <summary>
     /// Specifies the type of protocol that an instance of the <see cref='Socket'/>
     /// </summary>
+    [ExcludeType]
     public enum ProtocolFamily
     {
         /// <summary>

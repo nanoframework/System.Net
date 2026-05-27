@@ -5,12 +5,14 @@
 //
 
 using System;
+using System.Runtime.CompilerServices;
 
 namespace System.Net.NetworkInformation
 {
     /// <summary>
     /// Enum of Phy protocols used for connection.
     /// </summary>
+    [ExcludeType]
     [Flags]
     public enum PhyProtocols
     {

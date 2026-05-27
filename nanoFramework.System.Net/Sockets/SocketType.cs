@@ -4,6 +4,8 @@
 // See LICENSE file in the project root for full license information.
 //
 
+using System.Runtime.CompilerServices;
+
 namespace System.Net.Sockets
 {
     /// <summary>
@@ -14,6 +16,7 @@ namespace System.Net.Sockets
     /// and a ProtocolType. The SocketType enumeration provides several options for defining the type of <see cref="Socket"/> that you 
     /// intend to open.
     /// </remarks>
+    [ExcludeType]
     public enum SocketType
     {
         /// <summary>
