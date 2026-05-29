@@ -107,7 +107,11 @@ namespace NetworkHelperTests
 
             // If there is a network, second attempt should succeed;
             // if not, it will time out again — either way, it must NOT throw
-            Assert.IsTrue(NetworkHelper.Status != NetworkHelperStatus.None);
+            Assert.IsTrue(
+                NetworkHelper.Status == NetworkHelperStatus.NetworkIsReady ||
+                NetworkHelper.Status == NetworkHelperStatus.TokenExpiredWaitingIPAddress ||
+                NetworkHelper.Status == NetworkHelperStatus.TokenExpiredWaitingDateTime,
+                "Expected a terminal status after the second attempt");
 
             NetworkHelper.Reset();
         }

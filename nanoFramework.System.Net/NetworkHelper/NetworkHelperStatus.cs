@@ -43,13 +43,13 @@ namespace nanoFramework.Networking
         ErrorConnetingToWiFiWhileScanning,
 
         /// <summary>
-        /// The network was previously ready but the IP address was lost. Waiting for the connection to be restored.
-        /// </summary>
-        Reconnecting,
-
-        /// <summary>
         /// An exception occurred with waiting for the network to become ready. Check HelperException property to find the <see cref="Exception"/> that was thrown.
         /// </summary>
-        ExceptionOccurred
+        ExceptionOccurred,
+
+        /// <summary>
+        /// The network was previously ready but the IP address was lost. Waiting for the connection to be restored.
+        /// </summary>
+        Reconnecting
     }
 }

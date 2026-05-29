@@ -63,7 +63,7 @@ NetworkHelper.SetupNetworkHelper(requiresDateTime: true);
 
 `SetupNetworkHelper` throws `InvalidOperationException` if called a second time without a prior `Reset()`. Token-based methods (`SetupAndConnectNetwork`) do not have this restriction and are always retryable.
 
-## 
+## Feedback and documentation
 
 For documentation, providing feedback, issues and finding out how to contribute please refer to the [Home repo](https://github.com/nanoframework/Home).
 

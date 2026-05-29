@@ -27,6 +27,9 @@ namespace nanoFramework.Networking
 
         private static IPConfiguration _ipConfiguration;
 
+        private static Thread _workerThread;
+        private static bool _stopRequested;
+
         /// <summary>
         /// This flag will make sure there is only one and only one call to the event-based helper methods.
         /// </summary>
@@ -69,7 +72,8 @@ namespace nanoFramework.Networking
             SetupHelper(true);
 
             // fire working thread
-            new Thread(WorkingThread).Start();
+            _workerThread = new Thread(WorkingThread);
+            _workerThread.Start();
         }
 
         /// <summary>
@@ -90,7 +94,8 @@ namespace nanoFramework.Networking
             SetupHelper(true);
 
             // fire working thread
-            new Thread(WorkingThread).Start();
+            _workerThread = new Thread(WorkingThread);
+            _workerThread.Start();
         }
 
         /// <summary>
@@ -143,6 +148,22 @@ namespace nanoFramework.Networking
             // deregister event handler to prevent a handler leak
             NetworkChange.NetworkAddressChanged -= AddressChangedCallback;
 
+            // signal the worker thread to stop and unblock it if it is waiting for an IP address
+            _stopRequested = true;
+
+            if (_ipAddressAvailable != null)
+            {
+                _ipAddressAvailable.Set();
+            }
+
+            if (_workerThread != null)
+            {
+                // give the thread a moment to exit cleanly before clearing shared state
+                _workerThread.Join(1000);
+                _workerThread = null;
+            }
+
+            _stopRequested = false;
             _helperInstanciated = false;
             _ipAddressAvailable = null;
             _networkReady = new(false);
@@ -228,14 +249,26 @@ namespace nanoFramework.Networking
                 _workingNetworkInterface,
                 _ipConfiguration))
             {
-                // wait here until we have an IP address
+                // wait here until we have an IP address or until Reset() unblocks us
                 _ipAddressAvailable.WaitOne();
+            }
+
+            // bail out if Reset() was called while we were waiting
+            if (_stopRequested)
+            {
+                return;
             }
 
             if (_requiresDateTime)
             {
                 // wait until there is a valid DateTime
                 NetworkHelperInternal.WaitForValidDateTime();
+            }
+
+            // bail out if Reset() was called during the DateTime wait
+            if (_stopRequested)
+            {
+                return;
             }
 
             // all conditions met
@@ -247,6 +280,11 @@ namespace nanoFramework.Networking
 
         private static void AddressChangedCallback(object sender, EventArgs e)
         {
+            if (_stopRequested)
+            {
+                return;
+            }
+
             if (NetworkHelperInternal.CheckIP(
                 _workingNetworkInterface,
                 _ipConfiguration))
