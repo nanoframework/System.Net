@@ -29,10 +29,9 @@ namespace NetworkHelperTests
 
             DisplayLastError(success);
             
-            Assert.True(success);
+            Assert.IsTrue(success);
 
-            // need to reset this internal flag to allow calling the NetworkHelper again
-            NetworkHelper.ResetInstance();
+            NetworkHelper.Reset();
         }
 
         [TestMethod]
@@ -45,10 +44,9 @@ namespace NetworkHelperTests
                 new[] { "192.168.1.1" }), true);
 
             // wait 10 seconds to connect to the network
-            Assert.True(NetworkHelper.NetworkReady.WaitOne(10000, true));
+            Assert.IsTrue(NetworkHelper.NetworkReady.WaitOne(10000, true));
 
-            // need to reset this internal flag to allow calling the NetworkHelper again
-            NetworkHelper.ResetInstance();
+            NetworkHelper.Reset();
         }
 
         [TestMethod]
@@ -62,10 +60,9 @@ namespace NetworkHelperTests
 
             DisplayLastError(success);
 
-            Assert.True(success);
+            Assert.IsTrue(success);
 
-            // need to reset this internal flag to allow calling the NetworkHelper again
-            NetworkHelper.ResetInstance();
+            NetworkHelper.Reset();
         }
 
         [TestMethod]
@@ -74,23 +71,60 @@ namespace NetworkHelperTests
             NetworkHelper.SetupNetworkHelper(true);
 
             // wait 10 seconds to connect to the network and get an IP address
-            Assert.True(NetworkHelper.NetworkReady.WaitOne(10000, true));
+            Assert.IsTrue(NetworkHelper.NetworkReady.WaitOne(10000, true));
 
-            // need to reset this internal flag to allow calling the NetworkHelper again
-            NetworkHelper.ResetInstance();
+            NetworkHelper.Reset();
         }
 
         [TestMethod]
         public void TestSingleUsage()
         {
-            Assert.Throws(typeof(InvalidOperationException), () =>
+            Assert.ThrowsException(typeof(InvalidOperationException), () =>
             {
                 // call once, it's OK
                 NetworkHelper.SetupNetworkHelper();
 
-               // call twice, it's a NO NO and should throw an exception
+               // call twice without Reset — must throw
                 NetworkHelper.SetupNetworkHelper();
             });
+
+            NetworkHelper.Reset();
+        }
+
+        [TestMethod]
+        public void TestRetryAfterTimeout()
+        {
+            // First attempt: very short timeout so it expires
+            CancellationTokenSource cs1 = new(1000);
+            var firstResult = NetworkHelper.SetupAndConnectNetwork(token: cs1.Token);
+
+            Assert.IsFalse(firstResult, "First call should have timed out");
+            Assert.IsTrue(NetworkHelper.Status == NetworkHelperStatus.TokenExpiredWaitingIPAddress);
+
+            // Second attempt: longer timeout — must not throw InvalidOperationException
+            CancellationTokenSource cs2 = new(10000);
+            var secondResult = NetworkHelper.SetupAndConnectNetwork(token: cs2.Token);
+
+            // If there is a network, second attempt should succeed;
+            // if not, it will time out again — either way, it must NOT throw
+            Assert.IsTrue(NetworkHelper.Status != NetworkHelperStatus.None);
+
+            NetworkHelper.Reset();
+        }
+
+        [TestMethod]
+        public void TestResetAllowsSetupNetworkHelperRestart()
+        {
+            NetworkHelper.SetupNetworkHelper();
+
+            // Reset and call again — must not throw
+            NetworkHelper.Reset();
+            NetworkHelper.SetupNetworkHelper();
+
+            // wait briefly
+            NetworkHelper.NetworkReady.WaitOne(5000, true);
+
+            NetworkHelper.Reset();
         }
 
         public void DisplayLastError(bool success)

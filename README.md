@@ -12,7 +12,58 @@
 |:-|---|---|
 | System.Net | [![Build Status](https://dev.azure.com/nanoframework/System.Net/_apis/build/status/System.Net?repoName=nanoframework%2FSystem.Net&branchName=main)](https://dev.azure.com/nanoframework/System.Net/_build/latest?definitionId=20&repoName=nanoframework%2FSystem.Net&branchName=main) | [![NuGet](https://img.shields.io/nuget/v/nanoFramework.System.Net.svg?label=NuGet&style=flat&logo=nuget)](https://www.nuget.org/packages/nanoFramework.System.Net/) |
 
-## Feedback and documentation
+## NetworkHelper usage
+
+`NetworkHelper` provides two patterns for establishing a network connection: a blocking token-based approach for simple use-cases, and an event-based approach for background connection management.
+
+### Token-based (retryable)
+
+Call `SetupAndConnectNetwork` with a `CancellationToken` timeout. This method can be called repeatedly — if the first attempt times out, call it again:
+
+```csharp
+bool connected = false;
+while (!connected)
+{
+    CancellationTokenSource cs = new(30000);
+    connected = NetworkHelper.SetupAndConnectNetwork(requiresDateTime: true, token: cs.Token);
+    if (!connected)
+    {
+        Debug.WriteLine($"Network not ready, status: {NetworkHelper.Status}");
+        // wait before retrying
+        Thread.Sleep(5000);
+    }
+}
+```
+
+### Event-based
+
+Call `SetupNetworkHelper` once at startup. The helper connects in the background. Wait on `NetworkReady`:
+
+```csharp
+NetworkHelper.SetupNetworkHelper(requiresDateTime: true);
+
+if (!NetworkHelper.NetworkReady.WaitOne(30000, true))
+{
+    Debug.WriteLine($"Failed to connect: {NetworkHelper.Status}");
+}
+```
+
+> **Note:** `NetworkReady` is reset when the connection is lost and re-signaled when it is restored, accurately reflecting live network state. Code that previously assumed `NetworkReady` would remain set after first connect should be updated to handle transient disconnects.
+
+### Reset and reconfigure
+
+Call `Reset()` to fully reset the helper so it can be called again with different settings, or to restart after an error:
+
+```csharp
+NetworkHelper.Reset();
+
+// Now call SetupNetworkHelper or SetupAndConnectNetwork again
+NetworkHelper.SetupNetworkHelper(requiresDateTime: true);
+```
+
+`SetupNetworkHelper` throws `InvalidOperationException` if called a second time without a prior `Reset()`. Token-based methods (`SetupAndConnectNetwork`) do not have this restriction and are always retryable.
+
+## 
 
 For documentation, providing feedback, issues and finding out how to contribute please refer to the [Home repo](https://github.com/nanoframework/Home).
 
