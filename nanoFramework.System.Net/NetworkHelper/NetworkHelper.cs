@@ -27,8 +27,11 @@ namespace nanoFramework.Networking
 
         private static IPConfiguration _ipConfiguration;
 
+        private static Thread _workerThread;
+        private static bool _stopRequested;
+
         /// <summary>
-        /// This flag will make sure there is only one and only call to any of the helper methods.
+        /// This flag will make sure there is only one and only one call to the event-based helper methods.
         /// </summary>
         private static bool _helperInstanciated = false;
 
@@ -37,7 +40,12 @@ namespace nanoFramework.Networking
         /// </summary>
         /// <remarks>
         /// The conditions for this are setup in the call to <see cref="SetupNetworkHelper(bool)"/>. 
-        /// It will be a composition of network connected, IpAddress available and valid system <see cref="DateTime"/>.</remarks>
+        /// It will be a composition of network connected, IpAddress available and valid system <see cref="DateTime"/>.
+        /// <para>
+        /// When using <see cref="SetupNetworkHelper(bool)"/>, this event is reset when the connection is lost
+        /// and re-signaled when it is restored, accurately reflecting live network state.
+        /// </para>
+        /// </remarks>
         public static ManualResetEvent NetworkReady => _networkReady;
 
         /// <summary>
@@ -55,7 +63,7 @@ namespace nanoFramework.Networking
         /// That will be the network connection to be up, having a valid IpAddress and optionally for a valid date and time to become available.
         /// </summary>
         /// <param name="requiresDateTime">Set to <see langword="true"/> if valid date and time are required.</param>
-        /// <exception cref="InvalidOperationException">If any of the <see cref="NetworkHelper"/> methods is called more than once.</exception>
+        /// <exception cref="InvalidOperationException">If called more than once without an intervening call to <see cref="Reset"/>.</exception>
         /// <exception cref="NotSupportedException">There is no network interface configured. Open the 'Edit Network Configuration' in Device Explorer and configure one.</exception>
         public static void SetupNetworkHelper(bool requiresDateTime = false)
         {
@@ -64,7 +72,8 @@ namespace nanoFramework.Networking
             SetupHelper(true);
 
             // fire working thread
-            new Thread(WorkingThread).Start();
+            _workerThread = new Thread(WorkingThread);
+            _workerThread.Start();
         }
 
         /// <summary>
@@ -73,6 +82,7 @@ namespace nanoFramework.Networking
         /// </summary>
         /// <param name="ipConfiguration">The static IP configuration you want to apply.</param>
         /// <param name="requiresDateTime">Set to <see langword="true"/> if valid date and time are required.</param>
+        /// <exception cref="InvalidOperationException">If called more than once without an intervening call to <see cref="Reset"/>.</exception>
         /// <exception cref="NotSupportedException">There is no network interface configured. Open the 'Edit Network Configuration' in Device Explorer and configure one.</exception>
         public static void SetupNetworkHelper(
             IPConfiguration ipConfiguration,
@@ -84,11 +94,13 @@ namespace nanoFramework.Networking
             SetupHelper(true);
 
             // fire working thread
-            new Thread(WorkingThread).Start();
+            _workerThread = new Thread(WorkingThread);
+            _workerThread.Start();
         }
 
         /// <summary>
         /// This will wait for the network connection to be up and optionally for a valid date and time to become available.
+        /// This method is retryable and can be called multiple times after a previous call times out or fails.
         /// </summary>
         /// <param name="token">A <see cref="CancellationToken"/> used for timing out the operation.</param>
         /// <param name="requiresDateTime">Set to <see langword="true"/> if valid date and time are required.</param>
@@ -102,6 +114,7 @@ namespace nanoFramework.Networking
 
         /// <summary>
         /// This will wait for the network connection to be up and optionally for a valid date and time to become available.
+        /// This method is retryable and can be called multiple times after a previous call times out or fails.
         /// </summary>
         /// <param name="ipConfiguration">The static IPv4 configuration to apply to the Ethernet network interface.</param>
         /// <param name="token">A <see cref="CancellationToken"/> used for timing out the operation.</param>
@@ -120,6 +133,44 @@ namespace nanoFramework.Networking
                 false,
                 token,
                 requiresDateTime);
+        }
+
+        /// <summary>
+        /// Resets the <see cref="NetworkHelper"/> to its initial state, allowing <see cref="SetupNetworkHelper(bool)"/> to be called again
+        /// or the network configuration to be changed.
+        /// </summary>
+        /// <remarks>
+        /// Call this before switching network configuration or restarting the event-based helper.
+        /// This method does not disconnect the network interface or alter IP settings.
+        /// </remarks>
+        public static void Reset()
+        {
+            // deregister event handler to prevent a handler leak
+            NetworkChange.NetworkAddressChanged -= AddressChangedCallback;
+
+            // signal the worker thread to stop and unblock it if it is waiting for an IP address
+            _stopRequested = true;
+
+            if (_ipAddressAvailable != null)
+            {
+                _ipAddressAvailable.Set();
+            }
+
+            if (_workerThread != null)
+            {
+                // give the thread a moment to exit cleanly before clearing shared state
+                _workerThread.Join(1000);
+                _workerThread = null;
+            }
+
+            _stopRequested = false;
+            _helperInstanciated = false;
+            _ipAddressAvailable = null;
+            _networkReady = new(false);
+            _requiresDateTime = false;
+            _networkHelperStatus = NetworkHelperStatus.None;
+            _helperException = null;
+            _ipConfiguration = null;
         }
 
         internal static bool InternalWaitNetworkAvailable(
@@ -194,18 +245,30 @@ namespace nanoFramework.Networking
         private static void WorkingThread()
         {
             // check if we have an IP
-            if(!NetworkHelperInternal.CheckIP(
+            if (!NetworkHelperInternal.CheckIP(
                 _workingNetworkInterface,
                 _ipConfiguration))
             {
-                // wait here until we have an IP address
+                // wait here until we have an IP address or until Reset() unblocks us
                 _ipAddressAvailable.WaitOne();
+            }
+
+            // bail out if Reset() was called while we were waiting
+            if (_stopRequested)
+            {
+                return;
             }
 
             if (_requiresDateTime)
             {
                 // wait until there is a valid DateTime
                 NetworkHelperInternal.WaitForValidDateTime();
+            }
+
+            // bail out if Reset() was called during the DateTime wait
+            if (_stopRequested)
+            {
+                return;
             }
 
             // all conditions met
@@ -217,68 +280,73 @@ namespace nanoFramework.Networking
 
         private static void AddressChangedCallback(object sender, EventArgs e)
         {
-            if(NetworkHelperInternal.CheckIP(
+            if (_stopRequested)
+            {
+                return;
+            }
+
+            if (NetworkHelperInternal.CheckIP(
                 _workingNetworkInterface,
                 _ipConfiguration))
             {
                 _ipAddressAvailable.Set();
+
+                // re-signal ready; check DateTime condition in case it was required
+                if (!_requiresDateTime || DateTime.UtcNow.Year >= 2021)
+                {
+                    _networkReady.Set();
+                    _networkHelperStatus = NetworkHelperStatus.NetworkIsReady;
+                }
+            }
+            else
+            {
+                // IP was lost - reset signals so callers block until the connection is restored
+                _networkReady.Reset();
+                _ipAddressAvailable.Reset();
+                _networkHelperStatus = NetworkHelperStatus.Reconnecting;
             }
         }
 
         /// <summary>
         /// Perform setup of the various fields and events, along with any of the required event handlers.
         /// </summary>
-        /// <param name="setupEvents">Set true to setup the events. Required for the thread approach. Not required for the CancelationToken implementation.</param>
+        /// <param name="setupEvents">Set <see langword="true"/> to setup the events and background thread. Required for the event-based approach. Not required for the CancellationToken approach.</param>
         private static void SetupHelper(bool setupEvents)
         {
-            if (_helperInstanciated)
+            if (setupEvents)
             {
-                throw new InvalidOperationException();
-            }
-            else
-            {
+                if (_helperInstanciated)
+                {
+                    throw new InvalidOperationException();
+                }
+
                 // set flag
                 _helperInstanciated = true;
 
                 // setup event
                 _ipAddressAvailable = new(false);
+            }
 
-                NetworkInterface[] nis = NetworkInterface.GetAllNetworkInterfaces();
+            NetworkInterface[] nis = NetworkInterface.GetAllNetworkInterfaces();
 
-                if (setupEvents)
+            if (setupEvents)
+            {
+                // check if there are any network interfaces setup
+                if (nis.Length == 0)
                 {
-                    // check if there are any network interface setup
-                    if (nis.Length == 0)
-                    {
-                        _networkHelperStatus = NetworkHelperStatus.FailedNoNetworkInterface;
+                    _networkHelperStatus = NetworkHelperStatus.FailedNoNetworkInterface;
 
-                        throw new NotSupportedException();
-                    }
-
-                    // setup handler
-                    NetworkChange.NetworkAddressChanged += new NetworkAddressChangedEventHandler(AddressChangedCallback);
+                    throw new NotSupportedException();
                 }
 
-                NetworkHelperInternal.InternalSetupHelper(nis, _workingNetworkInterface, _ipConfiguration);
-
-                // update status
-                _networkHelperStatus = NetworkHelperStatus.Started;
+                // setup handler
+                NetworkChange.NetworkAddressChanged += new NetworkAddressChangedEventHandler(AddressChangedCallback);
             }
-        }
-   
-        /// <summary>
-        /// Method to reset internal fields to it's defaults
-        /// ONLY TO BE USED BY UNIT TESTS
-        /// </summary>
-        internal static void ResetInstance()
-        {
-            _ipAddressAvailable = null;
-            _networkReady = new(false);
-            _requiresDateTime = false;
-            _networkHelperStatus = NetworkHelperStatus.None;
-            _helperException = null;
-            _ipConfiguration = null;
-            _helperInstanciated = false;
+
+            NetworkHelperInternal.InternalSetupHelper(nis, _workingNetworkInterface, _ipConfiguration);
+
+            // update status
+            _networkHelperStatus = NetworkHelperStatus.Started;
         }
     }
 }
