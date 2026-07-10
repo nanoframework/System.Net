@@ -13,6 +13,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{C9AF0EE0-09CD-4836-9881-9E62766D1CC4}"
+	ProjectSection(SolutionItems) = preProject
+		Tests\README.md = Tests\README.md
+	EndProjectSection
 EndProject
 Project("{11A8DD76-328B-46DF-9F39-F559912D0360}") = "NetworkHelperTests", "Tests\NetworkHelperTests\NetworkHelperTests.nfproj", "{07D7468C-F619-4E73-A431-0B47D450462B}"
 EndProject

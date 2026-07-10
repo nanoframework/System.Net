@@ -254,3 +254,6 @@ paket-files/
 #SoundCloud
 *.sonarqube/
 .sonarlint
+
+# Auto-generated test configuration (produced from .runsettings at build time)
+Tests/SocketTests/TestConfiguration.cs

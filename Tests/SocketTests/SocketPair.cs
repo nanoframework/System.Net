@@ -79,12 +79,16 @@ namespace NFUnitTestSocketTests
         public void AssertDataReceived(int cBytes)
         {
             if (cBytes != bufSend.Length)
+            {
                 throw new Exception("Recieve failed, wrong size " + cBytes + " " + bufSend.Length);
+            }
 
             for (int i = 0; i < bufReceive.Length; i++)
             {
                 if (bufSend[i] != bufReceive[i])
+                {
                     throw new Exception("Receive failed, wrong data");
+                }
             }
         }
     }

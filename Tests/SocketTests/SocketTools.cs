@@ -32,7 +32,9 @@ namespace NFUnitTestSocketTests
         static public IPAddress ParseAddress(string ipString)
         {
             if (ipString == null)
+            {
                 throw new ArgumentNullException("WsdIPAddress.ipString must not be null.");
+            }
 
             ulong ipAddress = 0L;
             int lastIndex = 0;
@@ -45,6 +47,7 @@ namespace NFUnitTestSocketTests
             {
                 // Parse to '.' or end of IP address
                 if (ipString[i] == '.' || i == length - 1)
+                {
                     // If the IP starts with a '.'
                     // or a segment is longer than 3 characters or shiftIndex > 
                     // last bit position throw.
@@ -62,6 +65,7 @@ namespace NFUnitTestSocketTests
                         shiftIndex += 8;
                         mask <<= 8;
                     }
+                }
             }
 
             return new IPAddress((long)ipAddress);
@@ -77,7 +81,9 @@ namespace NFUnitTestSocketTests
             for (int i = 0; i < array1.Length; i++)
             {
                 if (array1[i] != array2[i])
+                {
                     return false;
+                }
             }
 
             return true;
@@ -93,7 +99,9 @@ namespace NFUnitTestSocketTests
             for (int i = 0; i < array1.Length; i++)
             {
                 if (array1[i] != array2[i])
+                {
                     return false;
+                }
             }
 
             return true;
