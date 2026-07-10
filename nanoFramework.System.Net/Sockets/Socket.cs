@@ -1171,6 +1171,12 @@ namespace System.Net.Sockets
                 throw new ObjectDisposedException();
             }
 
+            // Linger option requires 8 bytes (enabled flag + linger time, 4 bytes each)
+            if (optionName == SocketOptionName.Linger && optionValue.Length < 8)
+            {
+                throw new SocketException(SocketError.Fault);
+            }
+
             NativeSocket.setsockopt(
                 this,
                 (int)optionLevel,
