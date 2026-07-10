@@ -7,6 +7,12 @@
        <TargetFrameworkVersion>net48</TargetFrameworkVersion>
        <TargetPlatform>x64</TargetPlatform>
    </RunConfiguration>
+   <!-- NetworkTestCompanion parameters. Set CompanionIP to the PC's LAN IP when running on real hardware.
+        Leave as 127.0.0.1 for virtual device (Win32 emulator) runs. -->
+   <TestRunParameters>
+       <Parameter name="CompanionIP" value="127.0.0.1" />
+       <Parameter name="CompanionControlPort" value="11000" />
+   </TestRunParameters>
    <nanoFrameworkAdapter>
        <Logging>None</Logging> <!--Set to the desired level of logging for Unit Test execution. Possible values are: None, Detailed, Verbose, Error. -->
        <IsRealHardware>False</IsRealHardware><!--Set to true to run tests on real hardware. -->
