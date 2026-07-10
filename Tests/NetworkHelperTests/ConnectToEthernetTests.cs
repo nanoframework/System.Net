@@ -94,8 +94,9 @@ namespace NetworkHelperTests
         [TestMethod]
         public void TestRetryAfterTimeout()
         {
-            // First attempt: very short timeout so it expires
-            CancellationTokenSource cs1 = new(1000);
+            // First attempt: pre-cancelled token guarantees timeout regardless of network state
+            CancellationTokenSource cs1 = new();
+            cs1.Cancel();
             var firstResult = NetworkHelper.SetupAndConnectNetwork(token: cs1.Token);
 
             Assert.IsFalse(firstResult, "First call should have timed out");

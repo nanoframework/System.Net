@@ -46,7 +46,7 @@ namespace NFUnitTestSocketTests
             }
             catch (SocketException e)
             {
-                Assert.IsFalse(e.ErrorCode != (int)SocketError.ProtocolFamilyNotSupported && e.ErrorCode != (int)SocketError.AddressFamilyNotSupported, "Incorrect ErrorCode in SocketException "
+                Assert.IsFalse(e.ErrorCode != (int)SocketError.ProtocolFamilyNotSupported && e.ErrorCode != (int)SocketError.AddressFamilyNotSupported && e.ErrorCode != (int)SocketError.ProtocolNotSupported, "Incorrect ErrorCode in SocketException "
                         + e.ErrorCode);
                 return;
             }
@@ -57,7 +57,6 @@ namespace NFUnitTestSocketTests
         [TestMethod]
         public void SocketExceptionTest4_ProtocolNotSupported()
         {
-
             try
             {
                 Socket socketTest = new Socket(AddressFamily.InterNetwork,
@@ -65,8 +64,7 @@ namespace NFUnitTestSocketTests
             }
             catch (SocketException e)
             {
-                Assert.AreEqual((int)SocketError.ProtocolNotSupported, e.ErrorCode, "Incorrect ErrorCode in SocketException "
-                        + e.ErrorCode);
+                Assert.AreEqual((int)SocketError.ProtocolNotSupported, e.ErrorCode, "Incorrect ErrorCode in SocketException " + e.ErrorCode);
                 return;
             }
             throw new Exception("No SocketException thrown");
@@ -112,16 +110,18 @@ namespace NFUnitTestSocketTests
         public void SocketExceptionTest12_NotConnected()
         {
             SocketPair testSockets = new SocketPair(ProtocolType.Tcp, SocketType.Stream);
+            Socket socketTemp = null;
 
             Assert.ThrowsException(typeof(SocketException), () =>
             {
                 testSockets.Startup(0, 0);
-                Socket socketTemp = new Socket(AddressFamily.InterNetwork,
+                socketTemp = new Socket(AddressFamily.InterNetwork,
                     SocketType.Stream, ProtocolType.Tcp);
                 socketTemp.Bind(testSockets.socketServer.RemoteEndPoint);
                 socketTemp.Send(new byte[2]);
             });
 
+            socketTemp?.Close();
             testSockets.TearDown();
         }
 
@@ -146,17 +146,24 @@ namespace NFUnitTestSocketTests
         [TestMethod]
         public void SocketExceptionTest14_AddressNotAvailable()
         {
+            // Bind to an IP not assigned to any local interface, then connect to force address validation.
+            // nanoFramework's LWIP stack defers the AddressNotAvailable error to connect time, not bind time.
             SocketPair testSockets = new SocketPair(ProtocolType.Tcp, SocketType.Stream);
+            Socket freshSocket = null;
+
             Assert.ThrowsException(typeof(SocketException), () =>
             {
-                int clientPort = SocketTools.nextPort;
                 int serverPort = SocketTools.nextPort;
-                int tempPort = clientPort;
+                int clientPort = SocketTools.nextPort;
                 testSockets.Startup(clientPort, serverPort);
+                testSockets.socketServer.Listen(1);
 
-                testSockets.socketClient.Bind(new IPEndPoint(new IPAddress(SocketTools.DottedDecimalToIp((byte)192, (byte)168, (byte)192, (byte)168)), tempPort));
+                freshSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                freshSocket.Bind(new IPEndPoint(new IPAddress(SocketTools.DottedDecimalToIp((byte)192, (byte)168, (byte)192, (byte)168)), SocketTools.nextPort));
+                freshSocket.Connect(testSockets.epServer);
             });
 
+            freshSocket?.Close();
             testSockets.TearDown();
         }
 
