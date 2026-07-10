@@ -57,11 +57,17 @@ namespace NFUnitTestSocketTests
         [TestMethod]
         public void SocketExceptionTest4_ProtocolNotSupported()
         {
-            Assert.ThrowsException(typeof(SocketException), () =>
+            try
             {
                 Socket socketTest = new Socket(AddressFamily.InterNetwork,
                     SocketType.Stream, ProtocolType.Udp);
-            });
+            }
+            catch (SocketException e)
+            {
+                Assert.AreEqual((int)SocketError.ProtocolNotSupported, e.ErrorCode, "Incorrect ErrorCode in SocketException " + e.ErrorCode);
+                return;
+            }
+            throw new Exception("No SocketException thrown");
         }
 
         [TestMethod]
