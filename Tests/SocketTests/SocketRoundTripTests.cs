@@ -188,26 +188,32 @@ namespace NFUnitTestSocketTests
             server.Bind(new IPEndPoint(IPAddress.Any, mcuListenPort));
             server.Listen(1);
 
-            using (var companion = new CompanionClient())
+            try
             {
-                Assert.IsTrue(companion.Ping(), "Companion not reachable");
+                using (var companion = new CompanionClient())
+                {
+                    Assert.IsTrue(companion.Ping(), "Companion not reachable");
 
-                // Resolve the MCU's own IP - the companion must connect back to it.
-                string mcuIp = GetLocalIp();
-                Assert.IsTrue(companion.ConnectTo(mcuIp, mcuListenPort), "ConnectTo command failed");
+                    string mcuIp = GetLocalIp();
+                    Assert.IsTrue(companion.ConnectTo(mcuIp, mcuListenPort), "ConnectTo command failed");
 
-                // ConnectTo is synchronous on the companion side: by the time we get ok,
-                // the connection is already sitting in the listen backlog.
-                // Poll with 10 s timeout (microseconds) to avoid blocking forever.
-                Assert.IsTrue(server.Poll(10 * 1000 * 1000, SelectMode.SelectRead), "No connection received from companion within timeout");
-                Socket accepted = server.Accept();
+                    Assert.IsTrue(server.Poll(10 * 1000 * 1000, SelectMode.SelectRead), "No connection received from companion within timeout");
+                    Socket accepted = server.Accept();
 
-                Assert.IsNotNull(accepted, "Accept returned null");
-
-                accepted.Close();
+                    try
+                    {
+                        Assert.IsNotNull(accepted, "Accept returned null");
+                    }
+                    finally
+                    {
+                        accepted.Close();
+                    }
+                }
             }
-
-            server.Close();
+            finally
+            {
+                server.Close();
+            }
         }
 
         private static string GetLocalIp()
