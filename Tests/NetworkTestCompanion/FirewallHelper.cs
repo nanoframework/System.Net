@@ -27,11 +27,11 @@ internal static class FirewallHelper
         }
     }
 
-    internal static void Remove()
+    internal static void Remove(int[] tcpPorts, int[] udpPorts)
     {
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            RemoveWindows();
+            RemoveWindows(tcpPorts, udpPorts);
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
         {
@@ -69,7 +69,7 @@ internal static class FirewallHelper
     }
 
     [System.Runtime.Versioning.SupportedOSPlatform("windows")]
-    private static void RemoveWindows()
+    private static void RemoveWindows(int[] tcpPorts, int[] udpPorts)
     {
         if (!IsElevatedWindows())
         {
@@ -77,8 +77,17 @@ internal static class FirewallHelper
             Environment.Exit(1);
         }
 
-        RunNetsh($"advfirewall firewall delete rule name=\"{RulePrefix}\"");
-        Console.WriteLine("Windows firewall rules removed.");
+        foreach (var port in tcpPorts)
+        {
+            RunNetsh($"advfirewall firewall delete rule name=\"{RulePrefix}-TCP-{port}\"");
+        }
+
+        foreach (var port in udpPorts)
+        {
+            RunNetsh($"advfirewall firewall delete rule name=\"{RulePrefix}-UDP-{port}\"");
+        }
+
+        Console.WriteLine($"Windows firewall rules removed for TCP ports [{string.Join(", ", tcpPorts)}] and UDP ports [{string.Join(", ", udpPorts)}].");
     }
 
     private static void PrintMacOsGuidance()
@@ -90,15 +99,11 @@ internal static class FirewallHelper
 
     private static void SetupLinux(int[] tcpPorts, int[] udpPorts)
     {
-        var ufwActive = IsUfwActive();
-        if (!ufwActive)
-        {
-            Console.WriteLine("Linux: no active ufw firewall detected - inbound connections should work without changes.");
-            return;
-        }
+        // Print ufw instructions unconditionally: 'ufw status' requires elevated
+        // permissions and silently returns no output when run as a normal user,
+        // which would suppress necessary guidance even when ufw is active.
+        Console.WriteLine("Linux: if ufw is active, run the following commands to open the required ports:");
 
-        Console.WriteLine("Linux: ufw is active. Run the following commands to open the required ports:");
-        
         foreach (var port in tcpPorts)
         {
             Console.WriteLine($"  sudo ufw allow {port}/tcp");
@@ -110,35 +115,6 @@ internal static class FirewallHelper
         }
 
         Console.WriteLine("NOTE: for iptables/nftables environments, see Tests/README.md for equivalent rules.");
-    }
-
-    private static bool IsUfwActive()
-    {
-        try
-        {
-            var psi = new ProcessStartInfo("ufw", "status")
-            {
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false
-            };
-
-            using var proc = Process.Start(psi);
-
-            if (proc == null)
-            {
-                return false;
-            }
-
-            var output = proc.StandardOutput.ReadToEnd();
-            proc.WaitForExit();
-
-            return output.Contains("Status: active", StringComparison.OrdinalIgnoreCase);
-        }
-        catch
-        {
-            return false;
-        }
     }
 
     private static void RunNetsh(string args)

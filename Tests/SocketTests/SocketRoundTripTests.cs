@@ -69,23 +69,27 @@ namespace NFUnitTestSocketTests
                 Socket client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 client.Connect(new IPEndPoint(IPAddress.Parse(TestConfiguration.CompanionIP), echoPort));
 
-                byte[] sent = new byte[] { 0xAB, 0xCD, 0xEF };
-                client.Send(sent);
-
-                byte[] received = new byte[sent.Length];
-                int totalRead = 0;
-                while (totalRead < sent.Length)
+                try
                 {
-                    int n = client.Receive(received, totalRead, sent.Length - totalRead, SocketFlags.None);
-                    Assert.IsTrue(n > 0, "Connection closed before all bytes received");
-                    totalRead += n;
+                    byte[] sent = new byte[] { 0xAB, 0xCD, 0xEF };
+                    client.Send(sent);
+
+                    byte[] received = new byte[sent.Length];
+                    int totalRead = 0;
+                    while (totalRead < sent.Length)
+                    {
+                        int n = client.Receive(received, totalRead, sent.Length - totalRead, SocketFlags.None);
+                        Assert.IsTrue(n > 0, "Connection closed before all bytes received");
+                        totalRead += n;
+                    }
+
+                    Assert.IsTrue(SocketTools.ArrayEquals(sent, received), "Echoed bytes do not match sent bytes");
                 }
-
-                client.Close();
-
-                Assert.IsTrue(SocketTools.ArrayEquals(sent, received), "Echoed bytes do not match sent bytes");
-
-                companion.Stop(echoPort);
+                finally
+                {
+                    client.Close();
+                    companion.Stop(echoPort);
+                }
             }
         }
 
@@ -105,29 +109,33 @@ namespace NFUnitTestSocketTests
                 Socket client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 client.Connect(new IPEndPoint(IPAddress.Parse(TestConfiguration.CompanionIP), echoPort));
 
-                byte[] sent = new byte[bufferSize];
-
-                for (int i = 0; i < bufferSize; i++)
+                try
                 {
-                    sent[i] = (byte)(i & 0xFF);
+                    byte[] sent = new byte[bufferSize];
+
+                    for (int i = 0; i < bufferSize; i++)
+                    {
+                        sent[i] = (byte)(i & 0xFF);
+                    }
+
+                    client.Send(sent);
+
+                    byte[] received = new byte[bufferSize];
+                    int totalRead = 0;
+                    while (totalRead < bufferSize)
+                    {
+                        int n = client.Receive(received, totalRead, bufferSize - totalRead, SocketFlags.None);
+                        Assert.IsTrue(n > 0, "Connection closed before all bytes received");
+                        totalRead += n;
+                    }
+
+                    Assert.IsTrue(SocketTools.ArrayEquals(sent, received), "Large buffer echo mismatch");
                 }
-
-                client.Send(sent);
-
-                byte[] received = new byte[bufferSize];
-                int totalRead = 0;
-                while (totalRead < bufferSize)
+                finally
                 {
-                    int n = client.Receive(received, totalRead, bufferSize - totalRead, SocketFlags.None);
-                    Assert.IsTrue(n > 0, "Connection closed before all bytes received");
-                    totalRead += n;
+                    client.Close();
+                    companion.Stop(echoPort);
                 }
-
-                client.Close();
-
-                Assert.IsTrue(SocketTools.ArrayEquals(sent, received), "Large buffer echo mismatch");
-
-                companion.Stop(echoPort);
             }
         }
 
@@ -146,24 +154,28 @@ namespace NFUnitTestSocketTests
                 Socket client = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
                 client.Bind(new IPEndPoint(IPAddress.Any, 0));
 
-                EndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse(TestConfiguration.CompanionIP), echoPort);
-
-                byte[] sent = new byte[] { 0x11, 0x22, 0x33 };
-                client.SendTo(sent, serverEndPoint);
-
-                byte[] received = new byte[16];
-                EndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
-                int n = client.ReceiveFrom(received, ref remoteEndPoint);
-
-                client.Close();
-
-                Assert.AreEqual(sent.Length, n, "UDP echo returned wrong byte count");
-                for (int i = 0; i < sent.Length; i++)
+                try
                 {
-                    Assert.AreEqual(sent[i], received[i], $"UDP echo mismatch at byte {i}");
-                }
+                    EndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse(TestConfiguration.CompanionIP), echoPort);
 
-                companion.Stop(echoPort);
+                    byte[] sent = new byte[] { 0x11, 0x22, 0x33 };
+                    client.SendTo(sent, serverEndPoint);
+
+                    byte[] received = new byte[16];
+                    EndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
+                    int n = client.ReceiveFrom(received, ref remoteEndPoint);
+
+                    Assert.AreEqual(sent.Length, n, "UDP echo returned wrong byte count");
+                    for (int i = 0; i < sent.Length; i++)
+                    {
+                        Assert.AreEqual(sent[i], received[i], $"UDP echo mismatch at byte {i}");
+                    }
+                }
+                finally
+                {
+                    client.Close();
+                    companion.Stop(echoPort);
+                }
             }
         }
 
@@ -202,10 +214,18 @@ namespace NFUnitTestSocketTests
         {
             foreach (NetworkInterface ni in NetworkInterface.GetAllNetworkInterfaces())
             {
-                if (ni.IPv4Address != null && ni.IPv4Address != "0.0.0.0")
+                if (ni.IPv4Address == null || ni.IPv4Address == "0.0.0.0")
                 {
-                    return ni.IPv4Address;
+                    continue;
                 }
+
+                // Skip loopback, disconnected, and virtual (link-local) addresses.
+                if (ni.IPv4Address.StartsWith("127.") || ni.IPv4Address.StartsWith("169.254."))
+                {
+                    continue;
+                }
+
+                return ni.IPv4Address;
             }
 
             return "0.0.0.0";

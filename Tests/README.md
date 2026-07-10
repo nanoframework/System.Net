@@ -10,7 +10,7 @@ The tests target nanoFramework MCU devices (or the Win32 nanoCLR emulator). Some
 |---|---|
 | `IPAddressTests` | No - self-contained data-structure tests |
 | `NetworkHelperTests` | No - tests IP acquisition only |
-| `SocketTests` | Loopback-only tests: No. Future round-trip tests: Yes |
+| `SocketTests` | Loopback-only tests: No. Round-trip tests (`SocketRoundTripTests`): Yes (requires companion) |
 
 ---
 
@@ -82,9 +82,10 @@ If `ufw` is active, open the ports manually:
 
 ```sh
 sudo ufw allow 11000/tcp   # control channel
-sudo ufw allow 7/tcp
-sudo ufw allow 7/udp
-# add others as needed
+sudo ufw allow 7001/tcp    # TCP echo (RoundTrip_Tcp_SendReceive_Echo)
+sudo ufw allow 7002/tcp    # TCP echo (RoundTrip_Tcp_LargeBuffer_Echo)
+sudo ufw allow 7003/udp    # UDP echo (RoundTrip_Udp_SendReceive_Echo)
+sudo ufw allow 7004/tcp    # MCU-as-server (RoundTrip_Tcp_McuAsServer_CompanionConnects)
 ```
 
 ### Linux (iptables / nftables)
@@ -94,13 +95,17 @@ For environments without ufw, add equivalent rules:
 ```sh
 # iptables example
 sudo iptables -A INPUT -p tcp --dport 11000 -j ACCEPT
-sudo iptables -A INPUT -p tcp --dport 7 -j ACCEPT
-sudo iptables -A INPUT -p udp --dport 7 -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 7001 -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 7002 -j ACCEPT
+sudo iptables -A INPUT -p udp --dport 7003 -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 7004 -j ACCEPT
 
 # nftables example
 sudo nft add rule inet filter input tcp dport 11000 accept
-sudo nft add rule inet filter input tcp dport 7 accept
-sudo nft add rule inet filter input udp dport 7 accept
+sudo nft add rule inet filter input tcp dport 7001 accept
+sudo nft add rule inet filter input tcp dport 7002 accept
+sudo nft add rule inet filter input udp dport 7003 accept
+sudo nft add rule inet filter input tcp dport 7004 accept
 ```
 
 CI pipeline authors must open the required ports in their runner configuration.

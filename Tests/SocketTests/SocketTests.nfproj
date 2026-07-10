@@ -66,7 +66,8 @@
   <!--
     Generate TestConfiguration.cs from the shared .runsettings file so that
     CompanionIP and CompanionControlPort only need to be set in one place.
-    The generated file is committed to source; it is overwritten on every build.
+    The file is NOT committed to source; a fresh checkout receives it when
+    the GenerateTestConfiguration target runs before the first build.
   -->
   <Target Name="GenerateTestConfiguration" BeforeTargets="BeforeBuild">
     <XmlPeek XmlInputPath="$(MSBuildThisFileDirectory)..\..\.runsettings"

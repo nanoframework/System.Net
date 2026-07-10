@@ -43,7 +43,7 @@ if (setupFirewall)
 
 if (removeFirewall)
 {
-    FirewallHelper.Remove();
+    FirewallHelper.Remove(WellKnownTcpPorts, WellKnownUdpPorts);
     return;
 }
 
