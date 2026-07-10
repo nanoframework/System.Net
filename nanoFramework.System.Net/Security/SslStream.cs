@@ -65,18 +65,29 @@ namespace System.Net.Security
         }
 
         /// <summary>
-        /// Called by clients to authenticate the server and optionally the client in a client-server connection. 
+        /// Called by clients to authenticate the server and optionally the client in a client-server connection.
         /// The authentication process uses the specified SSL protocols.
         /// </summary>
         /// <param name="targetHost">The name of the server that will share this SslStream.</param>
         /// <param name="enabledSslProtocols">The <see cref="SslProtocols"/> value that represents the protocol used for authentication.</param>
+        /// <exception cref="InvalidOperationException">Authentication has already been performed on this stream, or all native SSL context slots are in.</exception>
+        /// <exception cref="OutOfMemoryException">A memory allocation failed while setting up the SSL context. The device may be low on heap.</exception>
+        /// <exception cref="System.Security.Cryptography.CryptographicException">
+        /// SSL context initialisation failed. The <see cref="System.Security.Cryptography.CryptographicException.ErrorCode"/> property contains the
+        /// corresponding <see cref="SslError"/> value:
+        /// <see cref="SslError.DrbgSeedFailed"/> — entropy source could not be initialised;
+        /// <see cref="SslError.ConfigDefaultsFailed"/> — internal mbedTLS configuration error;
+        /// <see cref="SslError.UnsupportedProtocolVersion"/> — the requested TLS version is not supported on this device;
+        /// <see cref="SslError.SetupFailed"/> — final SSL context setup failed.
+        /// </exception>
+        /// <exception cref="SocketException">The TLS handshake with the remote server failed.</exception>
         public void AuthenticateAsClient(string targetHost, SslProtocols enabledSslProtocols)
         {
             Authenticate(false, targetHost, null, null, enabledSslProtocols);
         }
 
         /// <summary>
-        /// Called by clients to authenticate the server and optionally the client in a client-server connection. 
+        /// Called by clients to authenticate the server and optionally the client in a client-server connection.
         /// The authentication process uses the specified certificate collections and SSL protocols.
         /// </summary>
         /// <param name="targetHost">The name of the server that will share this SslStream.</param>
@@ -85,13 +96,27 @@ namespace System.Net.Security
         /// <remarks>
         /// Instead of providing the client certificate in the <paramref name="clientCertificate"/> parameter the <see cref="UseStoredDeviceCertificate"/> property can be used to use the certificate stored in the device.
         /// </remarks>
+        /// <exception cref="InvalidOperationException">Authentication has already been performed on this stream, or all native SSL context slots are in.</exception>
+        /// <exception cref="OutOfMemoryException">A memory allocation failed while setting up the SSL context. The device may be low on heap.</exception>
+        /// <exception cref="System.Security.Cryptography.CryptographicException">
+        /// SSL context initialisation failed. The <see cref="System.Security.Cryptography.CryptographicException.ErrorCode"/> property contains the
+        /// corresponding <see cref="SslError"/> value:
+        /// <see cref="SslError.DrbgSeedFailed"/> — entropy source could not be initialised;
+        /// <see cref="SslError.ConfigDefaultsFailed"/> — internal mbedTLS configuration error;
+        /// <see cref="SslError.UnsupportedProtocolVersion"/> — the requested TLS version is not supported on this device;
+        /// <see cref="SslError.CertificateParseFailed"/> — the client certificate could not be parsed;
+        /// <see cref="SslError.PrivateKeyParseFailed"/> — the client private key could not be parsed;
+        /// <see cref="SslError.OwnCertConfigFailed"/> — configuring the certificate/key pair on the SSL context failed;
+        /// <see cref="SslError.SetupFailed"/> — final SSL context setup failed.
+        /// </exception>
+        /// <exception cref="SocketException">The TLS handshake with the remote server failed.</exception>
         public void AuthenticateAsClient(string targetHost, X509Certificate clientCertificate, SslProtocols enabledSslProtocols)
         {
             Authenticate(false, targetHost, clientCertificate, null, enabledSslProtocols);
         }
 
         /// <summary>
-        /// Called by clients to authenticate the server and optionally the client in a client-server connection. 
+        /// Called by clients to authenticate the server and optionally the client in a client-server connection.
         /// The authentication process uses the specified certificate collections and SSL protocols.
         /// </summary>
         /// <param name="targetHost">The name of the server that will share this SslStream.</param>
@@ -101,13 +126,27 @@ namespace System.Net.Security
         /// <remarks>
         /// Instead of providing the client certificate in the <paramref name="clientCertificate"/> parameter the <see cref="UseStoredDeviceCertificate"/> property can be used to use the certificate stored in the device.
         /// </remarks>
+        /// <exception cref="InvalidOperationException">Authentication has already been performed on this stream, or all native SSL context slots are in.</exception>
+        /// <exception cref="OutOfMemoryException">A memory allocation failed while setting up the SSL context. The device may be low on heap.</exception>
+        /// <exception cref="System.Security.Cryptography.CryptographicException">
+        /// SSL context initialisation failed. The <see cref="System.Security.Cryptography.CryptographicException.ErrorCode"/> property contains the
+        /// corresponding <see cref="SslError"/> value:
+        /// <see cref="SslError.DrbgSeedFailed"/> — entropy source could not be initialised;
+        /// <see cref="SslError.ConfigDefaultsFailed"/> — internal mbedTLS configuration error;
+        /// <see cref="SslError.UnsupportedProtocolVersion"/> — the requested TLS version is not supported on this device;
+        /// <see cref="SslError.CertificateParseFailed"/> — the client or CA certificate could not be parsed;
+        /// <see cref="SslError.PrivateKeyParseFailed"/> — the client private key could not be parsed;
+        /// <see cref="SslError.OwnCertConfigFailed"/> — configuring the certificate/key pair on the SSL context failed;
+        /// <see cref="SslError.SetupFailed"/> — final SSL context setup failed.
+        /// </exception>
+        /// <exception cref="SocketException">The TLS handshake with the remote server failed.</exception>
         public void AuthenticateAsClient(string targetHost, X509Certificate clientCertificate, X509Certificate ca, SslProtocols enabledSslProtocols)
         {
             Authenticate(false, targetHost, clientCertificate, ca, enabledSslProtocols);
         }
 
         /// <summary>
-        /// Called by servers to authenticate the server and optionally the client in a client-server connection using the specified certificate, 
+        /// Called by servers to authenticate the server and optionally the client in a client-server connection using the specified certificate,
         /// verification requirements and security protocol.
         /// </summary>
         /// <param name="serverCertificate">The certificate used to authenticate the server.</param>
@@ -115,6 +154,20 @@ namespace System.Net.Security
         /// <remarks>
         /// Instead of providing the server certificate in the <paramref name="serverCertificate"/> parameter the <see cref="UseStoredDeviceCertificate"/> property can be used to use the certificate stored in the device.
         /// </remarks>
+        /// <exception cref="InvalidOperationException">Authentication has already been performed on this stream, or all native SSL context slots are in.</exception>
+        /// <exception cref="OutOfMemoryException">A memory allocation failed while setting up the SSL context. The device may be low on heap.</exception>
+        /// <exception cref="System.Security.Cryptography.CryptographicException">
+        /// SSL context initialisation failed. The <see cref="System.Security.Cryptography.CryptographicException.ErrorCode"/> property contains the
+        /// corresponding <see cref="SslError"/> value:
+        /// <see cref="SslError.DrbgSeedFailed"/> — entropy source could not be initialised;
+        /// <see cref="SslError.ConfigDefaultsFailed"/> — internal mbedTLS configuration error;
+        /// <see cref="SslError.UnsupportedProtocolVersion"/> — the requested TLS version is not supported on this device;
+        /// <see cref="SslError.CertificateParseFailed"/> — the server certificate could not be parsed;
+        /// <see cref="SslError.PrivateKeyParseFailed"/> — the server private key could not be parsed;
+        /// <see cref="SslError.OwnCertConfigFailed"/> — configuring the certificate/key pair on the SSL context failed;
+        /// <see cref="SslError.SetupFailed"/> — final SSL context setup failed.
+        /// </exception>
+        /// <exception cref="SocketException">The TLS handshake with the remote client failed.</exception>
         public void AuthenticateAsServer(X509Certificate serverCertificate, SslProtocols enabledSslProtocols)
         {
             Authenticate(true, "", serverCertificate, null, enabledSslProtocols);
@@ -124,11 +177,25 @@ namespace System.Net.Security
         /// Called by servers to authenticate the server and optionally the client in a client-server connection using the specified certificates, requirements and security protocol.
         /// </summary>
         /// <param name="serverCertificate">The X509Certificate used to authenticate the server.</param>
-        /// <param name="clientCertificateRequired">A <see cref="Boolean"/> value that specifies whether the client is asked for a certificate for authentication. Note that this is only a request, if no certificate is provided, the server still accepts the connection request.</param>
+        /// <param name="clientCertificateRequired">A <see cref="Boolean"/> value that specifies whether the client is asked for a certificate for authentication. Note that this is only a request — if no certificate is provided, the server still accepts the connection request.</param>
         /// <param name="enabledSslProtocols">The protocols that may be used for authentication.</param>
         /// <remarks>
         /// Instead of providing the server certificate in the <paramref name="serverCertificate"/> parameter the <see cref="UseStoredDeviceCertificate"/> property can be used to use the certificate stored in the device.
         /// </remarks>
+        /// <exception cref="InvalidOperationException">Authentication has already been performed on this stream, or all native SSL context slots are in.</exception>
+        /// <exception cref="OutOfMemoryException">A memory allocation failed while setting up the SSL context. The device may be low on heap.</exception>
+        /// <exception cref="System.Security.Cryptography.CryptographicException">
+        /// SSL context initialisation failed. The <see cref="System.Security.Cryptography.CryptographicException.ErrorCode"/> property contains the
+        /// corresponding <see cref="SslError"/> value:
+        /// <see cref="SslError.DrbgSeedFailed"/> — entropy source could not be initialised;
+        /// <see cref="SslError.ConfigDefaultsFailed"/> — internal mbedTLS configuration error;
+        /// <see cref="SslError.UnsupportedProtocolVersion"/> — the requested TLS version is not supported on this device;
+        /// <see cref="SslError.CertificateParseFailed"/> — the server certificate could not be parsed;
+        /// <see cref="SslError.PrivateKeyParseFailed"/> — the server private key could not be parsed;
+        /// <see cref="SslError.OwnCertConfigFailed"/> — configuring the certificate/key pair on the SSL context failed;
+        /// <see cref="SslError.SetupFailed"/> — final SSL context setup failed.
+        /// </exception>
+        /// <exception cref="SocketException">The TLS handshake with the remote client failed.</exception>
         public void AuthenticateAsServer(X509Certificate serverCertificate, bool clientCertificateRequired, SslProtocols enabledSslProtocols)
         {
             SslVerification = clientCertificateRequired ? SslVerification.VerifyClientOnce : SslVerification.NoVerification;
