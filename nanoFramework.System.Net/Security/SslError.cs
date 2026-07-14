@@ -3,6 +3,8 @@
 // See LICENSE file in the project root for full license information.
 //
 
+using System.Security.Cryptography;
+
 namespace System.Net.Sockets
 {
 
@@ -12,8 +14,8 @@ namespace System.Net.Sockets
     /// </summary>
     /// <remarks>
     /// Values are kept in sync with the <c>SSL_Error</c> enum in the native interpreter
-    /// (<c>ssl_functions.h</c>). <see cref="System.Net.Security.SslStream"/> surfaces these
-    /// through <see cref="System.Security.Cryptography.CryptographicException.ErrorCode"/>
+    /// (<c>ssl_functions.h</c>). <see cref="Security.SslStream"/> surfaces these
+    /// through <see cref="CryptographicException.ErrorCode"/>
     /// when SSL context setup fails.
     /// </remarks>
     ///
@@ -75,5 +77,34 @@ namespace System.Net.Sockets
         /// This is an internal mbedTLS error that should not occur under normal conditions.
         /// </summary>
         SetupFailed,
+
+        /// <summary>
+        /// The SSL context was not valid when attempting the handshake.
+        /// Thrown as <see cref="InvalidOperationException"/>.
+        /// </summary>
+        HandshakeBadContext,
+
+        /// <summary>
+        /// Setting the server hostname for SNI failed during the handshake.
+        /// Thrown as <see cref="InvalidOperationException"/>.
+        /// </summary>
+        HandshakeSetHostname,
+
+        /// <summary>
+        /// Certificate verification failed during the handshake.
+        /// Thrown as <see cref="CryptographicException"/>
+        /// with <see cref="CryptographicException.ErrorCode"/>
+        /// set to the bitmask of <c>MBEDTLS_X509_BADCERT_*</c> verification flags returned
+        /// by <c>mbedtls_ssl_get_verify_result()</c>.
+        /// </summary>
+        HandshakeCertVerifyFailed,
+
+        /// <summary>
+        /// The TLS handshake failed.
+        /// Thrown as <see cref="CryptographicException"/>
+        /// with <see cref="CryptographicException.ErrorCode"/>
+        /// set to the raw negative mbedTLS error code.
+        /// </summary>
+        HandshakeFailed,
     }
 }
