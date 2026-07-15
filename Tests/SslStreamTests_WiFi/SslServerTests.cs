@@ -44,7 +44,7 @@ namespace NFUnitTestSslStream
         public void Setup()
         {
             // Comment the next line to run these tests on real hardware with network connectivity
-            //Assert.SkipTest("Skipping SSL server tests: requires real hardware with companion running");
+            Assert.SkipTest("Skipping SSL server tests: requires real hardware with companion running");
 
             CancellationTokenSource cs = new(60000);
 

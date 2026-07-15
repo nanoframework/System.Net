@@ -35,7 +35,7 @@ namespace NFUnitTestSslStream
         public void Setup()
         {
             // Comment the next line to run these tests on real hardware with network connectivity
-            //Assert.SkipTest("Skipping SSL tests: requires real hardware with network connectivity");
+            Assert.SkipTest("Skipping SSL tests: requires real hardware with network connectivity");
 
             CancellationTokenSource cs = new(60000);
 
