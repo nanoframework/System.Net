@@ -7,7 +7,7 @@ using System.Net.Sockets;
 using NetworkTestCompanion;
 
 const int DefaultControlPort = 11000;
-int[] WellKnownTcpPorts = [DefaultControlPort, 7, 8, 9, 10, 80, 8080];
+int[] WellKnownTcpPorts = [DefaultControlPort, 7, 8, 9, 10, 80, 8080, 7010, 7011, 7012, 7013, 7014];
 int[] WellKnownUdpPorts = [7, 8, 9];
 
 // Argument parsing
