@@ -7,6 +7,7 @@
 using System.IO;
 using System.Net.Sockets;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 
 namespace System.Net.Security
@@ -72,18 +73,33 @@ namespace System.Net.Security
         /// <param name="enabledSslProtocols">The <see cref="SslProtocols"/> value that represents the protocol used for authentication.</param>
         /// <exception cref="InvalidOperationException">Authentication has already been performed on this stream, or all native SSL context slots are in.</exception>
         /// <exception cref="OutOfMemoryException">A memory allocation failed while setting up the SSL context. The device may be low on heap.</exception>
-        /// <exception cref="System.Security.Cryptography.CryptographicException">
-        /// SSL context initialisation failed. The <see cref="System.Security.Cryptography.CryptographicException.ErrorCode"/> property contains the
+        /// <exception cref="CryptographicException">
+        /// SSL context initialisation failed. The <see cref="CryptographicException.ErrorCode"/> property contains the
         /// corresponding <see cref="SslError"/> value:
-        /// <see cref="SslError.DrbgSeedFailed"/> — entropy source could not be initialised;
-        /// <see cref="SslError.ConfigDefaultsFailed"/> — internal mbedTLS configuration error;
-        /// <see cref="SslError.UnsupportedProtocolVersion"/> — the requested TLS version is not supported on this device;
-        /// <see cref="SslError.SetupFailed"/> — final SSL context setup failed.
+        /// <see cref="SslError.DrbgSeedFailed"/> - entropy source could not be initialised;
+        /// <see cref="SslError.ConfigDefaultsFailed"/> - internal mbedTLS configuration error;
+        /// <see cref="SslError.UnsupportedProtocolVersion"/> - the requested TLS version is not supported on this device;
+        /// <see cref="SslError.SetupFailed"/> - final SSL context setup failed.
         /// </exception>
-        /// <exception cref="SocketException">The TLS handshake with the remote server failed.</exception>
-        public void AuthenticateAsClient(string targetHost, SslProtocols enabledSslProtocols)
+        /// <exception cref="InvalidOperationException">
+        /// Thrown during the TLS handshake when:
+        /// <see cref="SslError.HandshakeBadContext"/> - the SSL context was not valid;
+        /// <see cref="SslError.HandshakeSetHostname"/> - setting the server hostname for SNI failed.
+        /// </exception>
+        /// <exception cref="CryptographicException">
+        /// Thrown during the TLS handshake. The <see cref="CryptographicException.ErrorCode"/> property contains:
+        /// for <see cref="SslError.HandshakeCertVerifyFailed"/> - the bitmask of <c>MBEDTLS_X509_BADCERT_*</c> verification flags;
+        /// for <see cref="SslError.HandshakeFailed"/> - the raw negative mbedTLS error code.
+        /// </exception>
+        public void AuthenticateAsClient(
+            string targetHost,
+            SslProtocols enabledSslProtocols)
         {
-            Authenticate(false, targetHost, null, null, enabledSslProtocols);
+            Authenticate(false,
+                         targetHost,
+                         null,
+                         null,
+                         enabledSslProtocols);
         }
 
         /// <summary>
@@ -98,21 +114,37 @@ namespace System.Net.Security
         /// </remarks>
         /// <exception cref="InvalidOperationException">Authentication has already been performed on this stream, or all native SSL context slots are in.</exception>
         /// <exception cref="OutOfMemoryException">A memory allocation failed while setting up the SSL context. The device may be low on heap.</exception>
-        /// <exception cref="System.Security.Cryptography.CryptographicException">
-        /// SSL context initialisation failed. The <see cref="System.Security.Cryptography.CryptographicException.ErrorCode"/> property contains the
+        /// <exception cref="CryptographicException">
+        /// SSL context initialisation failed. The <see cref="CryptographicException.ErrorCode"/> property contains the
         /// corresponding <see cref="SslError"/> value:
-        /// <see cref="SslError.DrbgSeedFailed"/> — entropy source could not be initialised;
-        /// <see cref="SslError.ConfigDefaultsFailed"/> — internal mbedTLS configuration error;
-        /// <see cref="SslError.UnsupportedProtocolVersion"/> — the requested TLS version is not supported on this device;
-        /// <see cref="SslError.CertificateParseFailed"/> — the client certificate could not be parsed;
-        /// <see cref="SslError.PrivateKeyParseFailed"/> — the client private key could not be parsed;
-        /// <see cref="SslError.OwnCertConfigFailed"/> — configuring the certificate/key pair on the SSL context failed;
-        /// <see cref="SslError.SetupFailed"/> — final SSL context setup failed.
+        /// <see cref="SslError.DrbgSeedFailed"/> - entropy source could not be initialised;
+        /// <see cref="SslError.ConfigDefaultsFailed"/> - internal mbedTLS configuration error;
+        /// <see cref="SslError.UnsupportedProtocolVersion"/> - the requested TLS version is not supported on this device;
+        /// <see cref="SslError.CertificateParseFailed"/> - the client certificate could not be parsed;
+        /// <see cref="SslError.PrivateKeyParseFailed"/> - the client private key could not be parsed;
+        /// <see cref="SslError.OwnCertConfigFailed"/> - configuring the certificate/key pair on the SSL context failed;
+        /// <see cref="SslError.SetupFailed"/> - final SSL context setup failed.
         /// </exception>
-        /// <exception cref="SocketException">The TLS handshake with the remote server failed.</exception>
-        public void AuthenticateAsClient(string targetHost, X509Certificate clientCertificate, SslProtocols enabledSslProtocols)
+        /// <exception cref="InvalidOperationException">
+        /// Thrown during the TLS handshake when:
+        /// <see cref="SslError.HandshakeBadContext"/> - the SSL context was not valid;
+        /// <see cref="SslError.HandshakeSetHostname"/> - setting the server hostname for SNI failed.
+        /// </exception>
+        /// <exception cref="CryptographicException">
+        /// Thrown during the TLS handshake. The <see cref="CryptographicException.ErrorCode"/> property contains:
+        /// for <see cref="SslError.HandshakeCertVerifyFailed"/> - the bitmask of <c>MBEDTLS_X509_BADCERT_*</c> verification flags;
+        /// for <see cref="SslError.HandshakeFailed"/> - the raw negative mbedTLS error code.
+        /// </exception>
+        public void AuthenticateAsClient(
+            string targetHost,
+            X509Certificate clientCertificate,
+            SslProtocols enabledSslProtocols)
         {
-            Authenticate(false, targetHost, clientCertificate, null, enabledSslProtocols);
+            Authenticate(false,
+                         targetHost,
+                         clientCertificate,
+                         null,
+                         enabledSslProtocols);
         }
 
         /// <summary>
@@ -128,21 +160,38 @@ namespace System.Net.Security
         /// </remarks>
         /// <exception cref="InvalidOperationException">Authentication has already been performed on this stream, or all native SSL context slots are in.</exception>
         /// <exception cref="OutOfMemoryException">A memory allocation failed while setting up the SSL context. The device may be low on heap.</exception>
-        /// <exception cref="System.Security.Cryptography.CryptographicException">
-        /// SSL context initialisation failed. The <see cref="System.Security.Cryptography.CryptographicException.ErrorCode"/> property contains the
+        /// <exception cref="CryptographicException">
+        /// SSL context initialisation failed. The <see cref="CryptographicException.ErrorCode"/> property contains the
         /// corresponding <see cref="SslError"/> value:
-        /// <see cref="SslError.DrbgSeedFailed"/> — entropy source could not be initialised;
-        /// <see cref="SslError.ConfigDefaultsFailed"/> — internal mbedTLS configuration error;
-        /// <see cref="SslError.UnsupportedProtocolVersion"/> — the requested TLS version is not supported on this device;
-        /// <see cref="SslError.CertificateParseFailed"/> — the client or CA certificate could not be parsed;
-        /// <see cref="SslError.PrivateKeyParseFailed"/> — the client private key could not be parsed;
-        /// <see cref="SslError.OwnCertConfigFailed"/> — configuring the certificate/key pair on the SSL context failed;
-        /// <see cref="SslError.SetupFailed"/> — final SSL context setup failed.
+        /// <see cref="SslError.DrbgSeedFailed"/> - entropy source could not be initialised;
+        /// <see cref="SslError.ConfigDefaultsFailed"/> - internal mbedTLS configuration error;
+        /// <see cref="SslError.UnsupportedProtocolVersion"/> - the requested TLS version is not supported on this device;
+        /// <see cref="SslError.CertificateParseFailed"/> - the client or CA certificate could not be parsed;
+        /// <see cref="SslError.PrivateKeyParseFailed"/> - the client private key could not be parsed;
+        /// <see cref="SslError.OwnCertConfigFailed"/> - configuring the certificate/key pair on the SSL context failed;
+        /// <see cref="SslError.SetupFailed"/> - final SSL context setup failed.
         /// </exception>
-        /// <exception cref="SocketException">The TLS handshake with the remote server failed.</exception>
-        public void AuthenticateAsClient(string targetHost, X509Certificate clientCertificate, X509Certificate ca, SslProtocols enabledSslProtocols)
+        /// <exception cref="InvalidOperationException">
+        /// Thrown during the TLS handshake when:
+        /// <see cref="SslError.HandshakeBadContext"/> - the SSL context was not valid;
+        /// <see cref="SslError.HandshakeSetHostname"/> - setting the server hostname for SNI failed.
+        /// </exception>
+        /// <exception cref="CryptographicException">
+        /// Thrown during the TLS handshake. The <see cref="CryptographicException.ErrorCode"/> property contains:
+        /// for <see cref="SslError.HandshakeCertVerifyFailed"/> - the bitmask of <c>MBEDTLS_X509_BADCERT_*</c> verification flags;
+        /// for <see cref="SslError.HandshakeFailed"/> - the raw negative mbedTLS error code.
+        /// </exception>
+        public void AuthenticateAsClient(
+            string targetHost,
+            X509Certificate clientCertificate,
+            X509Certificate ca,
+            SslProtocols enabledSslProtocols)
         {
-            Authenticate(false, targetHost, clientCertificate, ca, enabledSslProtocols);
+            Authenticate(false,
+                         targetHost,
+                         clientCertificate,
+                         ca,
+                         enabledSslProtocols);
         }
 
         /// <summary>
@@ -156,21 +205,34 @@ namespace System.Net.Security
         /// </remarks>
         /// <exception cref="InvalidOperationException">Authentication has already been performed on this stream, or all native SSL context slots are in.</exception>
         /// <exception cref="OutOfMemoryException">A memory allocation failed while setting up the SSL context. The device may be low on heap.</exception>
-        /// <exception cref="System.Security.Cryptography.CryptographicException">
-        /// SSL context initialisation failed. The <see cref="System.Security.Cryptography.CryptographicException.ErrorCode"/> property contains the
+        /// <exception cref="CryptographicException">
+        /// SSL context initialisation failed. The <see cref="CryptographicException.ErrorCode"/> property contains the
         /// corresponding <see cref="SslError"/> value:
-        /// <see cref="SslError.DrbgSeedFailed"/> — entropy source could not be initialised;
-        /// <see cref="SslError.ConfigDefaultsFailed"/> — internal mbedTLS configuration error;
-        /// <see cref="SslError.UnsupportedProtocolVersion"/> — the requested TLS version is not supported on this device;
-        /// <see cref="SslError.CertificateParseFailed"/> — the server certificate could not be parsed;
-        /// <see cref="SslError.PrivateKeyParseFailed"/> — the server private key could not be parsed;
-        /// <see cref="SslError.OwnCertConfigFailed"/> — configuring the certificate/key pair on the SSL context failed;
-        /// <see cref="SslError.SetupFailed"/> — final SSL context setup failed.
+        /// <see cref="SslError.DrbgSeedFailed"/> - entropy source could not be initialised;
+        /// <see cref="SslError.ConfigDefaultsFailed"/> - internal mbedTLS configuration error;
+        /// <see cref="SslError.UnsupportedProtocolVersion"/> - the requested TLS version is not supported on this device;
+        /// <see cref="SslError.CertificateParseFailed"/> - the server certificate could not be parsed;
+        /// <see cref="SslError.PrivateKeyParseFailed"/> - the server private key could not be parsed;
+        /// <see cref="SslError.OwnCertConfigFailed"/> - configuring the certificate/key pair on the SSL context failed;
+        /// <see cref="SslError.SetupFailed"/> - final SSL context setup failed.
         /// </exception>
-        /// <exception cref="SocketException">The TLS handshake with the remote client failed.</exception>
-        public void AuthenticateAsServer(X509Certificate serverCertificate, SslProtocols enabledSslProtocols)
+        /// <exception cref="InvalidOperationException">
+        /// Thrown during the TLS handshake when <see cref="SslError.HandshakeBadContext"/> - the SSL context was not valid.
+        /// </exception>
+        /// <exception cref="CryptographicException">
+        /// Thrown during the TLS handshake. The <see cref="CryptographicException.ErrorCode"/> property contains:
+        /// for <see cref="SslError.HandshakeCertVerifyFailed"/> - the bitmask of <c>MBEDTLS_X509_BADCERT_*</c> verification flags (when client certificate verification is enabled);
+        /// for <see cref="SslError.HandshakeFailed"/> - the raw negative mbedTLS error code.
+        /// </exception>
+        public void AuthenticateAsServer(
+            X509Certificate serverCertificate,
+            SslProtocols enabledSslProtocols)
         {
-            Authenticate(true, "", serverCertificate, null, enabledSslProtocols);
+            Authenticate(true,
+                         "",
+                         serverCertificate,
+                         null,
+                         enabledSslProtocols);
         }
 
         /// <summary>
@@ -184,23 +246,37 @@ namespace System.Net.Security
         /// </remarks>
         /// <exception cref="InvalidOperationException">Authentication has already been performed on this stream, or all native SSL context slots are in.</exception>
         /// <exception cref="OutOfMemoryException">A memory allocation failed while setting up the SSL context. The device may be low on heap.</exception>
-        /// <exception cref="System.Security.Cryptography.CryptographicException">
-        /// SSL context initialisation failed. The <see cref="System.Security.Cryptography.CryptographicException.ErrorCode"/> property contains the
+        /// <exception cref="CryptographicException">
+        /// SSL context initialisation failed. The <see cref="CryptographicException.ErrorCode"/> property contains the
         /// corresponding <see cref="SslError"/> value:
-        /// <see cref="SslError.DrbgSeedFailed"/> — entropy source could not be initialised;
-        /// <see cref="SslError.ConfigDefaultsFailed"/> — internal mbedTLS configuration error;
-        /// <see cref="SslError.UnsupportedProtocolVersion"/> — the requested TLS version is not supported on this device;
-        /// <see cref="SslError.CertificateParseFailed"/> — the server certificate could not be parsed;
-        /// <see cref="SslError.PrivateKeyParseFailed"/> — the server private key could not be parsed;
-        /// <see cref="SslError.OwnCertConfigFailed"/> — configuring the certificate/key pair on the SSL context failed;
-        /// <see cref="SslError.SetupFailed"/> — final SSL context setup failed.
+        /// <see cref="SslError.DrbgSeedFailed"/> - entropy source could not be initialised;
+        /// <see cref="SslError.ConfigDefaultsFailed"/> - internal mbedTLS configuration error;
+        /// <see cref="SslError.UnsupportedProtocolVersion"/> - the requested TLS version is not supported on this device;
+        /// <see cref="SslError.CertificateParseFailed"/> - the server certificate could not be parsed;
+        /// <see cref="SslError.PrivateKeyParseFailed"/> - the server private key could not be parsed;
+        /// <see cref="SslError.OwnCertConfigFailed"/> - configuring the certificate/key pair on the SSL context failed;
+        /// <see cref="SslError.SetupFailed"/> - final SSL context setup failed.
         /// </exception>
-        /// <exception cref="SocketException">The TLS handshake with the remote client failed.</exception>
-        public void AuthenticateAsServer(X509Certificate serverCertificate, bool clientCertificateRequired, SslProtocols enabledSslProtocols)
+        /// <exception cref="InvalidOperationException">
+        /// Thrown during the TLS handshake when <see cref="SslError.HandshakeBadContext"/> - the SSL context was not valid.
+        /// </exception>
+        /// <exception cref="CryptographicException">
+        /// Thrown during the TLS handshake. The <see cref="CryptographicException.ErrorCode"/> property contains:
+        /// for <see cref="SslError.HandshakeCertVerifyFailed"/> - the bitmask of <c>MBEDTLS_X509_BADCERT_*</c> verification flags (when client certificate verification is enabled);
+        /// for <see cref="SslError.HandshakeFailed"/> - the raw negative mbedTLS error code.
+        /// </exception>
+        public void AuthenticateAsServer(
+            X509Certificate serverCertificate,
+            bool clientCertificateRequired,
+            SslProtocols enabledSslProtocols)
         {
             SslVerification = clientCertificateRequired ? SslVerification.VerifyClientOnce : SslVerification.NoVerification;
 
-            Authenticate(true, "", serverCertificate, null, enabledSslProtocols);
+            Authenticate(true,
+                         "",
+                         serverCertificate,
+                         null,
+                         enabledSslProtocols);
         }
 
         internal void Authenticate(bool isServer, string targetHost, X509Certificate certificate, X509Certificate ca, SslProtocols enabledSslProtocols)
