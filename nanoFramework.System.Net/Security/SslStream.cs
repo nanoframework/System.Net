@@ -298,7 +298,7 @@ namespace System.Net.Security
                         certificate,
                         ca,
                         _useStoredDeviceCertificate);
-                    
+
                     SslNative.SecureAccept(_sslContext, _socket);
                 }
                 else
@@ -309,7 +309,7 @@ namespace System.Net.Security
                         certificate,
                         ca,
                         _useStoredDeviceCertificate);
-                    
+
                     SslNative.SecureConnect(_sslContext, targetHost, _socket);
                 }
             }
@@ -394,13 +394,13 @@ namespace System.Net.Security
             {
                 _disposed = true;
 
-                if(_socket.m_Handle != -1)
+                if (_socket.m_Handle != -1)
                 {
                     SslNative.SecureCloseSocket(_socket);
                     _socket.m_Handle = -1;
                 }
 
-                if (_sslContext != -1) 
+                if (_sslContext != -1)
                 {
                     SslNative.ExitSecureContext(_sslContext);
                     _sslContext = -1;
@@ -446,7 +446,30 @@ namespace System.Net.Security
         /// <param name="buffer">An array that supplies the bytes written to the stream.</param>
         /// <param name="offset">he zero-based location in buffer at which to begin reading bytes to be written to the stream.</param>
         /// <param name="size">The number of bytes to read from buffer.</param>
-        public override void Write(byte[] buffer, int offset, int size)
+        /// <exception cref="ArgumentNullException"><paramref name="buffer"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <para>
+        /// <paramref name="offset"/> or <paramref name="size"/> is less than zero
+        /// </para>
+        /// <para>
+        /// -or-
+        /// </para>
+        /// <para>
+        /// <paramref name="offset"/> is greater than the length of <paramref name="buffer"/>.
+        /// </para>
+        /// <para>
+        /// -or-
+        /// </para>
+        /// <para>
+        /// <paramref name="offset"/> + <paramref name="size"/> is greater than the length of <paramref name="buffer"/>.
+        /// </para>
+        /// </exception>
+        /// <exception cref="ObjectDisposedException">The stream has been disposed.</exception>
+        /// <exception cref="IOException">The write operation failed.</exception>
+        public override void Write(
+            byte[] buffer,
+            int offset,
+            int size)
         {
             if (buffer == null)
             {
@@ -468,7 +491,12 @@ namespace System.Net.Security
                 throw new ArgumentOutOfRangeException();
             }
 
-            SslNative.SecureWrite(_socket, buffer, offset, size, _socket.SendTimeout);
+            int written = SslNative.SecureWrite(_socket, buffer, offset, size, _socket.SendTimeout);
+
+            if (written <= 0 && size > 0)
+            {
+                throw new IOException();
+            }
         }
     }
 }
