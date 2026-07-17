@@ -156,10 +156,20 @@ namespace NFUnitTestSslStream
                             AuthenticateAsServerLogged(sslStream, serverCert);
                             OutputHelper.WriteLine("TLS server handshake succeeded");
 
-                            byte[] buffer = new byte[1024];
-                            int bytesRead = sslStream.Read(buffer, 0, buffer.Length);
+                            byte[] buffer = new byte[testData.Length];
+                            int bytesRead = 0;
 
-                            Assert.IsTrue(bytesRead > 0, "Should have received data from companion");
+                            while (bytesRead < testData.Length)
+                            {
+                                int n = sslStream.Read(buffer, bytesRead, testData.Length - bytesRead);
+                                if (n == 0)
+                                {
+                                    break;
+                                }
+
+                                bytesRead += n;
+                            }
+
                             Assert.AreEqual(testData.Length, bytesRead, "Should receive exact bytes sent by companion");
 
                             for (int i = 0; i < bytesRead; i++)
@@ -212,8 +222,19 @@ namespace NFUnitTestSslStream
                         byte[] sent = Encoding.UTF8.GetBytes("Hello TLS echo from device!");
                         sslStream.Write(sent, 0, sent.Length);
 
-                        byte[] buffer = new byte[1024];
-                        int bytesRead = sslStream.Read(buffer, 0, buffer.Length);
+                        byte[] buffer = new byte[sent.Length];
+                        int bytesRead = 0;
+
+                        while (bytesRead < sent.Length)
+                        {
+                            int n = sslStream.Read(buffer, bytesRead, sent.Length - bytesRead);
+                            if (n == 0)
+                            {
+                                break;
+                            }
+
+                            bytesRead += n;
+                        }
 
                         Assert.AreEqual(sent.Length, bytesRead, "Echo response length should match sent data");
 
@@ -381,9 +402,10 @@ namespace NFUnitTestSslStream
                     // send() after close usually succeeds locally (bytes are just queued in the local
                     // send buffer) and the failure only surfaces on a later write, once the RST has
                     // been received or the send buffer can't drain. So write repeatedly - each call
-                    // bounded by SendTimeout - until one fails. The underlying failure can surface as
-                    // either a native SocketException or the managed IOException guard, so it's
-                    // normalized to IOException before being re-thrown for the assertion.
+                    // bounded by SendTimeout - until one fails. Only the two documented failure modes
+                    // (native SocketException, or the managed IOException guard) are normalized to
+                    // IOException; any other exception type is left to propagate so an unrelated bug
+                    // fails the test loudly instead of being reported as the expected outcome.
                     byte[] payload = Encoding.UTF8.GetBytes("this should fail");
                     const int maxAttempts = 5;
 
@@ -399,7 +421,12 @@ namespace NFUnitTestSslStream
                                     OutputHelper.WriteLine($"Attempt {attempt}/{maxAttempts}: Write({payload.Length} bytes) returned without error on a dead connection");
                                     Thread.Sleep(500);
                                 }
-                                catch (Exception ex)
+                                catch (IOException)
+                                {
+                                    OutputHelper.WriteLine($"Attempt {attempt}/{maxAttempts}: Write failed as expected: IOException");
+                                    throw;
+                                }
+                                catch (SocketException ex)
                                 {
                                     OutputHelper.WriteLine($"Attempt {attempt}/{maxAttempts}: Write failed as expected: {ex.GetType().Name}: {ex.Message}");
                                     throw new IOException("Write failed on dead connection", ex);

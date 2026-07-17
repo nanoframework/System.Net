@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Label="Globals">
     <NanoFrameworkProjectSystemPath>$(MSBuildExtensionsPath)\nanoFramework\v1.0\</NanoFrameworkProjectSystemPath>
@@ -51,11 +51,14 @@
     <Reference Include="nanoFramework.Runtime.Events, Version=1.11.37.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
       <HintPath>..\..\packages\nanoFramework.Runtime.Events.1.11.37\lib\nanoFramework.Runtime.Events.dll</HintPath>
     </Reference>
-    <Reference Include="System.Device.Wifi, Version=1.5.147.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
-      <HintPath>..\..\packages\nanoFramework.System.Device.Wifi.1.5.147\lib\System.Device.Wifi.dll</HintPath>
+    <Reference Include="System.Device.Wifi, Version=1.5.149.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
+      <HintPath>..\..\packages\nanoFramework.System.Device.Wifi.1.5.149\lib\System.Device.Wifi.dll</HintPath>
     </Reference>
     <Reference Include="System.IO.Streams, Version=1.1.96.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
       <HintPath>..\..\packages\nanoFramework.System.IO.Streams.1.1.96\lib\System.IO.Streams.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net, Version=1.11.60.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
+      <HintPath>..\..\packages\nanoFramework.System.Net.1.11.60\lib\System.Net.dll</HintPath>
     </Reference>
     <Reference Include="System.Threading, Version=1.1.52.34401, Culture=neutral, PublicKeyToken=c07d481e9758c731">
       <HintPath>..\..\packages\nanoFramework.System.Threading.1.1.52\lib\System.Threading.dll</HintPath>
@@ -68,28 +71,23 @@
     <ProjectReference Include="..\..\nanoFramework.System.Net\System.Net.nfproj" />
   </ItemGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.CSharp.targets" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.CSharp.targets')" />
-
   <!--
     Generate TestConfiguration.cs from the shared .runsettings file so that
     CompanionIP and CompanionControlPort only need to be set in one place.
   -->
   <Target Name="GenerateTestConfiguration" BeforeTargets="BeforeBuild">
-    <XmlPeek XmlInputPath="$(MSBuildThisFileDirectory)..\..\.runsettings"
-              Query="/RunSettings/TestRunParameters/Parameter[@name='CompanionIP']/@value">
+    <XmlPeek XmlInputPath="$(MSBuildThisFileDirectory)..\..\.runsettings" Query="/RunSettings/TestRunParameters/Parameter[@name='CompanionIP']/@value">
       <Output TaskParameter="Result" ItemName="_CompanionIPItems" />
     </XmlPeek>
-    <XmlPeek XmlInputPath="$(MSBuildThisFileDirectory)..\..\.runsettings"
-              Query="/RunSettings/TestRunParameters/Parameter[@name='CompanionControlPort']/@value">
+    <XmlPeek XmlInputPath="$(MSBuildThisFileDirectory)..\..\.runsettings" Query="/RunSettings/TestRunParameters/Parameter[@name='CompanionControlPort']/@value">
       <Output TaskParameter="Result" ItemName="_CompanionPortItems" />
     </XmlPeek>
-
     <PropertyGroup>
       <_CompanionIP>@(_CompanionIPItems)</_CompanionIP>
       <_CompanionPort>@(_CompanionPortItems)</_CompanionPort>
       <_CompanionIP Condition="'$(_CompanionIP)' == ''">127.0.0.1</_CompanionIP>
       <_CompanionPort Condition="'$(_CompanionPort)' == ''">11000</_CompanionPort>
     </PropertyGroup>
-
     <ItemGroup>
       <_TestConfigLines Include="// Auto-generated from .runsettings - do not edit directly." />
       <_TestConfigLines Include="//" />
@@ -105,15 +103,9 @@
       <_TestConfigLines Include="%20%20%20%20}" />
       <_TestConfigLines Include="}" />
     </ItemGroup>
-
-    <WriteLinesToFile File="$(MSBuildThisFileDirectory)TestConfiguration.cs"
-                      Lines="@(_TestConfigLines)"
-                      Overwrite="true"
-                      Encoding="UTF-8" />
-
+    <WriteLinesToFile File="$(MSBuildThisFileDirectory)TestConfiguration.cs" Lines="@(_TestConfigLines)" Overwrite="true" Encoding="UTF-8" />
     <Message Text="Generated TestConfiguration.cs: CompanionIP=$(_CompanionIP) CompanionControlPort=$(_CompanionPort)" Importance="normal" />
   </Target>
-
   <!-- MANUAL UPDATE HERE -->
   <ProjectExtensions>
     <ProjectCapabilities>

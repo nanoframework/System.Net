@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Label="Globals">
     <NanoFrameworkProjectSystemPath>$(MSBuildExtensionsPath)\nanoFramework\v1.0\</NanoFrameworkProjectSystemPath>
@@ -65,28 +65,23 @@
     <ProjectReference Include="..\..\nanoFramework.System.Net\System.Net.nfproj" />
   </ItemGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.CSharp.targets" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.CSharp.targets')" />
-
   <!--
     Generate TestConfiguration.cs from the shared .runsettings file so that
     CompanionIP and CompanionControlPort only need to be set in one place.
   -->
   <Target Name="GenerateTestConfiguration" BeforeTargets="BeforeBuild">
-    <XmlPeek XmlInputPath="$(MSBuildThisFileDirectory)..\..\.runsettings"
-              Query="/RunSettings/TestRunParameters/Parameter[@name='CompanionIP']/@value">
+    <XmlPeek XmlInputPath="$(MSBuildThisFileDirectory)..\..\.runsettings" Query="/RunSettings/TestRunParameters/Parameter[@name='CompanionIP']/@value">
       <Output TaskParameter="Result" ItemName="_CompanionIPItems" />
     </XmlPeek>
-    <XmlPeek XmlInputPath="$(MSBuildThisFileDirectory)..\..\.runsettings"
-              Query="/RunSettings/TestRunParameters/Parameter[@name='CompanionControlPort']/@value">
+    <XmlPeek XmlInputPath="$(MSBuildThisFileDirectory)..\..\.runsettings" Query="/RunSettings/TestRunParameters/Parameter[@name='CompanionControlPort']/@value">
       <Output TaskParameter="Result" ItemName="_CompanionPortItems" />
     </XmlPeek>
-
     <PropertyGroup>
       <_CompanionIP>@(_CompanionIPItems)</_CompanionIP>
       <_CompanionPort>@(_CompanionPortItems)</_CompanionPort>
       <_CompanionIP Condition="'$(_CompanionIP)' == ''">127.0.0.1</_CompanionIP>
       <_CompanionPort Condition="'$(_CompanionPort)' == ''">11000</_CompanionPort>
     </PropertyGroup>
-
     <ItemGroup>
       <_TestConfigLines Include="// Auto-generated from .runsettings - do not edit directly." />
       <_TestConfigLines Include="//" />
@@ -102,15 +97,9 @@
       <_TestConfigLines Include="%20%20%20%20}" />
       <_TestConfigLines Include="}" />
     </ItemGroup>
-
-    <WriteLinesToFile File="$(MSBuildThisFileDirectory)TestConfiguration.cs"
-                      Lines="@(_TestConfigLines)"
-                      Overwrite="true"
-                      Encoding="UTF-8" />
-
+    <WriteLinesToFile File="$(MSBuildThisFileDirectory)TestConfiguration.cs" Lines="@(_TestConfigLines)" Overwrite="true" Encoding="UTF-8" />
     <Message Text="Generated TestConfiguration.cs: CompanionIP=$(_CompanionIP) CompanionControlPort=$(_CompanionPort)" Importance="normal" />
   </Target>
-
   <!-- MANUAL UPDATE HERE -->
   <ProjectExtensions>
     <ProjectCapabilities>
