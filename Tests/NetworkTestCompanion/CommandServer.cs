@@ -2,7 +2,9 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System.Net;
+using System.Net.Security;
 using System.Net.Sockets;
+using System.Security.Authentication;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -20,6 +22,9 @@ namespace NetworkTestCompanion;
 ///   { "cmd": "stop", "port": N }
 ///   { "cmd": "stop_all" }
 ///   { "cmd": "connect_to", "host": "...", "port": N }
+///   { "cmd": "start_tls_echo", "port": N }
+///   { "cmd": "tls_connect_to", "host": "...", "port": N }
+///   { "cmd": "tls_connect_echo", "host": "...", "port": N, "data": "base64..." }
 /// </summary>
 internal sealed class CommandServer : IDisposable
 {
@@ -112,6 +117,9 @@ internal sealed class CommandServer : IDisposable
             "stop" => Stop(node),
             "stop_all" => StopAll(),
             "connect_to" => ConnectTo(node),
+            "start_tls_echo" => StartTlsEcho(node),
+            "tls_connect_to" => TlsConnectTo(node),
+            "tls_connect_echo" => TlsConnectEcho(node),
             _ => Error($"unknown command: {cmd}")
         };
     }
@@ -233,6 +241,179 @@ internal sealed class CommandServer : IDisposable
         {
             connectClient?.Dispose();
             Console.Error.WriteLine($"[CMD] connect_to {host}:{port} failed: {ex.Message}");
+            return Error(ex.Message);
+        }
+    }
+
+    private string StartTlsEcho(JsonNode node)
+    {
+        if (!TryGetPort(node, out var port, out var err)) return err!;
+
+        lock (_lock)
+        {
+            // Replace any stale server left registered on this port by a previous
+            // (possibly aborted) test run — the companion is long-lived across runs.
+            if (_activeServers.TryGetValue(port, out var existing))
+            {
+                existing.Dispose();
+                _activeServers.Remove(port);
+                Console.WriteLine($"[CMD] Replaced stale server on port {port}");
+            }
+
+            var server = new TlsEchoServer(_bindAddress, port, TestCertificates.ServerCert);
+            try
+            {
+                server.Start();
+            }
+            catch (Exception ex)
+            {
+                server.Dispose();
+                return Error(ex.Message);
+            }
+
+            _activeServers[port] = server;
+        }
+
+        Console.WriteLine($"[CMD] TLS echo started on port {port}");
+        return Ok();
+    }
+
+    private string TlsConnectTo(JsonNode node)
+    {
+        var host = node["host"]?.GetValue<string>();
+        if (string.IsNullOrEmpty(host)) return Error("missing 'host'");
+        if (!TryGetPort(node, out var port, out var err)) return err!;
+
+        TcpClient? connectClient = null;
+        try
+        {
+            connectClient = new TcpClient();
+            if (!connectClient.ConnectAsync(host, port).Wait(TimeSpan.FromSeconds(5)))
+            {
+                connectClient.Dispose();
+                return Error($"connect to {host}:{port} timed out");
+            }
+
+            Console.WriteLine($"[CMD] tls_connect_to {host}:{port} TCP connected, starting TLS handshake in background");
+
+            // TLS handshake + keep-alive runs in background so the device
+            // can call Accept() and AuthenticateAsServer() after getting Ok.
+            var clientForBg = connectClient;
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    var sslStream = new SslStream(
+                        clientForBg.GetStream(),
+                        leaveInnerStreamOpen: false,
+                        (_, _, _, _) => true);
+
+                    await sslStream.AuthenticateAsClientAsync(new SslClientAuthenticationOptions
+                    {
+                        TargetHost = host,
+                        EnabledSslProtocols = SslProtocols.Tls12
+                    });
+
+                    Console.WriteLine($"[CMD] tls_connect_to {host}:{port} TLS handshake succeeded");
+
+                    await Task.Delay(2000);
+                    sslStream.Dispose();
+                    clientForBg.Dispose();
+                }
+                catch (Exception ex)
+                {
+                    Console.Error.WriteLine($"[CMD] tls_connect_to {host}:{port} TLS failed: {ex.Message}");
+                    clientForBg.Dispose();
+                }
+            });
+
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            connectClient?.Dispose();
+            Console.Error.WriteLine($"[CMD] tls_connect_to {host}:{port} failed: {ex.Message}");
+            return Error(ex.Message);
+        }
+    }
+
+    private string TlsConnectEcho(JsonNode node)
+    {
+        var host = node["host"]?.GetValue<string>();
+        if (string.IsNullOrEmpty(host)) return Error("missing 'host'");
+        if (!TryGetPort(node, out var port, out var err)) return err!;
+        var dataB64 = node["data"]?.GetValue<string>();
+        if (string.IsNullOrEmpty(dataB64)) return Error("missing 'data'");
+
+        byte[] dataToSend;
+        try { dataToSend = Convert.FromBase64String(dataB64); }
+        catch { return Error("'data' is not valid base64"); }
+
+        TcpClient? connectClient = null;
+        try
+        {
+            connectClient = new TcpClient();
+            if (!connectClient.ConnectAsync(host, port).Wait(TimeSpan.FromSeconds(5)))
+            {
+                connectClient.Dispose();
+                return Error($"connect to {host}:{port} timed out");
+            }
+
+            Console.WriteLine($"[CMD] tls_connect_echo {host}:{port} TCP connected, starting TLS + echo in background");
+
+            // TLS handshake + echo runs in background so the device
+            // can call Accept() and AuthenticateAsServer() after getting Ok.
+            var clientForBg = connectClient;
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    var sslStream = new SslStream(
+                        clientForBg.GetStream(),
+                        leaveInnerStreamOpen: false,
+                        (_, _, _, _) => true);
+
+                    await sslStream.AuthenticateAsClientAsync(new SslClientAuthenticationOptions
+                    {
+                        TargetHost = host,
+                        EnabledSslProtocols = SslProtocols.Tls12
+                    });
+
+                    await sslStream.WriteAsync(dataToSend);
+                    await sslStream.FlushAsync();
+
+                    Console.WriteLine($"[CMD] tls_connect_echo {host}:{port}: sent {dataToSend.Length} bytes, waiting for echo");
+
+                    var buf = new byte[4096];
+                    int totalRead = 0;
+                    using var ms = new MemoryStream();
+
+                    while (totalRead < dataToSend.Length)
+                    {
+                        int read = await sslStream.ReadAsync(buf);
+                        if (read == 0) break;
+                        ms.Write(buf, 0, read);
+                        totalRead += read;
+                    }
+
+                    Console.WriteLine($"[CMD] tls_connect_echo {host}:{port}: received {totalRead} bytes echo");
+
+                    sslStream.Dispose();
+                    clientForBg.Dispose();
+                }
+                catch (Exception ex)
+                {
+                    Console.Error.WriteLine($"[CMD] tls_connect_echo {host}:{port} TLS/echo failed: {ex.Message}");
+                    clientForBg.Dispose();
+                }
+            });
+
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            connectClient?.Dispose();
+            Console.Error.WriteLine($"[CMD] tls_connect_echo {host}:{port} failed: {ex.Message}");
             return Error(ex.Message);
         }
     }

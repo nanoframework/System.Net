@@ -11,11 +11,11 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectTypeGuids>{11A8DD76-328B-46DF-9F39-F559912D0360};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <ProjectGuid>6233288d-091e-4795-aa1b-fd069b7f6305</ProjectGuid>
+    <ProjectGuid>b2c3d4e5-f6a7-8901-bcde-f12345678901</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <FileAlignment>512</FileAlignment>
-    <RootNamespace>NFUnitTestSocketTests</RootNamespace>
+    <RootNamespace>NFUnitTestSslStream</RootNamespace>
     <AssemblyName>NFUnitTest</AssemblyName>
     <IsCodedUITest>False</IsCodedUITest>
     <IsTestProject>true</IsTestProject>
@@ -26,35 +26,35 @@
   </PropertyGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
-    <Compile Include="CompanionClient.cs" />
-    <Compile Include="SocketOptionsTests.cs" />
-    <Compile Include="SocketPair.cs" />
-    <Compile Include="SocketExceptionsTests.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SocketRoundTripTests.cs" />
-    <Compile Include="SocketTools.cs" />
+    <Compile Include="..\SslStreamTests_WiFi\SslClientTests.cs">
+      <Link>SslClientTests.cs</Link>
+    </Compile>
+    <Compile Include="..\SslStreamTests_WiFi\SslServerTests.cs">
+      <Link>SslServerTests.cs</Link>
+    </Compile>
+    <Compile Include="..\SocketTests\CompanionClient.cs">
+      <Link>CompanionClient.cs</Link>
+    </Compile>
     <Compile Include="TestConfiguration.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\nanoFramework.System.Net\System.Net.nfproj" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="packages.lock.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
+    <Reference Include="mscorlib">
       <HintPath>..\..\packages\nanoFramework.CoreLibrary.2.0.0-preview.52\lib\netnano1.0\mscorlib.dll</HintPath>
     </Reference>
-    <Reference Include="nanoFramework.System.Text, Version=2.0.0.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
+    <Reference Include="nanoFramework.System.Text">
       <HintPath>..\..\packages\nanoFramework.System.Text.2.0.0-preview.23\lib\netnano1.0\nanoFramework.System.Text.dll</HintPath>
     </Reference>
-    <Reference Include="nanoFramework.TestFramework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
+    <Reference Include="nanoFramework.TestFramework">
       <HintPath>..\..\packages\nanoFramework.TestFramework.4.0.0-preview.58\lib\netnano1.0\nanoFramework.TestFramework.dll</HintPath>
     </Reference>
-    <Reference Include="nanoFramework.UnitTestLauncher, Version=0.0.0.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
+    <Reference Include="nanoFramework.UnitTestLauncher">
       <HintPath>..\..\packages\nanoFramework.TestFramework.4.0.0-preview.58\lib\netnano1.0\nanoFramework.UnitTestLauncher.exe</HintPath>
     </Reference>
-    <Reference Include="System.IO.Streams, Version=2.0.0.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
+    <Reference Include="System.IO.Streams">
       <HintPath>..\..\packages\nanoFramework.System.IO.Streams.2.0.0-preview.22\lib\netnano1.0\System.IO.Streams.dll</HintPath>
     </Reference>
     <Reference Include="System.Threading">
@@ -64,12 +64,13 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.lock.json" />
+  </ItemGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.CSharp.targets" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.CSharp.targets')" />
   <!--
     Generate TestConfiguration.cs from the shared .runsettings file so that
     CompanionIP and CompanionControlPort only need to be set in one place.
-    The file is NOT committed to source; a fresh checkout receives it when
-    the GenerateTestConfiguration target runs before the first build.
   -->
   <Target Name="GenerateTestConfiguration" BeforeTargets="BeforeBuild">
     <XmlPeek XmlInputPath="$(MSBuildThisFileDirectory)..\..\.runsettings" Query="/RunSettings/TestRunParameters/Parameter[@name='CompanionIP']/@value">

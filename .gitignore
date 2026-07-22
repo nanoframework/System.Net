@@ -256,4 +256,4 @@ paket-files/
 .sonarlint
 
 # Auto-generated test configuration (produced from .runsettings at build time)
-Tests/SocketTests/TestConfiguration.cs
+Tests/**/TestConfiguration.cs
