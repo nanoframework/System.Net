@@ -202,12 +202,6 @@ namespace NFUnitTestSslStream
                         ex.ErrorCode != 0,
                         "ErrorCode should be non-zero (MBEDTLS_X509_BADCERT_* bitmask)");
                 }
-                catch (InvalidOperationException ex)
-                {
-                    exceptionCaught = true;
-
-                    OutputHelper.WriteLine($"InvalidOperationException caught: {ex.Message}");
-                }
 
                 Assert.IsTrue(exceptionCaught, "Expected an exception when using wrong CA certificate");
             }
@@ -252,13 +246,6 @@ namespace NFUnitTestSslStream
                         ex.ErrorCode != 0,
                         "ErrorCode should be non-zero (MBEDTLS_X509_BADCERT_* bitmask)");
                 }
-                catch (InvalidOperationException ex)
-                {
-                    // HandshakeBadContext or HandshakeSetHostname
-                    exceptionCaught = true;
-
-                    OutputHelper.WriteLine($"InvalidOperationException caught: {ex.Message}");
-                }
 
                 Assert.IsTrue(exceptionCaught, "Expected an exception from hostname mismatch authentication");
             }
@@ -300,13 +287,6 @@ namespace NFUnitTestSslStream
                     Assert.IsTrue(
                         ex.ErrorCode != 0,
                         "ErrorCode should be non-zero (certificate verification failure flags)");
-                }
-                catch (InvalidOperationException ex)
-                {
-                    // HandshakeBadContext or HandshakeSetHostname
-                    exceptionCaught = true;
-
-                    OutputHelper.WriteLine($"InvalidOperationException caught: {ex.Message}");
                 }
 
                 Assert.IsTrue(exceptionCaught, "Expected an exception when connecting without authentication");
