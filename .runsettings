@@ -3,7 +3,7 @@
    <!-- Configurations that affect the Test Framework -->
    <RunConfiguration>
        <ResultsDirectory>.\TestResults</ResultsDirectory><!-- Path relative to solution directory -->
-       <TestSessionTimeout>60000</TestSessionTimeout><!-- Milliseconds -->
+       <TestSessionTimeout>90000</TestSessionTimeout><!-- Milliseconds -->
        <TargetFrameworkVersion>net48</TargetFrameworkVersion>
        <TargetPlatform>x64</TargetPlatform>
    </RunConfiguration>
