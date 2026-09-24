@@ -487,7 +487,7 @@ namespace System.Net.Sockets
                 throw new NotSupportedException();
             }
 
-            if (0 != count)
+            if (bytesSent != count)
             {
                 throw new IOException();
             }
