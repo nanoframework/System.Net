@@ -90,7 +90,7 @@ namespace System.Net.Sockets
         /// </summary>
         /// <value>true if data can be read from the stream; otherwise, false. The default value is true.</value>
         /// <remarks>
-        /// If CanRead is true, <see cref="NetworkStream"/> allows calls to the <see cref="Read"/> method. Provide the appropriate FileAccess enumerated value in the constructor to set 
+        /// If CanRead is true, <see cref="NetworkStream"/> allows calls to the <see cref="Read(byte[], int, int)"/> method. Provide the appropriate FileAccess enumerated value in the constructor to set 
         /// the readability and write-ability of the <see cref="NetworkStream"/>. The CanRead property is set when the <see cref="NetworkStream"/> is initialized.
         /// </remarks>
         public override bool CanRead { get { return true; } }
@@ -152,7 +152,7 @@ namespace System.Net.Sockets
         {
             get
             {
-                if (_disposed == true) throw new ObjectDisposedException();                
+                if (_disposed) throw new ObjectDisposedException();
                 if (_socket.m_Handle == -1) throw new IOException();
 
                 return _socket.Available;
@@ -184,7 +184,7 @@ namespace System.Net.Sockets
         {
             get
             {
-                if (_disposed == true) throw new ObjectDisposedException();     
+                if (_disposed) throw new ObjectDisposedException();
                 if (_socket.m_Handle == -1) throw new IOException();
 
                 return (_socket.Available > 0);
@@ -255,14 +255,14 @@ namespace System.Net.Sockets
         /// <exception cref="ObjectDisposedException">The <see cref="NetworkStream"/> is closed.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="offset"/> is less than 0 or greater than the length of <paramref name="buffer"/>. -or- <paramref name="count"/> is less than 0 or greater than the length of <paramref name="buffer"/> minus the value of the <paramref name="offset"/> parameter.</exception>
         /// <remarks>
-        /// <para>This method reads data into the <paramref name="buffer"/> parameter and returns the number of bytes successfully read. The <see cref="Read"/> operation reads as much data as is available, up to the number of bytes specified by the <paramref name="count"/> parameter. If the remote host shuts down the connection, and all available data has been received, the Read method completes immediately and return zero bytes.</para>
+        /// <para>This method reads data into the <paramref name="buffer"/> parameter and returns the number of bytes successfully read. The <see cref="Read(byte[], int, int)"/> operation reads as much data as is available, up to the number of bytes specified by the <paramref name="count"/> parameter. If the remote host shuts down the connection, and all available data has been received, the Read method completes immediately and return zero bytes.</para>
         /// <note type="important">
         /// Check to see if the <see cref="NetworkStream"/> is readable by calling the <see cref="CanRead"/> property. If you attempt to read from a <see cref="NetworkStream"/> that is not readable, you will get an <see cref="IOException"/>.
         /// </note>
         /// </remarks>
         public override int Read(byte[] buffer, int offset, int count)
         {
-            if (_disposed) throw new ObjectDisposedException();            
+            if (_disposed) throw new ObjectDisposedException();
             if (_socket.m_Handle == -1) throw new IOException();
             if (buffer == null) throw new ArgumentNullException();
             if (offset < 0 || offset > buffer.Length) throw new ArgumentOutOfRangeException();
@@ -320,7 +320,7 @@ namespace System.Net.Sockets
         /// </remarks>
         public override void Write(byte[] buffer, int offset, int count)
         {
-            if (_disposed) throw new ObjectDisposedException();            
+            if (_disposed) throw new ObjectDisposedException();
             if (_socket.m_Handle == -1) throw new IOException();
             if (buffer == null) throw new ArgumentNullException();
             if (offset < 0 || offset > buffer.Length) throw new ArgumentOutOfRangeException();
