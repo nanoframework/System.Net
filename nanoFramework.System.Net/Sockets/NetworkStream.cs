@@ -22,7 +22,7 @@ namespace System.Net.Sockets
         protected int _socketType;
 
         /// <summary>
-        /// Internal endpoint ref used for dgram sockets
+        /// Internal endpoint ref of the remote peer
         /// </summary>
         protected EndPoint _remoteEndPoint;
 
@@ -34,56 +34,16 @@ namespace System.Net.Sockets
         /// </summary>
         protected bool _disposed;
 
-        // Summary:
-        //     Creates a new instance of the System.Net.Sockets.NetworkStream class for
-        //     the specified System.Net.Sockets.Socket.
-        //
-        // Parameters:
-        //   socket:
-        //     The System.Net.Sockets.Socket that the System.Net.Sockets.NetworkStream will
-        //     use to send and receive data.
-        //
-        // Exceptions:
-        //   System.ArgumentNullException:
-        //     socket is null.
-        //
-        //   System.IO.IOException:
-        //     socket is not connected.-or- The System.Net.Sockets.Socket.SocketType property
-        //     of socket is not System.Net.Sockets.SocketType.Stream.-or- socket is in a
-        //     nonblocking state.
-
         /// <summary>
         /// Creates a new instance of the <see cref="NetworkStream"/> class for the specified <see cref="Socket"/>.
         /// </summary>
         /// <param name="socket">The <see cref="Socket"/> that the <see cref="NetworkStream"/> will use to send and receive data.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="socket"/> is <see langword="null"/>.</exception>
+        /// <exception cref="IOException"><paramref name="socket"/> is not connected. -or- The <see cref="Socket.SocketType"/> property of <paramref name="socket"/> is not <see cref="SocketType.Stream"/>.</exception>
         public NetworkStream(Socket socket)
             : this(socket, false)
         {
         }
-
-        //
-        // Summary:
-        //     Initializes a new instance of the System.Net.Sockets.NetworkStream class
-        //     for the specified System.Net.Sockets.Socket with the specified System.Net.Sockets.Socket
-        //     ownership.
-        //
-        // Parameters:
-        //   ownsSocket:
-        //     true to indicate that the System.Net.Sockets.NetworkStream will take ownership
-        //     of the System.Net.Sockets.Socket; otherwise, false.
-        //
-        //   socket:
-        //     The System.Net.Sockets.Socket that the System.Net.Sockets.NetworkStream will
-        //     use to send and receive data.
-        //
-        // Exceptions:
-        //   System.IO.IOException:
-        //     socket is not connected.-or- The value of the System.Net.Sockets.Socket.SocketType
-        //     property of socket is not System.Net.Sockets.SocketType.Stream.-or- socket
-        //     is in a nonblocking state.
-        //
-        //   System.ArgumentNullException:
-        //     socket is null.
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NetworkStream"/> class for the specified 
@@ -93,6 +53,8 @@ namespace System.Net.Sockets
         /// use to send and receive data.</param>
         /// <param name="ownsSocket"><see langword="true"/> to indicate that the <see cref="NetworkStream"/> will take ownership of the <see cref="Socket"/>; 
         /// otherwise, <see langword="false"/>.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="socket"/> is <see langword="null"/>.</exception>
+        /// <exception cref="IOException"><paramref name="socket"/> is not connected. -or- The <see cref="Socket.SocketType"/> property of <paramref name="socket"/> is not <see cref="SocketType.Stream"/>.</exception>
         public NetworkStream(Socket socket, bool ownsSocket)
         {
             if (socket == null) throw new ArgumentNullException();
@@ -108,7 +70,12 @@ namespace System.Net.Sockets
 
                 throw new IOException(errCode.ToString(), e);
             }
-            
+
+            if (socket.SocketType != SocketType.Stream)
+            {
+                throw new IOException();
+            }
+
             // Set the internal socket
             _socket = socket;
 
@@ -123,7 +90,7 @@ namespace System.Net.Sockets
         /// </summary>
         /// <value>true if data can be read from the stream; otherwise, false. The default value is true.</value>
         /// <remarks>
-        /// If CanRead is true, <see cref="NetworkStream"/> allows calls to the <see cref="Read"/> method. Provide the appropriate FileAccess enumerated value in the constructor to set 
+        /// If CanRead is true, <see cref="NetworkStream"/> allows calls to the <see cref="Read(byte[], int, int)"/> method. Provide the appropriate FileAccess enumerated value in the constructor to set 
         /// the readability and write-ability of the <see cref="NetworkStream"/>. The CanRead property is set when the <see cref="NetworkStream"/> is initialized.
         /// </remarks>
         public override bool CanRead { get { return true; } }
@@ -185,7 +152,7 @@ namespace System.Net.Sockets
         {
             get
             {
-                if (_disposed == true) throw new ObjectDisposedException();                
+                if (_disposed) throw new ObjectDisposedException();
                 if (_socket.m_Handle == -1) throw new IOException();
 
                 return _socket.Available;
@@ -217,31 +184,18 @@ namespace System.Net.Sockets
         {
             get
             {
-                if (_disposed == true) throw new ObjectDisposedException();     
+                if (_disposed) throw new ObjectDisposedException();
                 if (_socket.m_Handle == -1) throw new IOException();
 
                 return (_socket.Available > 0);
             }
         }
 
-        //
-        // Summary:
-        //     Closes the System.Net.Sockets.NetworkStream after waiting the specified time
-        //     to allow data to be sent.
-        //
-        // Parameters:
-        //   timeout:
-        //     A 32-bit signed integer that specifies how long to wait to send any remaining
-        //     data before closing.
-        //
-        // Exceptions:
-        //   System.ArgumentOutOfRangeException:
-        //     timeout is less than -1.
-
         /// <summary>
         /// Closes the <see cref="NetworkStream"/> after waiting the specified time to allow data to be sent.
         /// </summary>
         /// <param name="timeout">A 32-bit signed integer that specifies the number of milliseconds to wait to send any remaining data before closing.</param>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="timeout"/> is less than -1.</exception>
         /// <remarks>
         /// <para>The <see cref="Close"/> method frees both unmanaged and managed resources associated with the <see cref="NetworkStream"/>. If the <see cref="NetworkStream"/> owns the underlying Socket, it is closed as well.</para>
         /// </remarks>
@@ -250,7 +204,7 @@ namespace System.Net.Sockets
             if (timeout < -1)
                 throw new ArgumentOutOfRangeException();
 
-            System.Threading.Thread.Sleep(timeout);
+            Threading.Thread.Sleep(timeout);
 
             Close();
         }
@@ -289,39 +243,26 @@ namespace System.Net.Sockets
         {
         }
 
-        // Exceptions:
-        //   System.IO.IOException:
-        //     The underlying System.Net.Sockets.Socket is closed.
-        //
-        //   System.ArgumentNullException:
-        //     buffer is null.
-        //
-        //   System.ObjectDisposedException:
-        //     The System.Net.Sockets.NetworkStream is closed.-or- There is a failure reading
-        //     from the network.
-        //
-        //   System.ArgumentOutOfRangeException:
-        //     offset is less than 0.-or- offset is greater than the length of buffer.-or-
-        //     size is less than 0.-or- size is greater than the length of buffer minus
-        //     the value of the offset parameter. -or-An error occurred when accessing the
-        //     socket. See the Remarks section for more information.
-
         /// <summary>
         /// Reads data from the NetworkStream.
         /// </summary>
-        /// <param name="buffer">An array of type Byte that is the location in memory to store data read from the NetworkStream.</param>
-        /// <param name="offset">The location in buffer to begin storing the data to.</param>
-        /// <param name="count">The number of bytes to read from the NetworkStream.</param>
-        /// <returns>The number of bytes read from the NetworkStream.</returns>
+        /// <param name="buffer">An array of type <see cref="byte"/> that is the location in memory to store data read from the <see cref="NetworkStream"/>.</param>
+        /// <param name="offset">The location in <paramref name="buffer"/> to begin storing the data to.</param>
+        /// <param name="count">The number of bytes to read from the <see cref="NetworkStream"/>.</param>
+        /// <returns>The total number of bytes read into the buffer between zero (0) and the requested count. The method returns zero (0) only if zero bytes were requested or if no more bytes are available because the peer socket performed a graceful shutdown.</returns>
+        /// <exception cref="IOException">The underlying <see cref="Socket"/> is closed. -or- There was a failure while reading from the network.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="buffer"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ObjectDisposedException">The <see cref="NetworkStream"/> is closed.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="offset"/> is less than 0 or greater than the length of <paramref name="buffer"/>. -or- <paramref name="count"/> is less than 0 or greater than the length of <paramref name="buffer"/> minus the value of the <paramref name="offset"/> parameter.</exception>
         /// <remarks>
-        /// <para>This method reads data into the buffer parameter and returns the number of bytes successfully read. If no data is available for reading, the Read method returns 0. The Read operation reads as much data as is available, up to the number of bytes specified by the count parameter. If the remote host shuts down the connection, and all available data has been received, the Read method completes immediately and return zero bytes.</para>
+        /// <para>This method reads data into the <paramref name="buffer"/> parameter and returns the number of bytes successfully read. The <see cref="Read(byte[], int, int)"/> operation reads as much data as is available, up to the number of bytes specified by the <paramref name="count"/> parameter. If the remote host shuts down the connection, and all available data has been received, the Read method completes immediately and return zero bytes.</para>
         /// <note type="important">
-        /// Check to see if the <see cref="NetworkStream"/> is readable by calling the <see cref="CanRead"/> property. If you attempt to read from a <see cref="NetworkStream"/> that is not readable, you will get an IOException.
+        /// Check to see if the <see cref="NetworkStream"/> is readable by calling the <see cref="CanRead"/> property. If you attempt to read from a <see cref="NetworkStream"/> that is not readable, you will get an <see cref="IOException"/>.
         /// </note>
         /// </remarks>
         public override int Read(byte[] buffer, int offset, int count)
         {
-            if (_disposed) throw new ObjectDisposedException();            
+            if (_disposed) throw new ObjectDisposedException();
             if (_socket.m_Handle == -1) throw new IOException();
             if (buffer == null) throw new ArgumentNullException();
             if (offset < 0 || offset > buffer.Length) throw new ArgumentOutOfRangeException();
@@ -337,18 +278,7 @@ namespace System.Net.Sockets
                 count = available;
             }
 
-            if (_socketType == (int)SocketType.Stream)
-            {
-                return _socket.Receive(buffer, offset, count, SocketFlags.None);
-            }
-            else if (_socketType == (int)SocketType.Dgram)
-            {
-                return _socket.ReceiveFrom(buffer, offset, count, SocketFlags.None, ref _remoteEndPoint);
-            }
-            else
-            {
-                throw new NotSupportedException();
-            }
+            return _socket.Receive(buffer, offset, count, SocketFlags.None);
         }
 
         /// <summary>
@@ -372,71 +302,31 @@ namespace System.Net.Sockets
             throw new NotSupportedException();
         }
 
-        //
-        // Summary:
-        //     Writes data to the System.Net.Sockets.NetworkStream.
-        //
-        // Parameters:
-        //   offset:
-        //     The location in buffer from which to start writing data.
-        //
-        //   size:
-        //     The number of bytes to write to the System.Net.Sockets.NetworkStream.
-        //
-        //   buffer:
-        //     An array of type System.Byte that contains the data to write to the System.Net.Sockets.NetworkStream.
-        //
-        // Exceptions:
-        //   System.ArgumentOutOfRangeException:
-        //     offset is less than 0.-or- offset is greater than the length of buffer.-or-
-        //     size is less than 0.-or- size is greater than the length of buffer minus
-        //     the value of the offset parameter.
-        //
-        //   System.ObjectDisposedException:
-        //     The System.Net.Sockets.NetworkStream is closed.-or- There was a failure reading
-        //     from the network.
-        //
-        //   System.IO.IOException:
-        //     There was a failure while writing to the network. -or-An error occurred when
-        //     accessing the socket. See the Remarks section for more information.
-        //
-        //   System.ArgumentNullException:
-        //     buffer is null.
-
         /// <summary>
         /// Writes data to the <see cref="NetworkStream"/>.
         /// </summary>
-        /// <param name="buffer">An array of type Byte that contains the data to write to the NetworkStream.</param>
-        /// <param name="offset">The location in buffer from which to start writing data.</param>
-        /// <param name="count">The number of bytes to write to the NetworkStream.</param>
+        /// <param name="buffer">An array of type <see cref="byte"/> that contains the data to write to the <see cref="NetworkStream"/>.</param>
+        /// <param name="offset">The location in <paramref name="buffer"/> from which to start writing data.</param>
+        /// <param name="count">The number of bytes to write to the <see cref="NetworkStream"/>.</param>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="offset"/> is less than 0 or greater than the length of <paramref name="buffer"/>. -or- <paramref name="count"/> is less than 0 or greater than the length of <paramref name="buffer"/> minus the value of the <paramref name="offset"/> parameter.</exception>
+        /// <exception cref="ObjectDisposedException">The <see cref="NetworkStream"/> is closed.</exception>
+        /// <exception cref="IOException">There was a failure while writing to the network. -or- An error occurred when accessing the socket. See the Remarks section for more information.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="buffer"/> is <see langword="null"/>.</exception>
         /// <remarks>
         /// The Write method starts at the specified offset and sends count bytes from the contents of buffer to the network. 
-        /// The Write method blocks until the requested number of bytes is sent or a SocketException is thrown. 
+        /// The Write method blocks until the requested number of bytes is sent or a <see cref="SocketException"/> is thrown. 
         /// If you receive a <see cref="SocketException"/>, use the <see cref="SocketException.ErrorCode"/> property to obtain 
         /// the specific error code, and refer to the Windows Sockets version 2 API error code documentation in MSDN for a detailed description of the error.
         /// </remarks>
         public override void Write(byte[] buffer, int offset, int count)
         {
-            if (_disposed) throw new ObjectDisposedException();            
+            if (_disposed) throw new ObjectDisposedException();
             if (_socket.m_Handle == -1) throw new IOException();
             if (buffer == null) throw new ArgumentNullException();
             if (offset < 0 || offset > buffer.Length) throw new ArgumentOutOfRangeException();
             if (count < 0 || count > buffer.Length - offset) throw new ArgumentOutOfRangeException();
 
-            int bytesSent = 0;
-
-            if (_socketType == (int)SocketType.Stream)
-            {
-                bytesSent = _socket.Send(buffer, offset, count, SocketFlags.None);
-            }
-            else if (_socketType == (int)SocketType.Dgram)
-            {
-                bytesSent = _socket.SendTo(buffer, offset, count, SocketFlags.None, _socket.RemoteEndPoint);
-            }
-            else
-            {
-                throw new NotSupportedException();
-            }
+            int bytesSent = _socket.Send(buffer, offset, count, SocketFlags.None);
 
             if (bytesSent != count) throw new IOException();
         }
@@ -448,4 +338,3 @@ namespace System.Net.Sockets
         }
     }
 }
-
