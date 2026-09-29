@@ -54,11 +54,6 @@ namespace System.Net.Security
         public SslStream(Socket socket)
             : base(socket, false)
         {
-            if (SocketType.Stream != (SocketType)_socketType)
-            {
-                throw new NotSupportedException();
-            }
-
             _sslContext = -1;
             _isServer = false;
 

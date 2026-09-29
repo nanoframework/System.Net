@@ -27,6 +27,7 @@
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
     <Compile Include="CompanionClient.cs" />
+    <Compile Include="NetworkStreamTests.cs" />
     <Compile Include="SocketOptionsTests.cs" />
     <Compile Include="SocketPair.cs" />
     <Compile Include="SocketExceptionsTests.cs" />
