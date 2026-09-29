@@ -47,6 +47,8 @@ namespace System.Net.Security
         /// Initializes a new instance of the SslStream class using the specified Socket.
         /// </summary>
         /// <param name="socket">A valid socket that currently has a TCP connection.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="socket"/> is <see langword="null"/>.</exception>
+        /// <exception cref="IOException"><paramref name="socket"/> is not connected. -or- The <see cref="Socket.SocketType"/> property of <paramref name="socket"/> is not <see cref="SocketType.Stream"/>.</exception>
         /// <remarks>
         /// The SslStream maintains the lifetime of the socket. When the SslStream object is disposed, 
         /// the underlying TCP socket will be closed.
