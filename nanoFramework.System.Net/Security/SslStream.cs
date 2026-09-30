@@ -325,13 +325,13 @@ namespace System.Net.Security
         public bool IsServer { get { return _isServer; } }
 
         /// <summary>
-        /// Gets the length of the stream. (Overrides NetworkStream. . :: . .Length.)
+        /// Gets the number of bytes of decrypted data available to be read from the stream.
         /// </summary>
         public override long Length
         {
             get
             {
-                if (_disposed == true) throw new ObjectDisposedException();
+                if (_disposed) throw new ObjectDisposedException();
                 if (_socket == null) throw new IOException();
 
                 return SslNative.DataAvailable(_socket);
@@ -339,13 +339,13 @@ namespace System.Net.Security
         }
 
         /// <summary>
-        /// Gets a value the indicates whether data is available in the stream. (Overrides NetworkStream. . :: . .DataAvailable.)
+        /// Gets a value that indicates whether decrypted data is available on the stream to be read.
         /// </summary>
         public override bool DataAvailable
         {
             get
             {
-                if (_disposed == true) throw new ObjectDisposedException();
+                if (_disposed) throw new ObjectDisposedException();
                 if (_socket == null) throw new IOException();
 
                 return (SslNative.DataAvailable(_socket) > 0);
@@ -393,9 +393,9 @@ namespace System.Net.Security
         /// </summary>
         /// <param name="buffer">An array that receives the bytes read from this stream.</param>
         /// <param name="offset">An integer that contains the zero-based location in buffer at which to begin storing the data read from this stream.</param>
-        /// <param name="size">The maximum number of bytes to read from this stream.</param>
+        /// <param name="count">The maximum number of bytes to read from this stream.</param>
         /// <returns></returns>
-        public override int Read(byte[] buffer, int offset, int size)
+        public override int Read(byte[] buffer, int offset, int count)
         {
             if (buffer == null)
             {
@@ -412,24 +412,24 @@ namespace System.Net.Security
                 throw new ArgumentOutOfRangeException();
             }
 
-            if (size < 0 || size > buffer.Length - offset)
+            if (count < 0 || count > buffer.Length - offset)
             {
                 throw new ArgumentOutOfRangeException();
             }
 
-            return SslNative.SecureRead(_socket, buffer, offset, size, _socket.ReceiveTimeout);
+            return SslNative.SecureRead(_socket, buffer, offset, count, _socket.ReceiveTimeout);
         }
 
         /// <summary>
         /// Write the specified number of bytes to the underlying stream using the specified buffer and offset.
         /// </summary>
         /// <param name="buffer">An array that supplies the bytes written to the stream.</param>
-        /// <param name="offset">he zero-based location in buffer at which to begin reading bytes to be written to the stream.</param>
-        /// <param name="size">The number of bytes to read from buffer.</param>
+        /// <param name="offset">The zero-based location in buffer at which to begin reading bytes to be written to the stream.</param>
+        /// <param name="count">The number of bytes to read from buffer.</param>
         /// <exception cref="ArgumentNullException"><paramref name="buffer"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
         /// <para>
-        /// <paramref name="offset"/> or <paramref name="size"/> is less than zero
+        /// <paramref name="offset"/> or <paramref name="count"/> is less than zero
         /// </para>
         /// <para>
         /// -or-
@@ -441,7 +441,7 @@ namespace System.Net.Security
         /// -or-
         /// </para>
         /// <para>
-        /// <paramref name="offset"/> + <paramref name="size"/> is greater than the length of <paramref name="buffer"/>.
+        /// <paramref name="offset"/> + <paramref name="count"/> is greater than the length of <paramref name="buffer"/>.
         /// </para>
         /// </exception>
         /// <exception cref="ObjectDisposedException">The stream has been disposed.</exception>
@@ -449,7 +449,7 @@ namespace System.Net.Security
         public override void Write(
             byte[] buffer,
             int offset,
-            int size)
+            int count)
         {
             if (buffer == null)
             {
@@ -466,14 +466,14 @@ namespace System.Net.Security
                 throw new ArgumentOutOfRangeException();
             }
 
-            if (size < 0 || size > buffer.Length - offset)
+            if (count < 0 || count > buffer.Length - offset)
             {
                 throw new ArgumentOutOfRangeException();
             }
 
-            int written = SslNative.SecureWrite(_socket, buffer, offset, size, _socket.SendTimeout);
+            int written = SslNative.SecureWrite(_socket, buffer, offset, count, _socket.SendTimeout);
 
-            if (written <= 0 && size > 0)
+            if (written <= 0 && count > 0)
             {
                 throw new IOException();
             }
