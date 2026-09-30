@@ -181,7 +181,7 @@ namespace System.Net.Sockets
         }
 
         /// <summary>
-        /// Gets a value that indicates whether a <see cref="Socket"/> is connected to a remote host as of the last <see cref="Send"/> or <see cref="Receive"/> operation.
+        /// Gets a value that indicates whether a <see cref="Socket"/> is connected to a remote host as of the last <see cref="Send(byte[])"/> or <see cref="Receive(byte[])"/> operation.
         /// </summary>
         /// <value>
         /// <see langword="true"/> if the <see cref="Socket"/> was connected to a remote resource as of the most recent operation; otherwise, <see langword="false"/>.
@@ -766,30 +766,12 @@ namespace System.Net.Sockets
 
             if (_rightEndPoint == null)
             {
-                // socket must have connection established or previously accepted a connection 
+                // socket must be bound (by Bind, Connect or SendTo)
                 throw new SocketException(SocketError.NotConnected);
             }
 
-            EndPoint endPointSnapshot = remoteEP;
-            Snapshot(ref endPointSnapshot);
-
-            int bytesTransferred = 0;
-
-            bytesTransferred = NativeSocket.recvfrom(this, buffer, offset, size, (int)socketFlags, m_recvTimeout, ref remoteEP);
-
-            if (!remoteEP.Equals(endPointSnapshot))
-            {
-                // no need to create a new EndPoint here if it's different from the orignal
-                // because the interpreter has already created a new instance of an IPEndPoint
-
-                if (_rightEndPoint == null)
-                {
-                    // save a copy of the EndPoint
-                    _rightEndPoint = remoteEP;
-                }
-            }
-
-            return bytesTransferred;
+            // recvfrom always replaces remoteEP with a new IPEndPoint holding the sender's address; the caller's instance is never modified
+            return NativeSocket.recvfrom(this, buffer, offset, size, (int)socketFlags, m_recvTimeout, ref remoteEP);
         }
 
         /// <summary>
@@ -1091,6 +1073,9 @@ namespace System.Net.Sockets
             GC.SuppressFinalize(this);
         }
 
+        /// <summary>
+        /// Releases unmanaged resources used by the <see cref="Socket"/> before it is reclaimed by garbage collection.
+        /// </summary>
         ~Socket()
         {
             Dispose(false);
