@@ -27,11 +27,11 @@ internal static class FirewallHelper
         }
     }
 
-    internal static void Remove(int[] tcpPorts, int[] udpPorts)
+    internal static void Remove(int[] tcpPorts, int[] udpPorts, int[] legacyTcpPorts)
     {
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            RemoveWindows(tcpPorts, udpPorts);
+            RemoveWindows(tcpPorts, udpPorts, legacyTcpPorts);
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
         {
@@ -69,7 +69,7 @@ internal static class FirewallHelper
     }
 
     [System.Runtime.Versioning.SupportedOSPlatform("windows")]
-    private static void RemoveWindows(int[] tcpPorts, int[] udpPorts)
+    private static void RemoveWindows(int[] tcpPorts, int[] udpPorts, int[] legacyTcpPorts)
     {
         if (!IsElevatedWindows())
         {
@@ -85,6 +85,18 @@ internal static class FirewallHelper
         foreach (var port in udpPorts)
         {
             RunNetsh($"advfirewall firewall delete rule name=\"{RulePrefix}-UDP-{port}\"");
+        }
+
+        // rules from older setups may not exist, so a failed delete is only an error when the rule is actually there
+        foreach (var port in legacyTcpPorts)
+        {
+            var name = $"{RulePrefix}-TCP-{port}";
+
+            if (!TryRunNetsh($"advfirewall firewall delete rule name=\"{name}\"", out var error)
+                && TryRunNetsh($"advfirewall firewall show rule name=\"{name}\"", out _))
+            {
+                throw new InvalidOperationException(error);
+            }
         }
 
         Console.WriteLine($"Windows firewall rules removed for TCP ports [{string.Join(", ", tcpPorts)}] and UDP ports [{string.Join(", ", udpPorts)}].");
@@ -119,6 +131,14 @@ internal static class FirewallHelper
 
     private static void RunNetsh(string args)
     {
+        if (!TryRunNetsh(args, out var error))
+        {
+            throw new InvalidOperationException(error);
+        }
+    }
+
+    private static bool TryRunNetsh(string args, out string error)
+    {
         var psi = new ProcessStartInfo("netsh", args)
         {
             RedirectStandardOutput = true,
@@ -127,13 +147,19 @@ internal static class FirewallHelper
         };
 
         using var proc = Process.Start(psi) ?? throw new InvalidOperationException("Failed to start netsh.");
+        var output = proc.StandardOutput.ReadToEnd();
+        var err = proc.StandardError.ReadToEnd().Trim();
         proc.WaitForExit();
-        
+
         if (proc.ExitCode != 0)
         {
-            var err = proc.StandardError.ReadToEnd().Trim();
-            throw new InvalidOperationException($"netsh failed (exit {proc.ExitCode}): {err}");
+            // netsh reports most failures on stdout
+            error = $"netsh failed (exit {proc.ExitCode}): {(err.Length > 0 ? err : output.Trim())}";
+            return false;
         }
+
+        error = string.Empty;
+        return true;
     }
 
     [System.Runtime.Versioning.SupportedOSPlatform("windows")]

@@ -18,6 +18,8 @@ namespace NFUnitTestSocketTests
     /// </summary>
     internal sealed class CompanionClient : IDisposable
     {
+        private const int PingTimeoutMs = 5000;
+
         private readonly Socket _socket;
         private readonly byte[] _recvBuf = new byte[256];
 
@@ -52,9 +54,17 @@ namespace NFUnitTestSocketTests
         {
             using (var companion = new CompanionClient())
             {
-                if (!companion.Ping())
+                try
                 {
-                    throw new Exception(NotReachableMessage("connected but got no valid reply to ping"));
+                    if (!companion.Ping())
+                    {
+                        throw new Exception(NotReachableMessage("connected but got no valid reply to ping"));
+                    }
+                }
+                catch (SocketException ex)
+                {
+                    // includes the receive timeout when the peer accepts the connection but never answers
+                    throw new Exception(NotReachableMessage($"ping failed with SocketException {ex.ErrorCode}"), ex);
                 }
             }
         }
@@ -67,8 +77,19 @@ namespace NFUnitTestSocketTests
         /// <summary>Returns true when the companion responds with {"ok":true}.</summary>
         internal bool Ping()
         {
-            var response = SendCommand("{\"cmd\":\"ping\"}");
-            return response.IndexOf("\"ok\":true") >= 0;
+            // finite timeout only for the ping so an unresponsive peer can't block setup forever;
+            // other commands keep the default (infinite) receive timeout
+            _socket.ReceiveTimeout = PingTimeoutMs;
+
+            try
+            {
+                var response = SendCommand("{\"cmd\":\"ping\"}");
+                return response.IndexOf("\"ok\":true") >= 0;
+            }
+            finally
+            {
+                _socket.ReceiveTimeout = 0;
+            }
         }
 
         /// <summary>Asks the companion to start a TCP echo server on the given port.</summary>

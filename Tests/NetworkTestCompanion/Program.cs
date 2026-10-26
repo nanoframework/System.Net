@@ -9,6 +9,8 @@ using NetworkTestCompanion;
 const int DefaultControlPort = 11000;
 int[] WellKnownTcpPorts = [DefaultControlPort, 7, 8, 9, 10, 80, 8080, 7010, 7011, 7012, 7013, 7014, 7015];
 int[] WellKnownUdpPorts = [7, 8, 9];
+// ports of removed tests: never opened by setup, only cleaned up by --remove-firewall for developers who ran an older setup
+int[] LegacyTcpPorts = [7110, 7111, 7112, 7113];
 
 // Argument parsing
 var cliArgs = Environment.GetCommandLineArgs().Skip(1).ToArray();
@@ -46,7 +48,7 @@ if (setupFirewall)
 
 if (removeFirewall)
 {
-    FirewallHelper.Remove(WellKnownTcpPorts, WellKnownUdpPorts);
+    FirewallHelper.Remove(WellKnownTcpPorts, WellKnownUdpPorts, LegacyTcpPorts);
     return;
 }
 
