@@ -18,25 +18,78 @@ namespace NFUnitTestSocketTests
     /// </summary>
     internal sealed class CompanionClient : IDisposable
     {
+        private const int PingTimeoutMs = 5000;
+
         private readonly Socket _socket;
         private readonly byte[] _recvBuf = new byte[256];
 
         internal CompanionClient()
         {
             _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            _socket.Connect(new IPEndPoint(
-                IPAddress.Parse(TestConfiguration.CompanionIP),
-                TestConfiguration.CompanionControlPort));
+
+            try
+            {
+                _socket.Connect(new IPEndPoint(
+                    IPAddress.Parse(TestConfiguration.CompanionIP),
+                    TestConfiguration.CompanionControlPort));
+            }
+            catch (SocketException ex)
+            {
+                _socket.Close();
+
+                // a bare SocketException from Connect doesn't tell the developer what's missing
+                throw new Exception(NotReachableMessage($"connect failed with SocketException {ex.ErrorCode}"));
+            }
 
             // Brief settle time so the companion is ready to read
             Thread.Sleep(50);
         }
 
+        /// <summary>
+        /// Connects to the companion and pings it, throwing an exception with setup instructions when it isn't
+        /// reachable. Call from [Setup] of test classes that need the companion so a missing companion is reported
+        /// once, up front.
+        /// </summary>
+        internal static void EnsureReachable()
+        {
+            using (var companion = new CompanionClient())
+            {
+                try
+                {
+                    if (!companion.Ping())
+                    {
+                        throw new Exception(NotReachableMessage("connected but got no valid reply to ping"));
+                    }
+                }
+                catch (SocketException ex)
+                {
+                    // includes the receive timeout when the peer accepts the connection but never answers
+                    throw new Exception(NotReachableMessage($"ping failed with SocketException {ex.ErrorCode}"), ex);
+                }
+            }
+        }
+
+        private static string NotReachableMessage(string reason) =>
+            $"Network Test Companion not reachable at {TestConfiguration.CompanionIP}:{TestConfiguration.CompanionControlPort} ({reason}). "
+            + "Start it with 'dotnet run --project Tests/NetworkTestCompanion' and make sure CompanionIP in .runsettings "
+            + "matches the LAN IP it prints, then rebuild the test project.";
+
         /// <summary>Returns true when the companion responds with {"ok":true}.</summary>
         internal bool Ping()
         {
-            var response = SendCommand("{\"cmd\":\"ping\"}");
-            return response.IndexOf("\"ok\":true") >= 0;
+            // finite timeout only for the ping so an unresponsive peer can't block setup forever;
+            // other commands keep the default (infinite) receive timeout
+            _socket.ReceiveTimeout = PingTimeoutMs;
+
+            try
+            {
+                var response = SendCommand("{\"cmd\":\"ping\"}");
+                return response.IndexOf("\"ok\":true") >= 0;
+            }
+            finally
+            {
+                _socket.ReceiveTimeout = 0;
+            }
         }
 
         /// <summary>Asks the companion to start a TCP echo server on the given port.</summary>

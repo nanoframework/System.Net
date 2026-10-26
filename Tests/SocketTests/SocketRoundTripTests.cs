@@ -28,7 +28,7 @@ namespace NFUnitTestSocketTests
         public void Setup()
         {
             // Comment the next line to run these tests on real hardware with the companion running
-            Assert.SkipTest("Skipping round-trip tests: companion required - run on real hardware only");
+            //Assert.SkipTest("Skipping round-trip tests: companion required - run on real hardware only");
 
             // Bring up the network before any socket operation.
             CancellationTokenSource cs = new CancellationTokenSource(30000);
@@ -41,6 +41,8 @@ namespace NFUnitTestSocketTests
 
             _networkInitialized = true;
             OutputHelper.WriteLine($"Network ready, status: {NetworkHelper.Status}");
+
+            CompanionClient.EnsureReachable();
         }
 
         [Cleanup]

@@ -61,6 +61,8 @@ namespace NFUnitTestSslStream
 
             _networkInitialized = true;
             OutputHelper.WriteLine($"Network ready, status: {NetworkHelper.Status}");
+
+            CompanionClient.EnsureReachable();
         }
 
         [Cleanup]
