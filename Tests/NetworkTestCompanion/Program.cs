@@ -105,13 +105,15 @@ static List<(IPAddress Address, string Interface)> RankLanAddresses()
         foreach (var addr in props.UnicastAddresses)
         {
             if (addr.Address.AddressFamily != AddressFamily.InterNetwork
-                || IsLinkLocal(addr.Address)
                 || addr.PrefixLength >= 32)
             {
                 continue;
             }
 
-            int score = (hasGateway ? 2 : 0) + (IsPrivate(addr.Address) ? 1 : 0);
+            // link-local is kept for an MCU cabled straight to the PC (no DHCP), but ranks below any LAN address
+            int score = IsLinkLocal(addr.Address)
+                ? -1
+                : (hasGateway ? 2 : 0) + (IsPrivate(addr.Address) ? 1 : 0);
             candidates.Add((addr.Address, iface.Name, score));
         }
     }
