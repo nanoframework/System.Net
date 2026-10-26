@@ -31,6 +31,7 @@
     <Compile Include="SocketOptionsTests.cs" />
     <Compile Include="SocketPair.cs" />
     <Compile Include="SocketExceptionsTests.cs" />
+    <Compile Include="SocketSelectInvalidHandleTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SocketRoundTripTests.cs" />
     <Compile Include="SocketTools.cs" />
