@@ -24,13 +24,45 @@ namespace NFUnitTestSocketTests
         internal CompanionClient()
         {
             _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            _socket.Connect(new IPEndPoint(
-                IPAddress.Parse(TestConfiguration.CompanionIP),
-                TestConfiguration.CompanionControlPort));
+
+            try
+            {
+                _socket.Connect(new IPEndPoint(
+                    IPAddress.Parse(TestConfiguration.CompanionIP),
+                    TestConfiguration.CompanionControlPort));
+            }
+            catch (SocketException ex)
+            {
+                _socket.Close();
+
+                // a bare SocketException from Connect doesn't tell the developer what's missing
+                throw new Exception(NotReachableMessage($"connect failed with SocketException {ex.ErrorCode}"));
+            }
 
             // Brief settle time so the companion is ready to read
             Thread.Sleep(50);
         }
+
+        /// <summary>
+        /// Connects to the companion and pings it, throwing an exception with setup instructions when it isn't
+        /// reachable. Call from [Setup] of test classes that need the companion so a missing companion is reported
+        /// once, up front.
+        /// </summary>
+        internal static void EnsureReachable()
+        {
+            using (var companion = new CompanionClient())
+            {
+                if (!companion.Ping())
+                {
+                    throw new Exception(NotReachableMessage("connected but got no valid reply to ping"));
+                }
+            }
+        }
+
+        private static string NotReachableMessage(string reason) =>
+            $"Network Test Companion not reachable at {TestConfiguration.CompanionIP}:{TestConfiguration.CompanionControlPort} ({reason}). "
+            + "Start it with 'dotnet run --project Tests/NetworkTestCompanion' and make sure CompanionIP in .runsettings "
+            + "matches the LAN IP it prints, then rebuild the test project.";
 
         /// <summary>Returns true when the companion responds with {"ok":true}.</summary>
         internal bool Ping()
