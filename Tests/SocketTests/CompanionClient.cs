@@ -18,7 +18,7 @@ namespace NFUnitTestSocketTests
     /// </summary>
     internal sealed class CompanionClient : IDisposable
     {
-        private const int PingTimeoutMs = 5000;
+        private const int ReceiveTimeoutMs = 5000;
 
         private readonly Socket _socket;
         private readonly byte[] _recvBuf = new byte[256];
@@ -40,6 +40,8 @@ namespace NFUnitTestSocketTests
                 // a bare SocketException from Connect doesn't tell the developer what's missing
                 throw new Exception(NotReachableMessage($"connect failed with SocketException {ex.ErrorCode}"));
             }
+
+            _socket.ReceiveTimeout = ReceiveTimeoutMs;
 
             // Brief settle time so the companion is ready to read
             Thread.Sleep(50);
@@ -77,19 +79,8 @@ namespace NFUnitTestSocketTests
         /// <summary>Returns true when the companion responds with {"ok":true}.</summary>
         internal bool Ping()
         {
-            // finite timeout only for the ping so an unresponsive peer can't block setup forever;
-            // other commands keep the default (infinite) receive timeout
-            _socket.ReceiveTimeout = PingTimeoutMs;
-
-            try
-            {
-                var response = SendCommand("{\"cmd\":\"ping\"}");
-                return response.IndexOf("\"ok\":true") >= 0;
-            }
-            finally
-            {
-                _socket.ReceiveTimeout = 0;
-            }
+            var response = SendCommand("{\"cmd\":\"ping\"}");
+            return response.IndexOf("\"ok\":true") >= 0;
         }
 
         /// <summary>Asks the companion to start a TCP echo server on the given port.</summary>

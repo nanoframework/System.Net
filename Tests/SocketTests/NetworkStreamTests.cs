@@ -1,24 +1,54 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using nanoFramework.Networking;
 using nanoFramework.TestFramework;
 using System;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading;
 
 namespace NFUnitTestSocketTests
 {
+    /// <summary>
+    /// NetworkStream tests. The connected peer is the Network Test Companion's TCP echo server: loopback isn't
+    /// available on the targets (lwIP builds have it disabled), so data written is verified by reading the echo back.
+    /// </summary>
     [TestClass]
     public class NetworkStreamTests
     {
-        private const int ServerPort = 7010;
+        private const int EchoPort = 7010;
+        private const int EchoReceiveTimeoutMs = 5000;
+
+        private static bool _networkInitialized = false;
 
         [Setup]
         public void SetupNetworkStreamTests()
         {
-            // Comment next line to run the tests on a real hardware
+            // Comment next line to run the tests on a real hardware with the companion running
             Assert.SkipTest("Skipping tests using nanoCLR Win32 in a pipeline");
+
+            CancellationTokenSource cs = new CancellationTokenSource(30000);
+
+            if (!NetworkHelper.SetupAndConnectNetwork(requiresDateTime: false, token: cs.Token))
+            {
+                Assert.SkipTest($"Network not available ({NetworkHelper.Status}) - skipping NetworkStream tests");
+            }
+
+            _networkInitialized = true;
+
+            CompanionClient.EnsureReachable();
+        }
+
+        [Cleanup]
+        public void Cleanup()
+        {
+            if (_networkInitialized)
+            {
+                NetworkHelper.Reset();
+                _networkInitialized = false;
+            }
         }
 
         [TestMethod]
@@ -26,11 +56,11 @@ namespace NFUnitTestSocketTests
         {
             byte[] sent = new byte[] { 0x01, 0x02, 0x03, 0x04, 0x05 };
 
-            RunLoopbackTest((stream, peer) =>
+            RunEchoTest((stream) =>
             {
                 stream.Write(sent, 0, sent.Length);
 
-                AssertReceived(peer, sent);
+                AssertEchoed(stream, sent);
             });
         }
 
@@ -39,11 +69,11 @@ namespace NFUnitTestSocketTests
         {
             byte[] buffer = new byte[] { 0xFF, 0x11, 0x22, 0x33, 0xFF };
 
-            RunLoopbackTest((stream, peer) =>
+            RunEchoTest((stream) =>
             {
                 stream.Write(buffer, 1, 3);
 
-                AssertReceived(peer, new byte[] { 0x11, 0x22, 0x33 });
+                AssertEchoed(stream, new byte[] { 0x11, 0x22, 0x33 });
             });
         }
 
@@ -52,18 +82,18 @@ namespace NFUnitTestSocketTests
         {
             byte[] sent = new byte[] { 0xAB, 0xCD, 0xEF };
 
-            RunLoopbackTest((stream, peer) =>
+            RunEchoTest((stream) =>
             {
                 stream.Write(new ReadOnlySpan<byte>(sent));
 
-                AssertReceived(peer, sent);
+                AssertEchoed(stream, sent);
             });
         }
 
         [TestMethod]
         public void NetworkStream_Write_ZeroLength_DoesNotThrow()
         {
-            RunLoopbackTest((stream, peer) =>
+            RunEchoTest((stream) =>
             {
                 stream.Write(new byte[0], 0, 0);
             });
@@ -84,7 +114,7 @@ namespace NFUnitTestSocketTests
             });
         }
 
-
+        [TestMethod]
         public void Ctor_UnconnectedStreamSocket_ThrowsIOException()
         {
             Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -110,121 +140,123 @@ namespace NFUnitTestSocketTests
         [TestMethod]
         public void Ctor_ConnectedDgramSocket_ThrowsIOException()
         {
-            SocketPair testSockets = new SocketPair(ProtocolType.Udp, SocketType.Dgram);
+            Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
 
             try
             {
-                testSockets.Startup(0, 0);
-
-                // a connected datagram socket has a remote endpoint, so this exercises the socket type check
-                testSockets.socketClient.Connect(testSockets.epServer);
+                // a connected datagram socket has a remote endpoint, so this exercises the socket type check.
+                // UDP connect only records the remote endpoint, nothing needs to listen there.
+                socket.Connect(new IPEndPoint(IPAddress.Parse(TestConfiguration.CompanionIP), EchoPort));
 
                 Assert.ThrowsException(typeof(IOException), () =>
                 {
-                    _ = new NetworkStream(testSockets.socketClient);
+                    _ = new NetworkStream(socket);
                 });
 
                 Assert.ThrowsException(typeof(IOException), () =>
                 {
-                    _ = new NetworkStream(testSockets.socketClient, false);
+                    _ = new NetworkStream(socket, false);
                 });
             }
             finally
             {
-                testSockets.TearDown();
+                socket.Close();
             }
         }
 
         [TestMethod]
         public void Ctor_ConnectedStreamSocket_Succeeds()
         {
-            SocketPair testSockets = new SocketPair(ProtocolType.Tcp, SocketType.Stream);
-            Socket acceptedSocket = null;
+            byte[] sent = new byte[] { 0x5A, 0xA5, 0x3C };
 
-            try
+            using (var companion = new CompanionClient())
             {
-                testSockets.Startup(0, 0);
-                testSockets.socketServer.Listen(1);
-                testSockets.socketClient.Connect(testSockets.epServer);
-                acceptedSocket = testSockets.socketServer.Accept();
+                Socket client = null;
 
-                NetworkStream clientStream = new NetworkStream(testSockets.socketClient);
-                NetworkStream serverStream = new NetworkStream(acceptedSocket, true);
+                try
+                {
+                    Assert.IsTrue(companion.StartTcpEcho(EchoPort), "Failed to start TCP echo");
 
-                clientStream.Write(testSockets.bufSend, 0, testSockets.bufSend.Length);
+                    client = ConnectToEcho();
 
-                int bytesRead = serverStream.Read(testSockets.bufReceive, 0, testSockets.bufReceive.Length);
+                    // doesn't own the socket: disposing it must leave the socket open
+                    NetworkStream writeStream = new NetworkStream(client);
+                    writeStream.Write(sent, 0, sent.Length);
+                    writeStream.Dispose();
 
-                testSockets.AssertDataReceived(bytesRead);
+                    // owns the socket: reading the echo proves the socket survived the previous dispose
+                    NetworkStream readStream = new NetworkStream(client, true);
+                    AssertEchoed(readStream, sent);
 
-                clientStream.Dispose();
-
-                // server stream owns the accepted socket, so disposing it closes the socket
-                serverStream.Dispose();
-                acceptedSocket = null;
-            }
-            finally
-            {
-                acceptedSocket?.Close();
-                testSockets.TearDown();
-
-
-
-
-
-
-
+                    // disposing it closes the socket
+                    readStream.Dispose();
+                    client = null;
+                }
+                finally
+                {
+                    client?.Close();
+                    companion.Stop(EchoPort);
+                }
             }
         }
 
-        private delegate void LoopbackTestAction(NetworkStream stream, Socket peer);
+        private delegate void EchoTestAction(NetworkStream stream);
 
-        private static void RunLoopbackTest(LoopbackTestAction test)
+        private static void RunEchoTest(EchoTestAction test)
         {
-            Socket listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            Socket client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            Socket peer = null;
-            NetworkStream stream = null;
-
-            try
+            using (var companion = new CompanionClient())
             {
-                listener.Bind(new IPEndPoint(IPAddress.Loopback, ServerPort));
-                listener.Listen(1);
+                Socket client = null;
+                NetworkStream stream = null;
 
-                client.Connect(new IPEndPoint(IPAddress.Loopback, ServerPort));
-                peer = listener.Accept();
-
-                stream = new NetworkStream(client, true);
-
-                test(stream, peer);
-            }
-            finally
-            {
-                if (stream != null)
+                try
                 {
-                    // stream owns the client socket
-                    stream.Close();
-                }
-                else
-                {
-                    client.Close();
-                }
+                    Assert.IsTrue(companion.StartTcpEcho(EchoPort), "Failed to start TCP echo");
 
-                peer?.Close();
-                listener.Close();
+                    client = ConnectToEcho();
+                    stream = new NetworkStream(client, true);
+
+                    test(stream);
+                }
+                finally
+                {
+                    if (stream != null)
+                    {
+                        // stream owns the client socket
+                        stream.Close();
+                    }
+                    else
+                    {
+                        client?.Close();
+                    }
+
+                    companion.Stop(EchoPort);
+                }
             }
         }
 
-        private static void AssertReceived(Socket peer, byte[] expected)
+        private static Socket ConnectToEcho()
+        {
+            // give the companion time to bind the listener
+            Thread.Sleep(100);
+
+            Socket client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            client.ReceiveTimeout = EchoReceiveTimeoutMs;
+            client.Connect(new IPEndPoint(IPAddress.Parse(TestConfiguration.CompanionIP), EchoPort));
+
+            return client;
+        }
+
+        private static void AssertEchoed(NetworkStream stream, byte[] expected)
         {
             byte[] received = new byte[expected.Length];
             int totalRead = 0;
 
             while (totalRead < expected.Length)
             {
-                int read = peer.Receive(received, totalRead, expected.Length - totalRead, SocketFlags.None);
+                int read = stream.Read(received, totalRead, expected.Length - totalRead);
 
-                Assert.IsTrue(read > 0, "Connection closed before all data was received");
+                Assert.IsTrue(read > 0, "Connection closed before all data was echoed");
 
                 totalRead += read;
             }

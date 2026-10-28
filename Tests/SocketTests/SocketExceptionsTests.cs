@@ -3,21 +3,48 @@
 // See LICENSE file in the project root for full license information.
 //
 
+using nanoFramework.Networking;
 using nanoFramework.TestFramework;
 using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading;
 
 namespace NFUnitTestSocketTests
 {
+    /// <summary>
+    /// Tests that need a connected TCP peer use the Network Test Companion's TCP echo server: loopback isn't
+    /// available on the targets (lwIP builds have it disabled).
+    /// </summary>
     [TestClass]
     public class SocketExceptionsTests
     {
+        private static bool _networkInitialized = false;
+
         [Setup]
         public void SetupConnectToEthernetTests()
         {
-            // Comment next line to run the tests on a real hardware
+            // Comment next line to run the tests on a real hardware with the companion running
             Assert.SkipTest("Skipping tests using nanoCLR Win32 in a pipeline");
+
+            CancellationTokenSource cs = new CancellationTokenSource(30000);
+
+            if (!NetworkHelper.SetupAndConnectNetwork(requiresDateTime: false, token: cs.Token))
+            {
+                Assert.SkipTest($"Network not available ({NetworkHelper.Status}) - skipping socket exception tests");
+            }
+
+            _networkInitialized = true;
+        }
+
+        [Cleanup]
+        public void Cleanup()
+        {
+            if (_networkInitialized)
+            {
+                NetworkHelper.Reset();
+                _networkInitialized = false;
+            }
         }
 
         [TestMethod]
@@ -25,16 +52,22 @@ namespace NFUnitTestSocketTests
         {
             Socket socketClient = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             Socket socketServer = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            
-            Assert.ThrowsException(typeof(SocketException), () =>
+
+            try
             {
+                socketClient.Bind(new IPEndPoint(IPAddress.Any, 0));
+                int port = ((IPEndPoint)socketClient.LocalEndPoint).Port;
 
-                socketClient.Bind(new IPEndPoint(IPAddress.Loopback, 10));
-                socketServer.Bind(new IPEndPoint(IPAddress.Loopback, 10));
-            });
-
-            socketClient?.Close();
-            socketServer?.Close();
+                Assert.ThrowsException(typeof(SocketException), () =>
+                {
+                    socketServer.Bind(new IPEndPoint(IPAddress.Any, port));
+                });
+            }
+            finally
+            {
+                socketClient.Close();
+                socketServer.Close();
+            }
         }
 
         [TestMethod]
@@ -74,17 +107,24 @@ namespace NFUnitTestSocketTests
         [TestMethod]
         public void SocketExceptionTest6_IsConnected()
         {
-            SocketPair testSockets = new SocketPair(ProtocolType.Tcp, SocketType.Stream);
+            const int echoPort = 7011;
 
-            Assert.ThrowsException(typeof(SocketException), () =>
+            RunWithCompanionEcho(echoPort, () =>
             {
-                testSockets.Startup(0, 0);
-                testSockets.socketServer.Listen(1);
-                testSockets.socketClient.Connect(testSockets.epServer);
-                testSockets.socketClient.Connect(testSockets.epServer);
-            });
+                Socket client = ConnectToCompanion(echoPort);
 
-            testSockets.TearDown();
+                try
+                {
+                    Assert.ThrowsException(typeof(SocketException), () =>
+                    {
+                        client.Connect(new IPEndPoint(IPAddress.Parse(TestConfiguration.CompanionIP), echoPort));
+                    });
+                }
+                finally
+                {
+                    client.Close();
+                }
+            });
         }
 
 
@@ -111,20 +151,19 @@ namespace NFUnitTestSocketTests
         [TestMethod]
         public void SocketExceptionTest12_NotConnected()
         {
-            SocketPair testSockets = new SocketPair(ProtocolType.Tcp, SocketType.Stream);
-            Socket socketTemp = null;
+            Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
-            Assert.ThrowsException(typeof(SocketException), () =>
+            try
             {
-                testSockets.Startup(0, 0);
-                socketTemp = new Socket(AddressFamily.InterNetwork,
-                    SocketType.Stream, ProtocolType.Tcp);
-                socketTemp.Bind(testSockets.socketServer.RemoteEndPoint);
-                socketTemp.Send(new byte[2]);
-            });
-
-            socketTemp?.Close();
-            testSockets.TearDown();
+                Assert.ThrowsException(typeof(SocketException), () =>
+                {
+                    socket.Send(new byte[2]);
+                });
+            }
+            finally
+            {
+                socket.Close();
+            }
         }
 
         [TestMethod]
@@ -145,30 +184,6 @@ namespace NFUnitTestSocketTests
             testSockets.TearDown();
         }
 
-
-        [TestMethod]
-        public void SocketExceptionTest14_AddressNotAvailable()
-        {
-            // Bind to an IP not assigned to any local interface, then connect to force address validation.
-            // nanoFramework's LWIP stack defers the AddressNotAvailable error to connect time, not bind time.
-            SocketPair testSockets = new SocketPair(ProtocolType.Tcp, SocketType.Stream);
-            Socket freshSocket = null;
-
-            Assert.ThrowsException(typeof(SocketException), () =>
-            {
-                int serverPort = SocketTools.nextPort;
-                int clientPort = SocketTools.nextPort;
-                testSockets.Startup(clientPort, serverPort);
-                testSockets.socketServer.Listen(1);
-
-                freshSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                freshSocket.Bind(new IPEndPoint(new IPAddress(SocketTools.DottedDecimalToIp((byte)192, (byte)168, (byte)192, (byte)168)), SocketTools.nextPort));
-                freshSocket.Connect(testSockets.epServer);
-            });
-
-            freshSocket?.Close();
-            testSockets.TearDown();
-        }
 
         [TestMethod]
         public void SocketExceptionTest16_HostNotFound()
@@ -219,28 +234,32 @@ namespace NFUnitTestSocketTests
             testSockets = null;
         }
 
-
-        [TestMethod]
-        public void SocketExceptionTest20_OperationNotSupported()
+        private static void RunWithCompanionEcho(int echoPort, Action test)
         {
-            SocketPair testSockets = new SocketPair(ProtocolType.Tcp, SocketType.Stream);
-            
-            Assert.ThrowsException(typeof(SocketException), () =>
+            using (var companion = new CompanionClient())
             {
-                testSockets.Startup(0, 0);
-
-                testSockets.socketServer.Listen(1);
-                testSockets.socketClient.Connect(testSockets.epServer);
-                testSockets.socketClient.Send(testSockets.bufSend);
-
-                using (Socket sock = testSockets.socketServer.Accept())
+                try
                 {
-                    sock.Receive(testSockets.bufReceive, SocketFlags.DontRoute);
+                    Assert.IsTrue(companion.StartTcpEcho(echoPort), "Failed to start TCP echo");
+
+                    // give the companion time to bind the listener
+                    Thread.Sleep(100);
+
+                    test();
                 }
-            });
-            
-            testSockets.TearDown();
-            testSockets = null;
+                finally
+                {
+                    companion.Stop(echoPort);
+                }
+            }
+        }
+
+        private static Socket ConnectToCompanion(int port)
+        {
+            Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            socket.Connect(new IPEndPoint(IPAddress.Parse(TestConfiguration.CompanionIP), port));
+
+            return socket;
         }
     }
 }

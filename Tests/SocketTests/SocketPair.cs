@@ -48,8 +48,8 @@ namespace NFUnitTestSocketTests
 
         public void Startup(int portClient, int portServer)
         {
-            socketClient.Bind(new IPEndPoint(IPAddress.Loopback, portClient));
-            socketServer.Bind(new IPEndPoint(IPAddress.Loopback, portServer));
+            socketClient.Bind(new IPEndPoint(IPAddress.Any, portClient));
+            socketServer.Bind(new IPEndPoint(IPAddress.Any, portServer));
 
             epClient = (IPEndPoint)socketClient.LocalEndPoint;
             epServer = (IPEndPoint)socketServer.LocalEndPoint;
