@@ -52,16 +52,22 @@ namespace NFUnitTestSocketTests
         {
             Socket socketClient = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             Socket socketServer = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            
-            Assert.ThrowsException(typeof(SocketException), () =>
+
+            try
             {
+                socketClient.Bind(new IPEndPoint(IPAddress.Any, 0));
+                int port = ((IPEndPoint)socketClient.LocalEndPoint).Port;
 
-                socketClient.Bind(new IPEndPoint(IPAddress.Loopback, 10));
-                socketServer.Bind(new IPEndPoint(IPAddress.Loopback, 10));
-            });
-
-            socketClient?.Close();
-            socketServer?.Close();
+                Assert.ThrowsException(typeof(SocketException), () =>
+                {
+                    socketServer.Bind(new IPEndPoint(IPAddress.Any, port));
+                });
+            }
+            finally
+            {
+                socketClient.Close();
+                socketServer.Close();
+            }
         }
 
         [TestMethod]
@@ -145,20 +151,19 @@ namespace NFUnitTestSocketTests
         [TestMethod]
         public void SocketExceptionTest12_NotConnected()
         {
-            SocketPair testSockets = new SocketPair(ProtocolType.Tcp, SocketType.Stream);
-            Socket socketTemp = null;
+            Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
-            Assert.ThrowsException(typeof(SocketException), () =>
+            try
             {
-                testSockets.Startup(0, 0);
-                socketTemp = new Socket(AddressFamily.InterNetwork,
-                    SocketType.Stream, ProtocolType.Tcp);
-                socketTemp.Bind(testSockets.socketServer.RemoteEndPoint);
-                socketTemp.Send(new byte[2]);
-            });
-
-            socketTemp?.Close();
-            testSockets.TearDown();
+                Assert.ThrowsException(typeof(SocketException), () =>
+                {
+                    socket.Send(new byte[2]);
+                });
+            }
+            finally
+            {
+                socket.Close();
+            }
         }
 
         [TestMethod]
@@ -233,13 +238,13 @@ namespace NFUnitTestSocketTests
         {
             using (var companion = new CompanionClient())
             {
-                Assert.IsTrue(companion.StartTcpEcho(echoPort), "Failed to start TCP echo");
-
-                // give the companion time to bind the listener
-                Thread.Sleep(100);
-
                 try
                 {
+                    Assert.IsTrue(companion.StartTcpEcho(echoPort), "Failed to start TCP echo");
+
+                    // give the companion time to bind the listener
+                    Thread.Sleep(100);
+
                     test();
                 }
                 finally

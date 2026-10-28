@@ -19,6 +19,7 @@ namespace NFUnitTestSocketTests
     public class NetworkStreamTests
     {
         private const int EchoPort = 7010;
+        private const int EchoReceiveTimeoutMs = 5000;
 
         private static bool _networkInitialized = false;
 
@@ -170,12 +171,12 @@ namespace NFUnitTestSocketTests
 
             using (var companion = new CompanionClient())
             {
-                Assert.IsTrue(companion.StartTcpEcho(EchoPort), "Failed to start TCP echo");
-
                 Socket client = null;
 
                 try
                 {
+                    Assert.IsTrue(companion.StartTcpEcho(EchoPort), "Failed to start TCP echo");
+
                     client = ConnectToEcho();
 
                     // doesn't own the socket: disposing it must leave the socket open
@@ -205,13 +206,13 @@ namespace NFUnitTestSocketTests
         {
             using (var companion = new CompanionClient())
             {
-                Assert.IsTrue(companion.StartTcpEcho(EchoPort), "Failed to start TCP echo");
-
                 Socket client = null;
                 NetworkStream stream = null;
 
                 try
                 {
+                    Assert.IsTrue(companion.StartTcpEcho(EchoPort), "Failed to start TCP echo");
+
                     client = ConnectToEcho();
                     stream = new NetworkStream(client, true);
 
@@ -240,6 +241,7 @@ namespace NFUnitTestSocketTests
             Thread.Sleep(100);
 
             Socket client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            client.ReceiveTimeout = EchoReceiveTimeoutMs;
             client.Connect(new IPEndPoint(IPAddress.Parse(TestConfiguration.CompanionIP), EchoPort));
 
             return client;
